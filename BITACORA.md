@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 14:04] Calendario anual interactivo (Fase 2 · 14)
+
+- **Qué hice:** Tocar un día del calendario anual lo resalta y muestra debajo «Sábado, 17 de octubre de 2026: 5 vasos». Con teclado, al enfocar el calendario las flechas recorren los días (izquierda/derecha = semana, arriba/abajo = día), sin salir del año ni ir al futuro; el texto se anuncia a lectores de pantalla.
+- **Por qué:** Los `<title>` del SVG solo funcionan al pasar el ratón; en el celular no había forma de ver el valor de un día. Empieza seleccionado hoy.
+- **Archivos principales:** `src/ui/components/HeatmapChart.tsx`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (191 pasando) · build ✅
+- **Commit:** 4125724
+- **Siguiente:** Detalle del rastreador: editarlo y ver sus registros recientes.
+
 ### [2026-10-24 14:01] Plurales correctos en unidades (Fase 2 · 13)
 
 - **Qué hice:** Cuando el valor es 1, la unidad se muestra en singular: «1 taza», «1 vaso», «1 vez», «1 mes». Abreviaturas cortas («h», «km», «min») no cambian.
