@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 17:29] Duplicar un rastreador (Fase 2 · 41)
+
+- **Qué hice:** Nuevo botón «Duplicar» en Rastreadores. Abre el formulario de creación con la misma configuración (tipo, unidad, metas, días) y el nombre «Copia de …», listo para ajustar. También arreglé el diseño de la lista: con seis botones, en un celular los nombres quedaban cortados («E…»). Ahora en pantallas angostas las acciones van en una segunda fila y desde tablet vuelven a la misma línea.
+- **Por qué:** Crear variantes (Café / Café descafeinado, Estudio cálculo / Estudio física) sin repetir la configuración. La copia no lleva registros ni historial de metas: es un rastreador nuevo.
+- **Archivos principales:** `src/domain/trackers.ts`, `src/ui/screens/ManageTrackersScreen.tsx`, `src/ui/components/icons.tsx`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (260 pasando) · build ✅
+- **Commit:** f29fac5
+- **Siguiente:** Nota rápida tras registrar.
+
 ### [2026-10-24 17:26] Historial de metas (Fase 2 · 40)
 
 - **Qué hice:** Al cambiar la meta de un rastreador se guarda la anterior como vigente hasta ayer (`goalChanges`). Las rachas, el calendario anual, las metas semanales, el resumen semana/mes y la vista de días pasados en «Hoy» evalúan cada día con la meta que tenía en ese momento. El respaldo JSON conserva el historial. Al probarlo encontré un bug real y lo corregí: al editar un rastreador, quitar la meta de límite, la meta semanal o los días de la semana no se guardaba, porque la actualización mezclaba los valores nuevos con los viejos. Ahora los campos opcionales que el formulario ya no trae se borran de verdad.
