@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 14:07] Detalle del rastreador más útil (Fase 2 · 15)
+
+- **Qué hice:** El detalle de cada rastreador tiene un botón «Editar» (mismo formulario que en Rastreadores) y una sección «Registros recientes» con los últimos 10 (y botón para ver todos), cada uno editable o borrable con deshacer.
+- **Por qué:** Al revisar las estadísticas de un rastreador es natural querer corregir un registro raro o ajustar la meta sin cambiar de pantalla. Para no duplicar código extraje `EntryEditDialog` (ahora lo usan Historial y el detalle) y `draftFromTracker` al dominio.
+- **Archivos principales:** `src/ui/screens/TrackerDetailScreen.tsx`, `src/ui/components/EntryEditDialog.tsx`, `src/ui/screens/HistoryScreen.tsx`, `src/domain/trackers.ts`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (192 pasando) · build ✅
+- **Commit:** 68e967d
+- **Siguiente:** Reordenar arrastrando.
+
 ### [2026-10-24 14:04] Calendario anual interactivo (Fase 2 · 14)
 
 - **Qué hice:** Tocar un día del calendario anual lo resalta y muestra debajo «Sábado, 17 de octubre de 2026: 5 vasos». Con teclado, al enfocar el calendario las flechas recorren los días (izquierda/derecha = semana, arriba/abajo = día), sin salir del año ni ir al futuro; el texto se anuncia a lectores de pantalla.
