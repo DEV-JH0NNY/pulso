@@ -78,6 +78,14 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 38. ✅ **Documentación al día:** README y capturas con las funciones de las rondas 4–6.
 39. ✅ **Días de la semana por rastreador:** mostrar en «Hoy» solo los días que aplican (por ejemplo, gimnasio lunes, miércoles y viernes).
 
+### Ronda 8
+
+40. ⬜ **Historial de metas:** al cambiar la meta de un rastreador, los días anteriores se evalúan con la meta que tenían entonces (hoy se recalcula todo con la meta nueva).
+41. ⬜ **Duplicar un rastreador** (por ejemplo, para crear «Café descafeinado» a partir de «Café»).
+42. ⬜ **Nota rápida tras registrar:** el aviso permite agregar una nota al registro recién hecho sin abrir el formulario completo.
+43. ⬜ **Prueba de punta a punta en CI** con el build real: abrir la app, registrar, recargar y comprobar que el dato persiste.
+44. ⬜ **Exportar un gráfico como imagen** (PNG) para compartirlo.
+
 ## Completadas
 
 - [2026-10-24] Base del proyecto (Fase 1 · tarea 1).
