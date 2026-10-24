@@ -33,7 +33,7 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 
 ### Ronda 2 (tras revisar la app con ojo crítico)
 
-11. ⬜ **Metas de límite («como máximo»):** hoy toda meta es un mínimo; para café, pantalla o gastos lo útil es un tope (≤ 2 tazas). Afecta progreso, rachas, calendario y resúmenes.
+11. ✅ **Metas de límite («como máximo»):** hoy toda meta es un mínimo; para café, pantalla o gastos lo útil es un tope (≤ 2 tazas). Afecta progreso, rachas, calendario y resúmenes.
 12. ⬜ **Pruebas automáticas de accesibilidad con axe** sobre las pantallas principales.
 13. ⬜ **Plurales correctos en unidades:** «1 taza» en lugar de «1 tazas».
 14. ⬜ **Tocar un día del calendario anual muestra su valor:** los `title` del SVG no funcionan con el dedo.
@@ -63,3 +63,4 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 - [2026-10-24] Estadísticas por día de la semana (Fase 2 · 8).
 - [2026-10-24] Exportación CSV ancha (Fase 2 · 9).
 - [2026-10-24] Recordatorio diario (Fase 2 · 10).
+- [2026-10-24] Metas de límite (Fase 2 · 11).

@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 13:56] Metas de límite «como máximo» (Fase 2 · 11)
+
+- **Qué hice:** Al poner meta a un contador o cantidad se elige «Al menos» o «Como máximo». Con límite: la tarjeta muestra «5 / máx. 3 tazas» y la barra se pone roja al pasarse; el resumen del día, las rachas, el calendario (dentro del tope = intensidad máxima, pasarse = mínima) y el resumen semanal lo respetan con textos propios («Días dentro del límite»). Las plantillas Café (≤ 3 tazas) y Pantalla (≤ 3 h) y el Café de ejemplo ahora usan límite.
+- **Por qué:** Para café, cigarrillos, pantalla o gastos lo útil es un tope, no un mínimo. Campo opcional `goalDirection` (ausente = «al menos») para que los datos ya guardados y los respaldos anteriores sigan funcionando sin migración de la base. Un día sin registros no cuenta como «dentro del límite» porque no se sabe si fue cero o si no se registró; la app sugiere registrar 0 esos días.
+- **Archivos principales:** `src/domain/{types,aggregate,heatmap,trackers,backup}.ts`, `src/ui/components/{TrackerForm,TrackerTile,PeriodSummary}.tsx`, `src/ui/trackerText.ts`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (180 pasando) · build ✅
+- **Commit:** 78347bd
+- **Siguiente:** Pruebas automáticas de accesibilidad con axe.
+
 ### [2026-10-24 13:50] Recordatorio diario (Fase 2 · 10)
 
 - **Qué hice:** En Ajustes, «Recordarme registrar cada día» con hora elegible (20:00 por defecto). Después de esa hora, si hoy no hay registros, «Hoy» muestra un aviso. Al activarlo se pide permiso de notificaciones; si se concede, llega una notificación a esa hora mientras la app esté abierta.
