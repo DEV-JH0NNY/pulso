@@ -42,7 +42,7 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 
 ### Ronda 3
 
-17. ⬜ **Documentación al día con capturas:** README con capturas reales (claro y oscuro) y `COMO_EJECUTAR.md` con la estructura de carpetas actual.
+17. ✅ **Documentación al día con capturas:** README con capturas reales (claro y oscuro) y `COMO_EJECUTAR.md` con la estructura de carpetas actual.
 18. ⬜ **Metas semanales («3 veces por semana»):** para hábitos que no son diarios, como el ejercicio.
 19. ⬜ **Buscar en el historial por nota o rastreador.**
 20. ⬜ **Accesos directos de la app instalada** (mantener presionado el ícono → «Historial», «Hallazgos»).
@@ -78,3 +78,4 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 - [2026-10-24] Calendario anual interactivo (Fase 2 · 14).
 - [2026-10-24] Detalle del rastreador más útil (Fase 2 · 15).
 - [2026-10-24] Reordenar arrastrando (Fase 2 · 16).
+- [2026-10-24] Documentación al día con capturas (Fase 2 · 17).

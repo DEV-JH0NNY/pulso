@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 14:16] Documentación al día con capturas (Fase 2 · 17)
+
+- **Qué hice:** Capturas reales generadas con Playwright (Hoy y detalle en claro, Hallazgos e Historial en oscuro) en `docs/capturas/`. README reescrito con todas las funciones actuales agrupadas. `COMO_EJECUTAR.md`: estructura de carpetas detallada con la regla dominio/datos/UI, cómo pasar datos a otro celular y nuevos problemas comunes (acentos en Excel, notificaciones, cambio de celular).
+- **Por qué:** Es lo primero que el dueño va a ver en GitHub; la documentación había quedado atrás de la Fase 2.
+- **Archivos principales:** `README.md`, `COMO_EJECUTAR.md`, `docs/capturas/*.png`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** formato ✅ (sin cambios de código)
+- **Commit:** 9648013
+- **Siguiente:** Metas semanales.
+
 ### [2026-10-24 14:14] Reordenar arrastrando (Fase 2 · 16)
 
 - **Qué hice:** Cada rastreador activo tiene una manija (⋮⋮) para arrastrarlo; la lista se reordena en vivo y se guarda al soltar. Los botones subir/bajar siguen ahí como alternativa accesible con teclado y lector de pantalla (la manija se oculta a tecnologías de asistencia para no duplicar). Además subí a 3 s la espera de `findBy*` en las pruebas tras ver un fallo intermitente por tiempos bajo carga (9 corridas seguidas en verde después).
