@@ -6,6 +6,7 @@ import { computeStreaks } from '../../domain/streaks';
 import { weeklyStreak } from '../../domain/weekly';
 import { draftFromTracker } from '../../domain/trackers';
 import type { Entry } from '../../domain/types';
+import { DataQuality } from '../components/DataQuality';
 import { EntryEditDialog } from '../components/EntryEditDialog';
 import { EntryRow } from '../components/EntryRow';
 import { IconEdit } from '../components/icons';
@@ -118,6 +119,11 @@ export function TrackerDetailScreen({ id }: { id: string }) {
       <h2 className={sectionTitle}>Último año</h2>
       <div className={card}>
         <HeatmapChart tracker={tracker} totals={data.totals} todayDate={todayDate} />
+      </div>
+
+      <h2 className={sectionTitle}>Calidad de datos</h2>
+      <div className={card}>
+        <DataQuality totals={data.totals} todayDate={todayDate} />
       </div>
 
       <h2 className={sectionTitle}>Registros recientes</h2>

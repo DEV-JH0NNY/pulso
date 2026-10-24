@@ -79,3 +79,12 @@ describe('TrackerDetailScreen · edición', () => {
     );
   });
 });
+
+describe('TrackerDetailScreen · calidad de datos', () => {
+  it('muestra cobertura y hueco más largo', async () => {
+    const t = await seed();
+    renderWithProviders(<TrackerDetailScreen id={t.id} />);
+    expect(await screen.findByText('7 de 30 (23 %)')).toBeInTheDocument();
+    expect(screen.getByText(/hueco más largo sin registros: 7 días/i)).toBeInTheDocument();
+  });
+});
