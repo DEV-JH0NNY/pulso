@@ -29,6 +29,17 @@ export function isCurrencyUnit(unit: string): boolean {
   return unit.trim().toUpperCase() === 'COP';
 }
 
+/**
+ * Singular aproximado de una unidad escrita en plural ("tazas" → "taza",
+ * "veces" → "vez", "meses" → "mes"). Abreviaturas como "h" o "km" no cambian.
+ */
+export function singularUnit(unit: string): string {
+  if (unit.length <= 3 || !/s$/i.test(unit)) return unit;
+  if (/ces$/i.test(unit)) return unit.slice(0, -3) + 'z';
+  if (/(s|r|l|n|d)es$/i.test(unit)) return unit.slice(0, -2);
+  return unit.slice(0, -1);
+}
+
 /** Valor con su unidad según el tipo de rastreador. */
 export function formatValue(tracker: Pick<Tracker, 'type' | 'unit'>, value: number): string {
   switch (tracker.type) {
@@ -40,7 +51,8 @@ export function formatValue(tracker: Pick<Tracker, 'type' | 'unit'>, value: numb
     case 'quantity': {
       if (isCurrencyUnit(tracker.unit)) return formatCOP(value);
       const n = formatNumber(value);
-      return tracker.unit ? `${n} ${tracker.unit}` : n;
+      if (!tracker.unit) return n;
+      return `${n} ${value === 1 ? singularUnit(tracker.unit) : tracker.unit}`;
     }
   }
 }

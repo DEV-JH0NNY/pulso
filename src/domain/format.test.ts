@@ -7,6 +7,7 @@ import {
   formatValue,
   parseDecimal,
   plural,
+  singularUnit,
 } from './format';
 
 const norm = (s: string) => s.replace(/\s/g, ' ');
@@ -62,5 +63,25 @@ describe('plural', () => {
     expect(plural(2, 'registro')).toBe('2 registros');
     expect(plural(1200, 'día')).toBe('1.200 días');
     expect(plural(2, 'rastreador nuevo', 'rastreadores nuevos')).toBe('2 rastreadores nuevos');
+  });
+});
+
+describe('singularUnit', () => {
+  it('singulariza unidades comunes', () => {
+    expect(singularUnit('tazas')).toBe('taza');
+    expect(singularUnit('vasos')).toBe('vaso');
+    expect(singularUnit('páginas')).toBe('página');
+    expect(singularUnit('veces')).toBe('vez');
+    expect(singularUnit('meses')).toBe('mes');
+    expect(singularUnit('litros')).toBe('litro');
+    expect(singularUnit('h')).toBe('h');
+    expect(singularUnit('km')).toBe('km');
+    expect(singularUnit('kms')).toBe('kms');
+    expect(singularUnit('min')).toBe('min');
+  });
+  it('formatValue usa el singular solo con 1', () => {
+    expect(formatValue({ type: 'counter', unit: 'tazas' }, 1)).toBe('1 taza');
+    expect(formatValue({ type: 'counter', unit: 'tazas' }, 2)).toBe('2 tazas');
+    expect(formatValue({ type: 'quantity', unit: 'h' }, 1)).toBe('1 h');
   });
 });

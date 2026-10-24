@@ -37,7 +37,7 @@ describe('TodayScreen', () => {
     const { user } = renderWithProviders(<TodayScreen />);
     await user.click(await tile('Café'));
     await waitFor(async () => expect(await db.entries.count()).toBe(1));
-    expect(await screen.findByText('1 tazas')).toBeInTheDocument();
+    expect(await screen.findByText('1 taza')).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Deshacer' }));
     await waitFor(async () => expect(await db.entries.count()).toBe(0));
