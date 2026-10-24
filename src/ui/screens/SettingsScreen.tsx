@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { exportBackup } from '../../data/backupIO';
 import { isStoragePersisted } from '../../data/storage';
-import { exportCsv } from '../../data/csvIO';
+import { exportCsv, exportWideCsv } from '../../data/csvIO';
 import { LAST_EXPORT_AT, setSetting } from '../../data/settings';
 import { today } from '../../domain/dates';
 import { plural } from '../../domain/format';
@@ -39,6 +39,18 @@ export function SettingsScreen() {
     toast({ message: `Exportado: ${plural(rows, 'registro')}` });
   };
 
+  const doExportWide = async () => {
+    const csv = await exportWideCsv();
+    const days = csv.split('\r\n').length - 2;
+    if (days <= 0) {
+      toast({ message: 'Todavía no hay registros para exportar' });
+      return;
+    }
+    downloadText(`pulso-por-dia-${today()}.csv`, csv, 'text/csv');
+    await setSetting(LAST_EXPORT_AT, Date.now());
+    toast({ message: `Exportado: ${plural(days, 'día')}` });
+  };
+
   const doBackup = async () => {
     downloadText(`pulso-respaldo-${today()}.json`, await exportBackup(), 'application/json');
     await setSetting(LAST_EXPORT_AT, Date.now());
@@ -67,8 +79,8 @@ export function SettingsScreen() {
       <div className={`${card} space-y-3`}>
         <p className={muted}>
           Exporta en CSV de formato largo (<code>fecha, hora, rastreador, valor, unidad, nota</code>
-          ), listo para Excel, pandas o SQL. Los datos nunca salen de tu dispositivo salvo que tú
-          los exportes.
+          ), listo para Excel, pandas o SQL. El CSV por día trae una fila por fecha y una columna
+          por rastreador. Los datos nunca salen de tu dispositivo salvo que tú los exportes.
         </p>
         <div className="flex flex-wrap gap-2">
           <button type="button" className={buttonSecondary} onClick={() => void doExport()}>
@@ -76,6 +88,9 @@ export function SettingsScreen() {
           </button>
           <button type="button" className={buttonSecondary} onClick={() => setImporting(true)}>
             Importar CSV
+          </button>
+          <button type="button" className={buttonSecondary} onClick={() => void doExportWide()}>
+            CSV por día (ancho)
           </button>
         </div>
         <p className={`${muted} border-t border-slate-200 pt-3 dark:border-slate-800`}>

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { parseCsv } from './csv';
-import { csvUnit, entriesToCsv, planImport } from './csvData';
+import { csvUnit, entriesToCsv, entriesToWideCsv, planImport } from './csvData';
 import type { Entry, Tracker } from './types';
 
 const tracker = (over: Partial<Tracker>): Tracker => ({
@@ -164,5 +164,26 @@ describe('importar CSV', () => {
       'h',
       '',
     ]);
+  });
+});
+
+describe('exportar CSV ancho', () => {
+  it('una fila por día con huecos vacíos y valores diarios agregados', () => {
+    const csv = entriesToWideCsv(
+      [sleep, mood],
+      [
+        entry({ trackerId: 's', value: 7, date: '2026-01-01' }),
+        entry({ trackerId: 'm', value: 2, date: '2026-01-01' }),
+        entry({ trackerId: 'm', value: 3, date: '2026-01-01' }),
+        entry({ trackerId: 's', value: 8.5, date: '2026-01-03' }),
+      ],
+    );
+    expect(csv).toBe(
+      'fecha,Sueño (h),Ánimo (1-5)\r\n2026-01-01,7,2.5\r\n2026-01-02,,\r\n2026-01-03,8.5,\r\n',
+    );
+  });
+
+  it('sin registros solo trae el encabezado', () => {
+    expect(entriesToWideCsv([sleep], [])).toBe('fecha,Sueño (h)\r\n');
   });
 });

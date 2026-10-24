@@ -1,5 +1,5 @@
 import { TRACKER_COLORS } from '../domain/colors';
-import { entriesToCsv, type ImportPlan } from '../domain/csvData';
+import { entriesToCsv, entriesToWideCsv, type ImportPlan } from '../domain/csvData';
 import { newId } from '../domain/ids';
 import { defaultsForType } from '../domain/trackers';
 import type { Entry, Tracker } from '../domain/types';
@@ -8,6 +8,11 @@ import { db } from './db';
 export async function exportCsv(): Promise<string> {
   const [trackers, entries] = await Promise.all([db.trackers.toArray(), db.entries.toArray()]);
   return entriesToCsv(trackers, entries);
+}
+
+export async function exportWideCsv(): Promise<string> {
+  const [trackers, entries] = await Promise.all([db.trackers.toArray(), db.entries.toArray()]);
+  return entriesToWideCsv(trackers, entries);
 }
 
 export interface ImportResult {

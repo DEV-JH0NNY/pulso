@@ -1,7 +1,8 @@
 import { parseCsv, toCsv } from './csv';
-import { isValidISODate } from './dates';
+import { dailyTotals } from './aggregate';
+import { dateRange, isValidISODate } from './dates';
 import { parseDecimal } from './format';
-import { NAME_MAX_LENGTH, validateEntryValue } from './trackers';
+import { NAME_MAX_LENGTH, sortTrackers, validateEntryValue } from './trackers';
 import type { Entry, Tracker, TrackerType } from './types';
 
 /** Columnas del formato largo, en orden. */
@@ -244,4 +245,33 @@ export function planImport(text: string, trackers: Tracker[], existing: Entry[])
 
 function capitalize(s: string): string {
   return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+/**
+ * Formato ancho: una fila por día (sin saltos entre la primera y la última
+ * fecha) y una columna por rastreador con su valor diario (suma, «Sí» = 1 o
+ * promedio según el tipo). Las celdas vacías son días sin registros.
+ */
+export function entriesToWideCsv(trackers: Tracker[], entries: Entry[]): string {
+  const sorted = sortTrackers(trackers);
+  const totals = sorted.map((t) => dailyTotals(t, entries));
+  const dates = entries
+    .filter((e) => sorted.some((t) => t.id === e.trackerId))
+    .map((e) => e.date)
+    .sort();
+  const header = [
+    'fecha',
+    ...sorted.map((t) => (csvUnit(t) ? `${t.name} (${csvUnit(t)})` : t.name)),
+  ];
+  const first = dates[0];
+  const last = dates[dates.length - 1];
+  if (!first || !last) return toCsv([header]);
+  const rows = dateRange(first, last).map((date) => [
+    date,
+    ...totals.map((m) => {
+      const v = m.get(date);
+      return v === undefined ? '' : String(Math.round(v * 1e6) / 1e6);
+    }),
+  ]);
+  return toCsv([header, ...rows]);
 }
