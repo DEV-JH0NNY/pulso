@@ -84,7 +84,7 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 41. ✅ **Duplicar un rastreador** (por ejemplo, para crear «Café descafeinado» a partir de «Café»).
 42. ✅ **Nota rápida tras registrar:** el aviso permite agregar una nota al registro recién hecho sin abrir el formulario completo.
 43. ✅ **Prueba de punta a punta en CI** con el build real: abrir la app, registrar, recargar y comprobar que el dato persiste.
-44. ⬜ **Exportar un gráfico como imagen** (PNG) para compartirlo.
+44. ✅ **Exportar un gráfico como imagen** (PNG) para compartirlo.
 
 ## Completadas
 
@@ -142,3 +142,4 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 - [2026-10-24] Duplicar un rastreador (Fase 2 · 41).
 - [2026-10-24] Nota rápida tras registrar (Fase 2 · 42).
 - [2026-10-24] Prueba de punta a punta en CI (Fase 2 · 43).
+- [2026-10-24] Exportar un gráfico como imagen (Fase 2 · 44).

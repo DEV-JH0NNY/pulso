@@ -4,11 +4,26 @@
 
 > Actualiza esta sección cada 5 entradas y al final de la noche. Es lo primero que el dueño va a leer.
 
-- **Estado actual:** Fase 1 completa (11/11). Fase 2: 40 mejoras hechas (ronda 8 en curso). 259 pruebas. CI en verde en todos los commits que revisé.
-- **Lo más destacado hasta ahora:** Registro con un toque (también días anteriores, atajos de teclado y celebración al cumplir). Metas diarias «al menos» / «como máximo», metas semanales y días de la semana por rastreador. Historial con búsqueda. Rachas, calendario anual tocable, gráficos, perfil por día de la semana, calidad de datos y resumen anual. Resumen semana/mes y métricas derivadas (fórmulas). Hallazgos con Pearson + valor p + corrección de Benjamini–Hochberg (mismo día y día siguiente, con gráfico en el tiempo y exportación CSV). CSV largo/ancho de ida y vuelta y respaldo JSON con recordatorio. PWA con aviso de actualización y accesos directos. Pantalla de error amigable. Pruebas de accesibilidad (axe) y de rendimiento (3 años de datos).
-- **Decisiones importantes tomadas:** Fechas como texto local AAAA-MM-DD. Ruteo por hash propio. Gráficos, CSV y estadística sin librerías, todo probado y validado contra scipy/statsmodels. Campos nuevos opcionales (`goalDirection`, `weeklyTarget`, `activeDays`) para no migrar la base. La base v2 solo agrega la tabla `derived` (migración probada). TypeScript 6, porque typescript-eslint aún no soporta la 7. Única dependencia añadida fuera del stack: `axe-core` (solo desarrollo). Dockerfile verificado (`prod` y `dev`).
-- **Problemas conocidos o pendientes:** El despliegue a GitHub Pages solo corre en `main`: hay que fusionar la rama `claude/wonderful-rubin-wns5l9` y activar **Settings → Pages → Source: GitHub Actions**. Las notificaciones del recordatorio solo llegan con la app abierta (límite de las PWA sin servidor). La sesión se cortó una vez por límite de uso; no se perdió trabajo (ver la entrada de la tarea 39).
-- **Siguiente paso:** Seguir con la ronda 8 del backlog (duplicar rastreador, nota rápida, prueba de punta a punta, exportar gráfico).
+- **Estado actual:** Trabajo detenido por pedido del dueño. Fase 1 completa (11/11). Fase 2: 44 mejoras en ocho rondas de backlog, todas cerradas. 262 pruebas unitarias y de componentes, más 2 de punta a punta con Playwright. CI en verde, incluido el job de punta a punta.
+- **Lo más destacado hasta ahora:**
+  - **Registro:** un toque (también en días anteriores), atajos de teclado, nota rápida desde el aviso y celebración al cumplir una meta.
+  - **Metas:** diarias «al menos» o «como máximo», semanales, días de la semana por rastreador e historial de metas.
+  - **Consulta y análisis:** historial con búsqueda; rachas; calendario anual tocable; gráficos que se pueden descargar como imagen; perfil por día de la semana; calidad de datos; resumen anual; resumen semana/mes; métricas derivadas.
+  - **Hallazgos:** Pearson + valor p + Benjamini–Hochberg, del mismo día y del día siguiente, con gráfico en el tiempo y exportación CSV.
+  - **Tus datos:** CSV largo/ancho de ida y vuelta y respaldo JSON con recordatorio.
+  - **App y calidad:** PWA con aviso de actualización y accesos directos, pantalla de error amigable, y pruebas de accesibilidad (axe), de rendimiento y de punta a punta.
+- **Decisiones importantes tomadas:**
+  - Fechas como texto local AAAA-MM-DD y ruteo por hash propio.
+  - Gráficos, CSV y estadística sin librerías; todo probado y validado contra scipy/statsmodels.
+  - Campos nuevos opcionales (`goalDirection`, `weeklyTarget`, `activeDays`, `goalChanges`) para no migrar la base. La base v2 solo agrega la tabla `derived` (migración probada).
+  - TypeScript 6, porque typescript-eslint aún no soporta la 7.
+  - Dependencias añadidas fuera del stack: solo `axe-core` y `@playwright/test`, ambas de desarrollo.
+  - Dockerfile verificado (`prod` y `dev`).
+- **Problemas conocidos o pendientes:**
+  - El despliegue a GitHub Pages solo corre en `main`: hay que fusionar la rama `claude/wonderful-rubin-wns5l9` y activar **Settings → Pages → Source: GitHub Actions**.
+  - Las notificaciones del recordatorio solo llegan con la app abierta (límite de las PWA sin servidor).
+  - La sesión se cortó una vez por límite de uso; no se perdió trabajo.
+- **Siguiente paso:** Si se retoma, hacer una nueva ronda de revisión crítica y llenar el backlog (la ronda 8 está completa).
 
 ---
 
@@ -28,6 +43,16 @@ Usa exactamente este formato:
 - **Commit:** (hash corto)
 - **Siguiente:**
 -->
+
+### [2026-10-24 17:39] Exportar un gráfico como imagen (Fase 2 · 44)
+
+- **Qué hice:** Botón «Descargar imagen» bajo el gráfico de cada rastreador. Genera un PNG de alta resolución (3×) con un título («Sueño: total del día»), el fondo del tema actual y los mismos colores que en pantalla. El archivo queda como `pulso-sueno-dia-2026-10-24.png`. Lo verifiqué en Chromium real: descargué la imagen y la revisé.
+- **Por qué:** Para compartir un gráfico sin hacer capturas de pantalla. Va de SVG a canvas y luego a PNG, sin librerías y sin salir del dispositivo; los colores de las clases de Tailwind se copian como atributos para que la imagen se vea igual. El nombre se pasa a ASCII porque, con «ñ», el navegador descartaba el nombre y guardaba el archivo como «download».
+- **Archivos principales:** `src/ui/exportImage.ts`, `src/ui/components/{BarChart,TrackerChart}.tsx`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (262 pasando) · build ✅ · descarga real en Chromium ✅ · CI con punta a punta ✅
+- **Commit:** b7c1e26
+- **Siguiente:** Me detengo aquí por pedido del dueño. El backlog de la ronda 8 está completo; lo siguiente sería otra ronda de revisión crítica.
 
 ### [2026-10-24 17:35] Prueba de punta a punta en CI (Fase 2 · 43)
 
