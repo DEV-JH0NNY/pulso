@@ -4,11 +4,11 @@
 
 > Actualiza esta sección cada 5 entradas y al final de la noche. Es lo primero que el dueño va a leer.
 
-- **Estado actual:** Fase 1 en curso, 6 de 11 tareas completas.
-- **Lo más destacado hasta ahora:** Rastreadores personalizables, registro con un toque (toque largo para ajustar y «Deshacer»), vista de hoy con progreso frente a metas, historial editable, rachas y calendario anual estilo GitHub.
-- **Decisiones importantes tomadas:** Fechas como texto local AAAA-MM-DD; ruteo por hash propio; gráficos en SVG propio sin librerías; TypeScript 6 (typescript-eslint aún no soporta la 7).
-- **Problemas conocidos o pendientes:** El despliegue a GitHub Pages solo corre en `main`; hay que fusionar la rama y activar Pages con «GitHub Actions».
-- **Siguiente paso:** Gráficos por rastreador.
+- **Estado actual:** Fase 1 completa (11 de 11). Empieza la Fase 2.
+- **Lo más destacado hasta ahora:** Registro con un toque (toque largo para ajustar, «Deshacer»), vista de hoy con metas, historial editable, rachas y calendario anual, gráficos día/semana/mes, hallazgos con Pearson + valor p explicados en lenguaje simple, CSV de ida y vuelta con validación por línea, y datos de ejemplo realistas que se borran con un botón.
+- **Decisiones importantes tomadas:** Fechas como texto local AAAA-MM-DD; ruteo por hash propio; gráficos, CSV y estadística sin librerías (todo probado); TypeScript 6 (typescript-eslint aún no soporta la 7); sin dependencias nuevas más allá del stack pedido.
+- **Problemas conocidos o pendientes:** El despliegue a GitHub Pages solo corre en `main`: hay que fusionar la rama `claude/wonderful-rubin-wns5l9` y activar **Settings → Pages → Source: GitHub Actions**.
+- **Siguiente paso:** Respaldo y restauración en JSON (Fase 2).
 
 ---
 
@@ -28,6 +28,16 @@ Usa exactamente este formato:
 - **Commit:** (hash corto)
 - **Siguiente:**
 -->
+
+### [2026-10-24 13:24] Diseño, tema y rendimiento (Fase 1 · tarea 11) — Fase 1 completa
+
+- **Qué hice:** Selector de tema Sistema/Claro/Oscuro en Ajustes (también cambia el color de la barra del sistema en Android), sección «Acerca de» con versión y nota de privacidad, títulos de pestaña por pantalla («Hoy · Pulso»), nombre del rastreador como título del detalle, y carga diferida de todas las pantallas salvo «Hoy». Revisé contrastes: el verde de los botones principales pasó de emerald-600 (3,8:1, no cumple AA) a emerald-700 (5,5:1).
+- **Por qué:** El diseño móvil, el modo oscuro automático y el formato es-CO ya venían desde las tareas anteriores; esta tarea cerró lo pendiente. Las pantallas diferidas pesan entre 2 y 13 kB cada una; la carga inicial queda en ~113 kB comprimidos (la mayor parte es React y Dexie).
+- **Archivos principales:** `src/app/App.tsx`, `src/ui/components/ThemePicker.tsx`, `src/ui/theme.ts`, `src/ui/screens/SettingsScreen.tsx`, `vite.config.ts`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (140 pasando) · build ✅ · CI en GitHub ✅
+- **Commit:** 41ca162
+- **Siguiente:** Fase 2: respaldo y restauración en JSON.
 
 ### [2026-10-24 13:19] Datos de ejemplo (Fase 1 · tarea 10)
 
