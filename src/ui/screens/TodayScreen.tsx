@@ -16,6 +16,7 @@ import { useActiveTrackers, useEntriesForDate } from '../hooks/useData';
 import { useOnboardingDone } from '../hooks/useSample';
 import { WelcomeCard } from '../components/WelcomeCard';
 import { BackupReminder } from '../components/BackupReminder';
+import { DailyReminder } from '../components/DailyReminder';
 import { useToday } from '../hooks/useToday';
 import { routeHref } from '../router';
 
@@ -111,6 +112,7 @@ export function TodayScreen() {
           <IconChevronRight />
         </button>
       </nav>
+      {isToday && <DailyReminder loggedToday={values.size > 0} />}
       {isToday && <BackupReminder />}
       {trackers.length > 0 && (
         <DaySummaryCard
