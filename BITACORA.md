@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 14:21] Buscar en el historial (Fase 2 · 19)
+
+- **Qué hice:** Campo «Buscar» en Historial que filtra por texto de la nota o nombre del rastreador, sin distinguir mayúsculas ni tildes («cumpleanos» encuentra «Cumpleaños de Ana»). Mientras se busca se recorre todo el historial, no solo los últimos 30 días; se combina con el filtro por rastreador.
+- **Por qué:** Las notas solo sirven si se pueden encontrar después («¿cuándo fue la salida con amigos?»). La normalización vive en el dominio con pruebas.
+- **Archivos principales:** `src/domain/history.ts`, `src/ui/screens/HistoryScreen.tsx`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (203 pasando) · build ✅
+- **Commit:** 9cea04a
+- **Siguiente:** Accesos directos de la app instalada.
+
 ### [2026-10-24 14:19] Metas semanales (Fase 2 · 18)
 
 - **Qué hice:** Cualquier rastreador puede tener «meta semanal» de 1 a 7 días. En «Hoy» cada tarjeta muestra «Semana: 2/3 días» (en verde con ✓ al cumplirla) y el detalle añade «Racha semanal» (semanas seguidas cumpliendo). La plantilla y el ejemplo de Ejercicio pasan a «3 días por semana».
