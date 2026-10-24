@@ -105,6 +105,11 @@ export function draftFromTracker(t: Tracker): TrackerDraft {
   };
 }
 
+/** Borrador para duplicar un rastreador: misma configuración, nombre «Copia de …». */
+export function duplicateDraft(t: Tracker): TrackerDraft {
+  return { ...draftFromTracker(t), name: `Copia de ${t.name}`.slice(0, NAME_MAX_LENGTH) };
+}
+
 /** Limpia espacios y campos que no aplican al tipo. */
 export function normalizeDraft(draft: TrackerDraft): TrackerDraft {
   const numeric = draft.type === 'counter' || draft.type === 'quantity';

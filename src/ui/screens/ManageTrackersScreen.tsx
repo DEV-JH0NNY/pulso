@@ -6,11 +6,12 @@ import {
   setTrackerArchived,
   updateTracker,
 } from '../../data/trackers';
-import { draftFromTracker, emptyDraft, moveId } from '../../domain/trackers';
+import { draftFromTracker, duplicateDraft, emptyDraft, moveId } from '../../domain/trackers';
 import type { Tracker, TrackerDraft } from '../../domain/types';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import {
   IconArchive,
+  IconCopy,
   IconDown,
   IconEdit,
   IconGrip,
@@ -108,7 +109,7 @@ export function ManageTrackersScreen() {
             <li
               key={t.id}
               ref={drag.itemRef(t.id)}
-              className={`${cardBase} flex items-center gap-2 p-3 ${
+              className={`${cardBase} flex flex-wrap items-center gap-2 p-3 sm:flex-nowrap ${
                 drag.draggingId === t.id ? 'relative z-10 shadow-lg ring-2 ring-emerald-500' : ''
               }`}
             >
@@ -128,7 +129,7 @@ export function ManageTrackersScreen() {
                 </p>
                 <p className={`truncate ${muted}`}>{describeTracker(t)}</p>
               </div>
-              <div className="flex shrink-0">
+              <div className="-mb-1 flex w-full shrink-0 justify-end border-t border-slate-100 pt-1 sm:mb-0 sm:w-auto sm:border-0 sm:pt-0 dark:border-slate-800">
                 <button
                   type="button"
                   className={iconButton}
@@ -154,6 +155,14 @@ export function ManageTrackersScreen() {
                   onClick={() => setEditing({ mode: 'edit', tracker: t })}
                 >
                   <IconEdit />
+                </button>
+                <button
+                  type="button"
+                  className={iconButton}
+                  aria-label={`Duplicar ${t.name}`}
+                  onClick={() => setEditing({ mode: 'create', template: duplicateDraft(t) })}
+                >
+                  <IconCopy />
                 </button>
                 <button
                   type="button"

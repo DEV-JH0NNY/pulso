@@ -174,3 +174,24 @@ describe('ManageTrackersScreen · días de la semana', () => {
     expect(await screen.findByText(/L, M, X, J, V/)).toBeInTheDocument();
   });
 });
+
+describe('ManageTrackersScreen · duplicar', () => {
+  it('crea una copia con la misma configuración', async () => {
+    await createTracker({
+      ...emptyDraft(),
+      name: 'Café',
+      unit: 'tazas',
+      dailyGoal: 3,
+      goalDirection: 'atMost',
+    });
+    const { user } = renderWithProviders(<ManageTrackersScreen />);
+    await user.click(await screen.findByRole('button', { name: 'Duplicar Café' }));
+    const dialog = screen.getByRole('dialog', { name: 'Nuevo rastreador' });
+    expect(within(dialog).getByLabelText('Nombre')).toHaveValue('Copia de Café');
+    await user.click(within(dialog).getByRole('button', { name: 'Crear' }));
+    await waitFor(async () => {
+      const copy = (await db.trackers.toArray()).find((t) => t.name === 'Copia de Café');
+      expect(copy).toMatchObject({ unit: 'tazas', dailyGoal: 3, goalDirection: 'atMost' });
+    });
+  });
+});
