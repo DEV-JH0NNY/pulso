@@ -12,6 +12,8 @@ import { buttonPrimary, card, muted } from '../components/styles';
 import { useToast } from '../components/toastContext';
 import { TrackerTile } from '../components/TrackerTile';
 import { useActiveTrackers, useEntriesForDate } from '../hooks/useData';
+import { useOnboardingDone } from '../hooks/useSample';
+import { WelcomeCard } from '../components/WelcomeCard';
 import { useToday } from '../hooks/useToday';
 import { routeHref } from '../router';
 
@@ -21,6 +23,7 @@ export function TodayScreen() {
   const entries = useEntriesForDate(todayDate);
   const [detailed, setDetailed] = useState<Tracker | null>(null);
   const toast = useToast();
+  const onboardingDone = useOnboardingDone();
 
   const values = useMemo(() => {
     const map = new Map<string, number>();
@@ -32,7 +35,9 @@ export function TodayScreen() {
     return map;
   }, [trackers, entries, todayDate]);
 
-  if (!trackers || !entries) return <p className={muted}>Cargando…</p>;
+  if (!trackers || !entries || onboardingDone === undefined)
+    return <p className={muted}>Cargando…</p>;
+  if (trackers.length === 0 && !onboardingDone) return <WelcomeCard />;
 
   const undoable = (message: string, entryId: string) =>
     toast({

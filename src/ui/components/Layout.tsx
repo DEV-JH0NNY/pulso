@@ -17,10 +17,12 @@ interface LayoutProps {
   nav: NavItem[];
   back?: Route;
   actions?: ReactNode;
+  /** Aviso que se muestra bajo el encabezado (por ejemplo, datos de ejemplo). */
+  banner?: ReactNode;
   children: ReactNode;
 }
 
-export function Layout({ title, route, nav, back, actions, children }: LayoutProps) {
+export function Layout({ title, route, nav, back, actions, banner, children }: LayoutProps) {
   return (
     <div className="mx-auto flex min-h-dvh max-w-xl flex-col">
       <a
@@ -40,6 +42,7 @@ export function Layout({ title, route, nav, back, actions, children }: LayoutPro
         <h1 className="min-w-0 flex-1 truncate text-xl font-bold">{title}</h1>
         {actions}
       </header>
+      {banner}
 
       <main id="contenido" tabIndex={-1} className="flex-1 px-4 pb-28 pt-4 outline-none">
         {children}

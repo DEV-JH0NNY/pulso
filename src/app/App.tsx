@@ -7,6 +7,7 @@ import {
   IconStats,
   IconToday,
 } from '../ui/components/icons';
+import { SampleBanner } from '../ui/components/SampleBanner';
 import { ToastProvider } from '../ui/components/ToastProvider';
 import { useRoute, type Route } from '../ui/router';
 import { HistoryScreen } from '../ui/screens/HistoryScreen';
@@ -73,7 +74,13 @@ export function App() {
   const screen = screenFor(route);
   return (
     <ToastProvider>
-      <Layout title={screen.title} route={route} nav={NAV} back={screen.back}>
+      <Layout
+        title={screen.title}
+        route={route}
+        nav={NAV}
+        back={screen.back}
+        banner={<SampleBanner />}
+      >
         {screen.content}
       </Layout>
     </ToastProvider>

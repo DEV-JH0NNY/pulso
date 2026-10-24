@@ -1,6 +1,7 @@
 import { act, fireEvent, screen, waitFor, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { db } from '../../data/db';
+import { ONBOARDING_DONE, setSetting } from '../../data/settings';
 import { resetDb } from '../../data/testUtils';
 import { createTracker } from '../../data/trackers';
 import { emptyDraft } from '../../domain/trackers';
@@ -12,7 +13,20 @@ beforeEach(resetDb);
 const tile = (name: string) => screen.findByRole('button', { name: new RegExp(`^${name}:`) });
 
 describe('TodayScreen', () => {
-  it('invita a crear un rastreador cuando no hay ninguno', async () => {
+  it('la primera vez da la bienvenida y ofrece datos de ejemplo', async () => {
+    const { user } = renderWithProviders(<TodayScreen />);
+    expect(
+      await screen.findByRole('heading', { name: 'Te damos la bienvenida a Pulso' }),
+    ).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Explorar con datos de ejemplo' }));
+    expect(
+      await screen.findByRole('button', { name: /^Sueño:/ }, { timeout: 3000 }),
+    ).toBeInTheDocument();
+    expect(screen.getAllByText('Ejemplo').length).toBeGreaterThan(0);
+  });
+
+  it('después de la bienvenida invita a crear un rastreador', async () => {
+    await setSetting(ONBOARDING_DONE, true);
     renderWithProviders(<TodayScreen />);
     expect(await screen.findByRole('link', { name: 'Crear rastreador' })).toBeInTheDocument();
   });
