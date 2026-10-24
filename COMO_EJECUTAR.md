@@ -102,6 +102,7 @@ pulso/
 | Dexie 4 + dexie-react-hooks           | Base de datos local (IndexedDB) y consultas reactivas | API simple y tipada sobre IndexedDB; `useLiveQuery` actualiza la UI al cambiar los datos sin un estado global. |
 | vite-plugin-pwa (Workbox)             | Manifest y service worker (instalable y offline)      | Genera el service worker automáticamente; escribirlo a mano es propenso a errores.                             |
 | Vitest + Testing Library + jsdom      | Pruebas unitarias y de componentes                    | Comparte la configuración de Vite; API compatible con Jest pero más rápido.                                    |
+| axe-core                              | Pruebas automáticas de accesibilidad                  | Motor de reglas de referencia (Deque), sin dependencias; se usa directo sin envoltorios.                       |
 | fake-indexeddb                        | IndexedDB en memoria para las pruebas                 | Permite probar la capa de datos real (Dexie) sin navegador.                                                    |
 | ESLint + typescript-eslint + Prettier | Calidad y formato automáticos                         | Estándar de facto; reglas estrictas y formato consistente sin discusiones.                                     |
 | GitHub Actions + GitHub Pages         | CI y hosting gratuito                                 | Integrado con el repositorio, sin servicios de pago ni registros en terceros.                                  |
