@@ -54,7 +54,7 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 23. ✅ **Pantalla de error amigable:** si algo falla al dibujar una pantalla, mostrar un mensaje con «Reintentar» y la opción de descargar un respaldo, en vez de una página en blanco.
 24. ✅ **Prueba de rendimiento con 3 años de datos** (≈ 20 000 registros) para hallazgos, rachas y series; optimizar si hace falta.
 25. ✅ **Hora del último registro en las tarjetas de Hoy** («último 8:15 a. m.»), útil para agua o café.
-26. ⬜ **Íconos y colores automáticos al importar CSV** según el nombre (café → ☕, sueño → 💤).
+26. ✅ **Íconos y colores automáticos al importar CSV** según el nombre (café → ☕, sueño → 💤).
 27. ⬜ **Exportar los hallazgos como CSV** (a, b, desfase, r, n, p) para analizarlos fuera.
 
 ## Completadas
@@ -95,3 +95,4 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 - [2026-10-24] Pantalla de error amigable (Fase 2 · 23).
 - [2026-10-24] Prueba de rendimiento (Fase 2 · 24).
 - [2026-10-24] Hora del último registro (Fase 2 · 25).
+- [2026-10-24] Íconos automáticos al importar (Fase 2 · 26).

@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 14:39] Íconos automáticos al importar (Fase 2 · 26)
+
+- **Qué hice:** Los rastreadores que se crean al importar un CSV reciben ícono y color según palabras clave del nombre, sin importar tildes ni mayúsculas («Horas de SUEÑO» → 💤 violeta, «café» → ☕ ámbar, «Gastos del mes» → 💸 rojo…; 18 grupos). Si no se reconoce, queda 📊 con un color de la paleta.
+- **Por qué:** Importar datos de otra app dejaba todo con el mismo ícono gris y había que editarlos uno por uno. Reutiliza la normalización de la búsqueda.
+- **Archivos principales:** `src/domain/appearance.ts`, `src/data/csvIO.ts`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (223 pasando) · build ✅
+- **Commit:** 3e24feb
+- **Siguiente:** Exportar los hallazgos como CSV.
+
 ### [2026-10-24 14:37] Hora del último registro (Fase 2 · 25)
 
 - **Qué hice:** Las tarjetas de contadores y cantidades muestran «Último: 7:05 a. m.» cuando el día tiene registros.
