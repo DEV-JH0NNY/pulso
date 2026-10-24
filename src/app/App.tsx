@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, type ReactNode } from 'react';
+import { ErrorBoundary } from '../ui/components/ErrorBoundary';
 import { Layout, type NavItem } from '../ui/components/Layout';
 import {
   IconHistory,
@@ -11,7 +12,7 @@ import { SampleBanner } from '../ui/components/SampleBanner';
 import { muted } from '../ui/components/styles';
 import { ToastProvider } from '../ui/components/ToastProvider';
 import { useTracker } from '../ui/hooks/useData';
-import { useRoute, type Route } from '../ui/router';
+import { routeHref, useRoute, type Route } from '../ui/router';
 import { TodayScreen } from '../ui/screens/TodayScreen';
 
 // Las pantallas que no son "Hoy" se cargan bajo demanda para aligerar la carga inicial.
@@ -103,7 +104,10 @@ export function App() {
         back={screen.back}
         banner={<SampleBanner />}
       >
-        <Suspense fallback={<p className={muted}>Cargando…</p>}>{screen.content}</Suspense>
+        {/* La clave por ruta reinicia el estado de error al cambiar de pantalla. */}
+        <ErrorBoundary key={routeHref(route)}>
+          <Suspense fallback={<p className={muted}>Cargando…</p>}>{screen.content}</Suspense>
+        </ErrorBoundary>
       </Layout>
     </ToastProvider>
   );
