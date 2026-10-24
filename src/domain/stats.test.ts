@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { correlationPValue, logGamma, mean, pearson, regularizedBeta } from './stats';
+import { correlationPValue, logGamma, mean, median, pearson, regularizedBeta } from './stats';
 
 describe('estadística', () => {
   it('promedio', () => {
@@ -41,5 +41,13 @@ describe('estadística', () => {
     expect(correlationPValue(0.5, 20)).toBeCloseTo(0.02477, 4);
     expect(correlationPValue(0, 30)).toBeCloseTo(1, 6);
     expect(correlationPValue(1, 30)).toBe(0);
+  });
+});
+
+describe('mediana', () => {
+  it('impar, par y vacía', () => {
+    expect(median([3, 1, 100])).toBe(3);
+    expect(median([4, 1, 3, 2])).toBe(2.5);
+    expect(median([])).toBeNull();
   });
 });

@@ -1,4 +1,5 @@
 import Dexie, { type EntityTable } from 'dexie';
+import type { DerivedMetric } from '../domain/derived';
 import type { Entry, Tracker } from '../domain/types';
 
 export interface Setting {
@@ -10,6 +11,7 @@ export class PulsoDB extends Dexie {
   trackers!: EntityTable<Tracker, 'id'>;
   entries!: EntityTable<Entry, 'id'>;
   settings!: EntityTable<Setting, 'key'>;
+  derived!: EntityTable<DerivedMetric, 'id'>;
 
   constructor(name = 'pulso') {
     super(name);
@@ -18,6 +20,8 @@ export class PulsoDB extends Dexie {
       entries: 'id, trackerId, date, [trackerId+date]',
       settings: 'key',
     });
+    // v2: métricas derivadas. Solo agrega una tabla; los datos existentes no cambian.
+    this.version(2).stores({ derived: 'id' });
   }
 }
 

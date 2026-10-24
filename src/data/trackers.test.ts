@@ -51,3 +51,22 @@ describe('repositorio de rastreadores', () => {
     expect(await db.trackers.count()).toBe(0);
   });
 });
+
+describe('borrar rastreador con métricas derivadas', () => {
+  it('borra las métricas que lo usan', async () => {
+    const a = await createTracker({ ...emptyDraft(), name: 'A' });
+    const b = await createTracker({ ...emptyDraft(), name: 'B' });
+    await db.derived.add({
+      id: 'm',
+      name: 'M',
+      icon: '🧮',
+      op: 'sum',
+      aId: a.id,
+      bId: b.id,
+      unit: '',
+      createdAt: 0,
+    });
+    await deleteTracker(b.id);
+    expect(await db.derived.count()).toBe(0);
+  });
+});

@@ -100,3 +100,13 @@ export function correlationPValue(r: number, n: number): number {
   const t2 = (r * r * df) / (1 - r * r);
   return regularizedBeta(df / (df + t2), df / 2, 0.5);
 }
+
+/** Mediana; null si no hay datos. Menos sensible que el promedio a valores extremos. */
+export function median(xs: number[]): number | null {
+  if (xs.length === 0) return null;
+  const s = [...xs].sort((a, b) => a - b);
+  const mid = Math.floor(s.length / 2);
+  return s.length % 2 === 1
+    ? (s[mid] as number)
+    : ((s[mid - 1] as number) + (s[mid] as number)) / 2;
+}

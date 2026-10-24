@@ -23,8 +23,9 @@ export async function loadSampleData(now: Date = new Date()): Promise<void> {
 
 /** Borra todos los rastreadores y registros de ejemplo, y los registros hechos en ellos. */
 export async function clearSampleData(): Promise<number> {
-  return db.transaction('rw', db.trackers, db.entries, async () => {
+  return db.transaction('rw', db.trackers, db.entries, db.derived, async () => {
     const sampleIds = (await db.trackers.filter((t) => t.isSample).toArray()).map((t) => t.id);
+    await db.derived.filter((m) => sampleIds.includes(m.aId) || sampleIds.includes(m.bId)).delete();
     const removed = await db.entries
       .filter((e) => e.isSample || sampleIds.includes(e.trackerId))
       .delete();

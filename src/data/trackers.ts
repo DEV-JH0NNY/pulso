@@ -61,10 +61,11 @@ export async function reorderTrackers(orderedIds: string[]): Promise<void> {
   });
 }
 
-/** Borra el rastreador y todos sus registros. */
+/** Borra el rastreador, todos sus registros y las métricas derivadas que lo usan. */
 export async function deleteTracker(id: string): Promise<void> {
-  await db.transaction('rw', db.trackers, db.entries, async () => {
+  await db.transaction('rw', db.trackers, db.entries, db.derived, async () => {
     await db.entries.where('trackerId').equals(id).delete();
+    await db.derived.filter((m) => m.aId === id || m.bId === id).delete();
     await db.trackers.delete(id);
   });
 }

@@ -52,3 +52,26 @@ describe('respaldo JSON', () => {
     expect(parseBackup(JSON.stringify(dup))).toMatchObject({ ok: false, error: /repetido/ });
   });
 });
+
+describe('respaldo con métricas derivadas', () => {
+  it('las conserva y valida sus rastreadores', () => {
+    const [a, b] = sample.trackers;
+    const metric = {
+      id: 'm1',
+      name: 'Prueba',
+      icon: '🧮',
+      op: 'ratio' as const,
+      aId: a?.id ?? '',
+      bId: b?.id ?? '',
+      unit: '',
+      createdAt: 1,
+    };
+    const backup = createBackup(sample.trackers, [], new Date(0), [metric]);
+    expect(parseBackup(JSON.stringify(backup))).toEqual({ ok: true, backup });
+    const broken = { ...backup, derived: [{ ...metric, bId: 'nada' }] };
+    expect(parseBackup(JSON.stringify(broken))).toMatchObject({
+      ok: false,
+      error: /Métrica derivada #1/,
+    });
+  });
+});

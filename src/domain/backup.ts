@@ -1,3 +1,4 @@
+import { DERIVED_OPS, type DerivedMetric } from './derived';
 import { isValidISODate, isValidTime } from './dates';
 import { TRACKER_TYPES, type Entry, type Tracker } from './types';
 import { validateEntryValue, validateTrackerDraft } from './trackers';
@@ -10,10 +11,24 @@ export interface Backup {
   exportedAt: string;
   trackers: Tracker[];
   entries: Entry[];
+  /** Métricas derivadas (opcional: los respaldos anteriores no lo traen). */
+  derived?: DerivedMetric[];
 }
 
-export function createBackup(trackers: Tracker[], entries: Entry[], now = new Date()): Backup {
-  return { app: 'pulso', format: BACKUP_FORMAT, exportedAt: now.toISOString(), trackers, entries };
+export function createBackup(
+  trackers: Tracker[],
+  entries: Entry[],
+  now = new Date(),
+  derived: DerivedMetric[] = [],
+): Backup {
+  return {
+    app: 'pulso',
+    format: BACKUP_FORMAT,
+    exportedAt: now.toISOString(),
+    trackers,
+    entries,
+    ...(derived.length > 0 ? { derived } : {}),
+  };
 }
 
 export type BackupResult = { ok: true; backup: Backup } | { ok: false; error: string };
@@ -123,6 +138,14 @@ export function parseBackup(text: string): BackupResult {
     if (typeof e === 'string') return { ok: false, error: e };
     entries.push(e);
   }
+  const derived: DerivedMetric[] = [];
+  if (Array.isArray(data.derived)) {
+    for (const [i, raw] of data.derived.entries()) {
+      const m = parseDerived(raw, i, byId);
+      if (typeof m === 'string') return { ok: false, error: m };
+      derived.push(m);
+    }
+  }
   return {
     ok: true,
     backup: {
@@ -131,6 +154,32 @@ export function parseBackup(text: string): BackupResult {
       exportedAt: isString(data.exportedAt) ? data.exportedAt : '',
       trackers,
       entries,
+      ...(derived.length > 0 ? { derived } : {}),
     },
+  };
+}
+
+function parseDerived(
+  raw: unknown,
+  i: number,
+  trackers: Map<string, Tracker>,
+): DerivedMetric | string {
+  const where = `Métrica derivada #${i + 1}`;
+  if (!isObject(raw)) return `${where}: no es un objeto.`;
+  const { id, name, icon, op, aId, bId, unit, createdAt } = raw;
+  if (!isString(id) || !isString(name) || !isString(icon) || !isString(unit))
+    return `${where}: faltan campos.`;
+  if (!DERIVED_OPS.some((o) => o.op === op)) return `${where}: operación desconocida.`;
+  if (!isString(aId) || !isString(bId) || !trackers.has(aId) || !trackers.has(bId))
+    return `${where}: sus rastreadores no están en el respaldo.`;
+  return {
+    id,
+    name,
+    icon,
+    op: op as DerivedMetric['op'],
+    aId,
+    bId,
+    unit,
+    createdAt: isNumber(createdAt) ? createdAt : 0,
   };
 }

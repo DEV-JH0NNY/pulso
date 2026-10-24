@@ -3,6 +3,7 @@ import { dailyTotals } from '../../domain/aggregate';
 import { computeStreaks } from '../../domain/streaks';
 import { IconChevronRight } from '../components/icons';
 import { PeriodSummary } from '../components/PeriodSummary';
+import { DerivedMetrics } from '../components/DerivedMetrics';
 import { cardBase, card, muted, sectionTitle } from '../components/styles';
 import { TrackerBadge } from '../components/TrackerBadge';
 import { useAllTrackers, useEntriesBetween } from '../hooks/useData';
@@ -69,6 +70,7 @@ export function StatsScreen() {
           {list(archived)}
         </>
       )}
+      <DerivedMetrics trackers={trackers} entries={entries} todayDate={todayDate} />
     </div>
   );
 }
