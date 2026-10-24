@@ -113,3 +113,18 @@ export function summarizeDay(
   }
   return { withGoal, met, logged };
 }
+
+/**
+ * ¿Agregar `added` a los valores del día hace que se cumpla una meta que
+ * antes no se cumplía? (solo metas «al menos»; un límite se cumple sin esfuerzo).
+ */
+export function reachesGoal(
+  tracker: Pick<Tracker, 'type' | 'dailyGoal' | 'goalDirection'>,
+  dayValues: number[],
+  added: number,
+): boolean {
+  if (tracker.dailyGoal === null || isLimitGoal(tracker)) return false;
+  const before = progressFor(tracker, dailyValue(tracker.type, dayValues)).met;
+  const after = progressFor(tracker, dailyValue(tracker.type, [...dayValues, added])).met;
+  return !before && after;
+}

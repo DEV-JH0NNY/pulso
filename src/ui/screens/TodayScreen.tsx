@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { addEntry, deleteEntry } from '../../data/entries';
 import { quickLog } from '../../data/quickLog';
-import { dailyTotals, summarizeDay } from '../../domain/aggregate';
+import { dailyTotals, reachesGoal, summarizeDay } from '../../domain/aggregate';
 import { addDays, startOfWeek, toTime } from '../../domain/dates';
 import { formatDayLabel, formatLongDate, formatValue } from '../../domain/format';
 import type { DaySummary } from '../../domain/aggregate';
@@ -31,6 +31,7 @@ export function TodayScreen() {
   // Se carga la semana del día mostrado para calcular también las metas semanales.
   const entries = useEntriesBetween(startOfWeek(day), day);
   const [detailed, setDetailed] = useState<Tracker | null>(null);
+  const [celebrating, setCelebrating] = useState<{ id: string; n: number } | null>(null);
   const toast = useToast();
   const onboardingDone = useOnboardingDone();
 
@@ -56,9 +57,18 @@ export function TodayScreen() {
     });
 
   const handleQuickLog = async (t: Tracker) => {
+    const dayValues = (entries ?? [])
+      .filter((e) => e.trackerId === t.id && e.date === day)
+      .map((e) => e.value);
     const entry = await quickLog(t, values.get(t.id) ?? null, new Date(), day);
     if (!entry) {
       toast({ message: `«${t.name}» ya está marcado ${isToday ? 'hoy' : 'ese día'}` });
+      return;
+    }
+    if (reachesGoal(t, dayValues, entry.value)) {
+      setCelebrating((c) => ({ id: t.id, n: (c?.n ?? 0) + 1 }));
+      navigator.vibrate?.([15, 60, 15]);
+      undoable(`🎉 ¡Meta de «${t.name}» cumplida!`, entry.id);
       return;
     }
     navigator.vibrate?.(10);
@@ -146,6 +156,7 @@ export function TodayScreen() {
                   tracker={t}
                   value={values.get(t.id) ?? null}
                   week={weekProgress(t, dailyTotals(t, entries), day)}
+                  celebrate={celebrating?.id === t.id ? celebrating.n : 0}
                   onQuickLog={() => void handleQuickLog(t)}
                   onDetailedLog={() => setDetailed(t)}
                 />

@@ -140,3 +140,15 @@ describe('TodayScreen · meta semanal', () => {
     expect(await screen.findByText('Semana: 1/3 días')).toBeInTheDocument();
   });
 });
+
+describe('TodayScreen · celebración', () => {
+  it('celebra al cumplir la meta del día', async () => {
+    await createTracker({ ...emptyDraft(), name: 'Agua', unit: 'vasos', dailyGoal: 2 });
+    const { user } = renderWithProviders(<TodayScreen />);
+    await user.click(await tile('Agua'));
+    await screen.findByText('1 / 2 vasos');
+    expect(screen.queryByText(/meta de «agua» cumplida/i)).not.toBeInTheDocument();
+    await user.click(await tile('Agua'));
+    expect(await screen.findByText('🎉 ¡Meta de «Agua» cumplida!')).toBeInTheDocument();
+  });
+});

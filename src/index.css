@@ -61,3 +61,15 @@ dialog::backdrop {
     transform: scale(1.35);
   }
 }
+
+/* Anillo que se expande y desvanece al cumplir una meta. */
+@keyframes goal-ring {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.12);
+  }
+}

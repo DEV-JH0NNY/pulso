@@ -5,6 +5,7 @@ import {
   isDayDone,
   isLimitGoal,
   progressFor,
+  reachesGoal,
   summarizeDay,
 } from './aggregate';
 
@@ -99,5 +100,19 @@ describe('metas de límite', () => {
     expect(isLimitGoal(limit)).toBe(true);
     expect(isLimitGoal({ type: 'scale', goalDirection: 'atMost' })).toBe(false);
     expect(isLimitGoal({ type: 'counter' })).toBe(false);
+  });
+});
+
+describe('reachesGoal', () => {
+  it('detecta el momento en que se cumple la meta', () => {
+    const agua = { type: 'counter' as const, dailyGoal: 3 };
+    expect(reachesGoal(agua, [1], 1)).toBe(false);
+    expect(reachesGoal(agua, [1, 1], 1)).toBe(true);
+    expect(reachesGoal(agua, [1, 1, 1], 1)).toBe(false); // ya estaba cumplida
+    expect(reachesGoal({ type: 'boolean', dailyGoal: 1 }, [], 1)).toBe(true);
+    expect(reachesGoal({ type: 'counter', dailyGoal: null }, [], 1)).toBe(false);
+    expect(reachesGoal({ type: 'counter', dailyGoal: 2, goalDirection: 'atMost' }, [], 1)).toBe(
+      false,
+    );
   });
 });

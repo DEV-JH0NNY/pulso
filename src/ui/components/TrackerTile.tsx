@@ -15,11 +15,20 @@ interface TrackerTileProps {
   value: number | null;
   /** Progreso de la meta semanal, si el rastreador tiene una. */
   week?: WeekProgress | null;
+  /** Contador que cambia cada vez que hay que celebrar una meta cumplida. */
+  celebrate?: number;
   onQuickLog: () => void;
   onDetailedLog: () => void;
 }
 
-export function TrackerTile({ tracker, value, week, onQuickLog, onDetailedLog }: TrackerTileProps) {
+export function TrackerTile({
+  tracker,
+  value,
+  week,
+  celebrate = 0,
+  onQuickLog,
+  onDetailedLog,
+}: TrackerTileProps) {
   const [pulse, setPulse] = useState(0);
   const press = useLongPress(onDetailedLog, () => {
     setPulse((p) => p + 1);
@@ -40,6 +49,14 @@ export function TrackerTile({ tracker, value, week, onQuickLog, onDetailedLog }:
 
   return (
     <div className="relative h-full">
+      {celebrate > 0 && (
+        <span
+          key={celebrate}
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 hidden rounded-2xl motion-safe:block motion-safe:animate-[goal-ring_700ms_ease-out_forwards]"
+          style={{ boxShadow: `0 0 0 3px ${hex}` }}
+        />
+      )}
       <button
         type="button"
         {...press}
