@@ -82,7 +82,7 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 
 40. ✅ **Historial de metas:** al cambiar la meta de un rastreador, los días anteriores se evalúan con la meta que tenían entonces (hoy se recalcula todo con la meta nueva).
 41. ✅ **Duplicar un rastreador** (por ejemplo, para crear «Café descafeinado» a partir de «Café»).
-42. ⬜ **Nota rápida tras registrar:** el aviso permite agregar una nota al registro recién hecho sin abrir el formulario completo.
+42. ✅ **Nota rápida tras registrar:** el aviso permite agregar una nota al registro recién hecho sin abrir el formulario completo.
 43. ⬜ **Prueba de punta a punta en CI** con el build real: abrir la app, registrar, recargar y comprobar que el dato persiste.
 44. ⬜ **Exportar un gráfico como imagen** (PNG) para compartirlo.
 
@@ -140,3 +140,4 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 - [2026-10-24] Documentación al día, ronda 7 (Fase 2 · 38).
 - [2026-10-24] Historial de metas (Fase 2 · 40).
 - [2026-10-24] Duplicar un rastreador (Fase 2 · 41).
+- [2026-10-24] Nota rápida tras registrar (Fase 2 · 42).

@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 17:32] Nota rápida tras registrar (Fase 2 · 42)
+
+- **Qué hice:** El aviso que aparece al registrar ahora tiene dos acciones: «Nota» y «Deshacer». «Nota» abre un diálogo pequeño solo con el campo de texto y guarda la nota en el registro recién hecho.
+- **Por qué:** Las notas hacen útiles la búsqueda y el historial, pero abrir el formulario completo (con toque largo) para escribir una era un paso de más. Los avisos admiten una acción secundaria opcional; el resto de avisos no cambia.
+- **Archivos principales:** `src/ui/components/{NoteDialog,ToastProvider}.tsx`, `src/ui/components/toastContext.ts`, `src/ui/screens/TodayScreen.tsx`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (261 pasando) · build ✅
+- **Commit:** 421cc3f
+- **Siguiente:** Prueba de punta a punta en CI.
+
 ### [2026-10-24 17:29] Duplicar un rastreador (Fase 2 · 41)
 
 - **Qué hice:** Nuevo botón «Duplicar» en Rastreadores. Abre el formulario de creación con la misma configuración (tipo, unidad, metas, días) y el nombre «Copia de …», listo para ajustar. También arreglé el diseño de la lista: con seis botones, en un celular los nombres quedaban cortados («E…»). Ahora en pantallas angostas las acciones van en una segunda fila y desde tablet vuelven a la misma línea.
