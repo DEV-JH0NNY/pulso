@@ -64,6 +64,14 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 30. ✅ **Pantallas anchas:** tres columnas en «Hoy» desde tablet y contenido más ancho en escritorio.
 31. ✅ **Comparar dos rastreadores en el tiempo:** en cada hallazgo, un gráfico con ambas series normalizadas para ver cómo se mueven juntas.
 
+### Ronda 6
+
+32. ⬜ **Calidad de datos:** cobertura de cada rastreador (días con registro en los últimos 30 y 90 días) y el hueco más largo, para saber qué tan confiables son los análisis.
+33. ⬜ **Importar también CSV ancho** (un día por fila), detectándolo automáticamente.
+34. ⬜ **Atajos de teclado en escritorio:** 1–9 registra el rastreador n en «Hoy»; ← / → cambia de día.
+35. ⬜ **Ajuste para desactivar la vibración.**
+36. ⬜ **Resumen anual «Tu año en Pulso»:** totales, mejores rachas y meses destacados.
+
 ## Completadas
 
 - [2026-10-24] Base del proyecto (Fase 1 · tarea 1).
