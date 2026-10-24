@@ -224,8 +224,9 @@ export function InsightsScreen() {
           <p>
             El <strong>valor p</strong> indica qué tan probable sería ver una relación así de fuerte
             por pura casualidad. Por debajo de {formatNumber(SIGNIFICANCE)} se dice que es poco
-            probable que sea casualidad. Ojo: al comparar muchos pares, algunos pueden parecer
-            relacionados por azar.
+            probable que sea casualidad. Al comparar muchos pares, algunos parecen relacionados por
+            azar; por eso también se muestra el <strong>valor p ajustado</strong> con el método de
+            Benjamini–Hochberg, que controla la proporción de falsos positivos entre los hallazgos.
           </p>
           <p>Todo se calcula en tu dispositivo; tus datos no salen de él.</p>
         </div>

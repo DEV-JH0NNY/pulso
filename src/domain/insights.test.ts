@@ -133,10 +133,54 @@ describe('exportar hallazgos', () => {
     const a = tracker('a', 'Café, con leche');
     const b = tracker('b', 'Sueño');
     const csv = correlationsToCsv([
-      { a, b, r: -0.61234, n: 30, p: 0.000312, strength: 'fuerte', points: [], lag: 1 },
+      {
+        a,
+        b,
+        r: -0.61234,
+        n: 30,
+        p: 0.000312,
+        q: 0.001,
+        comparisons: 3,
+        strength: 'fuerte',
+        points: [],
+        lag: 1,
+      },
     ]);
     expect(csv).toBe(
-      'rastreador_a,rastreador_b,desfase_dias,r,n,p,fuerza\r\n"Café, con leche",Sueño,1,-0.6123,30,0.000312,fuerte\r\n',
+      'rastreador_a,rastreador_b,desfase_dias,r,n,p,p_ajustado_bh,fuerza\r\n"Café, con leche",Sueño,1,-0.6123,30,0.000312,0.00100,fuerte\r\n',
     );
+  });
+});
+
+describe('comparaciones múltiples', () => {
+  it('explica si un hallazgo resiste la corrección', () => {
+    expect(describeConfidence({ n: 30, p: 0.01, q: 0.02, comparisons: 10 })).toMatch(
+      /incluso considerando que se compararon 10 pares \(p ajustado = 0,02\)/,
+    );
+    expect(describeConfidence({ n: 30, p: 0.03, q: 0.2, comparisons: 10 })).toMatch(
+      /podría ser un falso positivo \(p ajustado = 0,2\)/,
+    );
+  });
+
+  it('computeInsights asigna q a cada correlación', () => {
+    const s = Array.from({ length: 20 }, (_, i) => (i * 7) % 11);
+    const res = computeInsights(
+      [tracker('a', 'A'), tracker('b', 'B'), tracker('c', 'C')],
+      [
+        ...entries('a', s),
+        ...entries(
+          'b',
+          s.map((v) => v * 2 + 1),
+        ),
+        ...entries(
+          'c',
+          s.map((v, i) => (v * i) % 5),
+        ),
+      ],
+    );
+    for (const c of res.correlations) {
+      expect(c.comparisons).toBe(3);
+      expect(c.q).toBeGreaterThanOrEqual(c.p);
+    }
   });
 });

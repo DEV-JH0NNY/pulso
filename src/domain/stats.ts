@@ -110,3 +110,20 @@ export function median(xs: number[]): number | null {
     ? (s[mid] as number)
     : ((s[mid - 1] as number) + (s[mid] as number)) / 2;
 }
+
+/**
+ * Valores p ajustados por Benjamini–Hochberg (control de la tasa de falsos
+ * descubrimientos). Devuelve los q en el mismo orden que la entrada.
+ */
+export function benjaminiHochberg(pValues: number[]): number[] {
+  const m = pValues.length;
+  const order = pValues.map((p, i) => ({ p, i })).sort((a, b) => a.p - b.p);
+  const q = new Array<number>(m);
+  let running = 1;
+  for (let k = m - 1; k >= 0; k--) {
+    const { p, i } = order[k] as { p: number; i: number };
+    running = Math.min(running, (p * m) / (k + 1));
+    q[i] = Math.min(1, running);
+  }
+  return q;
+}

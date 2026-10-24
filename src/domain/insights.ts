@@ -2,7 +2,7 @@ import { dailyTotals } from './aggregate';
 import { toCsv } from './csv';
 import { addDays } from './dates';
 import { formatNumber } from './format';
-import { correlationPValue, pearson } from './stats';
+import { benjaminiHochberg, correlationPValue, pearson } from './stats';
 import type { Entry, Tracker } from './types';
 
 /** Días con datos en común necesarios para calcular una correlación. */
@@ -19,6 +19,13 @@ export interface Correlation {
   /** Días con datos en ambos rastreadores. */
   n: number;
   p: number;
+  /**
+   * Valor p ajustado por Benjamini–Hochberg dentro de su familia (todas las
+   * correlaciones del mismo día, o todas las de un día de desfase).
+   */
+  q: number;
+  /** Cantidad de pares comparados en su familia. */
+  comparisons: number;
   strength: Strength;
   /** Pares (valor de a, valor de b) de cada día en común, para el diagrama de dispersión. */
   points: [number, number][];
@@ -73,6 +80,7 @@ export function computeInsights(
     }
   }
 
+  adjustFamily(correlations);
   correlations.sort((x, y) => Math.abs(y.r) - Math.abs(x.r));
   pending.sort((x, y) => y.n - x.n);
   return { correlations, pending, constant };
@@ -111,6 +119,8 @@ function correlatePair(
       r,
       n,
       p: correlationPValue(r, n),
+      q: 1,
+      comparisons: 1,
       strength: strengthOf(r),
       points: xs.map((x, k) => [x, ys[k] as number]),
       lag,
@@ -136,7 +146,17 @@ export function computeLaggedCorrelations(
       if (res.kind === 'ok') out.push(res.correlation);
     }
   }
+  adjustFamily(out);
   return out.sort((x, y) => Math.abs(y.r) - Math.abs(x.r));
+}
+
+/** Asigna q (Benjamini–Hochberg) y el tamaño de la familia a cada correlación. */
+function adjustFamily(family: Correlation[]): void {
+  const q = benjaminiHochberg(family.map((c) => c.p));
+  family.forEach((c, i) => {
+    c.q = q[i] as number;
+    c.comparisons = family.length;
+  });
 }
 
 function condition(t: Tracker): string {
@@ -169,12 +189,24 @@ export function describeCorrelation(
   return `Los días en que ${condition(c.a)}, ${when}tiendes a ${outcome(c.b, c.r > 0)}.`;
 }
 
-/** Explicación honesta de la confianza en el resultado. */
-export function describeConfidence(c: Pick<Correlation, 'n' | 'p'>): string {
-  const p = c.p < 0.001 ? 'p < 0,001' : `p = ${formatNumber(c.p, 3)}`;
-  return c.p < SIGNIFICANCE
-    ? `Con ${c.n} días en común, es poco probable que sea pura casualidad (${p}).`
-    : `Con ${c.n} días en común, todavía podría ser casualidad (${p}). Sigue registrando para confirmarlo.`;
+const formatP = (name: string, v: number) =>
+  v < 0.001 ? `${name} < 0,001` : `${name} = ${formatNumber(v, 3)}`;
+
+/**
+ * Explicación honesta de la confianza en el resultado. Si hay varias
+ * comparaciones, aclara si el hallazgo resiste la corrección por comparaciones múltiples.
+ */
+export function describeConfidence(
+  c: Pick<Correlation, 'n' | 'p'> & Partial<Pick<Correlation, 'q' | 'comparisons'>>,
+): string {
+  const p = formatP('p', c.p);
+  if (c.p >= SIGNIFICANCE)
+    return `Con ${c.n} días en común, todavía podría ser casualidad (${p}). Sigue registrando para confirmarlo.`;
+  const base = `Con ${c.n} días en común, es poco probable que sea pura casualidad (${p})`;
+  if (c.q === undefined || !c.comparisons || c.comparisons < 2) return `${base}.`;
+  return c.q < SIGNIFICANCE
+    ? `${base}, incluso considerando que se compararon ${c.comparisons} pares (${formatP('p ajustado', c.q)}).`
+    : `${base}, pero como se compararon ${c.comparisons} pares podría ser un falso positivo (${formatP('p ajustado', c.q)}).`;
 }
 
 /** Tabla de correlaciones para analizar fuera de la app (una fila por par y desfase). */
@@ -186,10 +218,11 @@ export function correlationsToCsv(correlations: Correlation[]): string {
     String(Math.round(c.r * 1e4) / 1e4),
     String(c.n),
     c.p.toPrecision(3),
+    c.q.toPrecision(3),
     c.strength,
   ]);
   return toCsv([
-    ['rastreador_a', 'rastreador_b', 'desfase_dias', 'r', 'n', 'p', 'fuerza'],
+    ['rastreador_a', 'rastreador_b', 'desfase_dias', 'r', 'n', 'p', 'p_ajustado_bh', 'fuerza'],
     ...rows,
   ]);
 }

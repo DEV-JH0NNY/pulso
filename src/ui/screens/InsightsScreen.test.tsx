@@ -98,7 +98,9 @@ describe('InsightsScreen · exportar', () => {
     const { user } = renderWithProviders(<InsightsScreen />);
     await user.click(await screen.findByRole('button', { name: 'Exportar hallazgos (CSV)' }));
     const text = await (createObjectURL.mock.calls[0]?.[0] as Blob).text();
-    expect(text.split('\r\n')[0]).toBe('rastreador_a,rastreador_b,desfase_dias,r,n,p,fuerza');
+    expect(text.split('\r\n')[0]).toBe(
+      'rastreador_a,rastreador_b,desfase_dias,r,n,p,p_ajustado_bh,fuerza',
+    );
     expect(text).toContain('Café,Sueño,0,');
     vi.unstubAllGlobals();
   });

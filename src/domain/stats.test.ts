@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { correlationPValue, logGamma, mean, median, pearson, regularizedBeta } from './stats';
+import {
+  benjaminiHochberg,
+  correlationPValue,
+  logGamma,
+  mean,
+  median,
+  pearson,
+  regularizedBeta,
+} from './stats';
 
 describe('estadística', () => {
   it('promedio', () => {
@@ -49,5 +57,16 @@ describe('mediana', () => {
     expect(median([3, 1, 100])).toBe(3);
     expect(median([4, 1, 3, 2])).toBe(2.5);
     expect(median([])).toBeNull();
+  });
+});
+
+describe('Benjamini–Hochberg', () => {
+  it('coincide con statsmodels multipletests(method="fdr_bh")', () => {
+    const q = benjaminiHochberg([0.01, 0.04, 0.03, 0.005]);
+    expect(q.map((x) => Number(x.toFixed(4)))).toEqual([0.02, 0.04, 0.04, 0.02]);
+  });
+  it('lista vacía y tope en 1', () => {
+    expect(benjaminiHochberg([])).toEqual([]);
+    expect(benjaminiHochberg([0.9, 0.95])).toEqual([0.95, 0.95]);
   });
 });
