@@ -4,11 +4,11 @@
 
 > Actualiza esta sección cada 5 entradas y al final de la noche. Es lo primero que el dueño va a leer.
 
-- **Estado actual:** Fase 1 completa (11 de 11). Empieza la Fase 2.
-- **Lo más destacado hasta ahora:** Registro con un toque (toque largo para ajustar, «Deshacer»), vista de hoy con metas, historial editable, rachas y calendario anual, gráficos día/semana/mes, hallazgos con Pearson + valor p explicados en lenguaje simple, CSV de ida y vuelta con validación por línea, y datos de ejemplo realistas que se borran con un botón.
+- **Estado actual:** Fase 1 completa (11/11). Fase 2: 6 de 10 ideas del backlog hechas.
+- **Lo más destacado hasta ahora:** Registro con un toque (y en días anteriores), metas, historial, rachas y calendario anual, gráficos, hallazgos con Pearson + valor p (mismo día y día siguiente), CSV y respaldo JSON de ida y vuelta, recordatorio de respaldo, plantillas y resumen semanal/mensual justo.
 - **Decisiones importantes tomadas:** Fechas como texto local AAAA-MM-DD; ruteo por hash propio; gráficos, CSV y estadística sin librerías (todo probado); TypeScript 6 (typescript-eslint aún no soporta la 7); sin dependencias nuevas más allá del stack pedido.
 - **Problemas conocidos o pendientes:** El despliegue a GitHub Pages solo corre en `main`: hay que fusionar la rama `claude/wonderful-rubin-wns5l9` y activar **Settings → Pages → Source: GitHub Actions**.
-- **Siguiente paso:** Respaldo y restauración en JSON (Fase 2).
+- **Siguiente paso:** Aviso de nueva versión de la PWA.
 
 ---
 
@@ -28,6 +28,16 @@ Usa exactamente este formato:
 - **Commit:** (hash corto)
 - **Siguiente:**
 -->
+
+### [2026-10-24 13:42] Hallazgos con desfase de un día (Fase 2 · 6)
+
+- **Qué hice:** Nueva sección «Al día siguiente» en Hallazgos: correlación entre el total de un rastreador en un día y el de otro al día siguiente, para cada par ordenado («Los días en que registras más «Café», al día siguiente tiendes a registrar menos «Sueño».»). Solo se muestran las moderadas o fuertes, con el mismo mínimo de 14 pares de días, r, valor p y diagrama.
+- **Por qué:** Muchas relaciones reales tienen retraso (café de hoy → sueño de esta noche, que se registra mañana). Se advierte que una relación del mismo día con datos que cambian poco de un día a otro también aparece con desfase sin que exista un efecto entre días. Se refactorizó el cálculo de pares en `correlatePair` para compartirlo.
+- **Archivos principales:** `src/domain/insights.ts`, `src/ui/screens/InsightsScreen.tsx`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (162 pasando) · build ✅
+- **Commit:** 0b5e2dd
+- **Siguiente:** Aviso de nueva versión de la PWA.
 
 ### [2026-10-24 13:38] Resumen semanal y mensual (Fase 2 · 5)
 
