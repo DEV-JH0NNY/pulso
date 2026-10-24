@@ -1,6 +1,8 @@
 /** Clases reutilizables para mantener la apariencia consistente. */
-export const card =
-  'rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900';
+/** Tarjeta sin relleno, para listas o para fijar un relleno propio. */
+export const cardBase =
+  'rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900';
+export const card = `${cardBase} p-4`;
 
 const buttonBase =
   'inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50';

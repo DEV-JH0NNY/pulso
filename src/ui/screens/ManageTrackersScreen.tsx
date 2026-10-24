@@ -15,6 +15,7 @@ import {
   buttonPrimary,
   buttonSecondary,
   card,
+  cardBase,
   iconButton,
   muted,
   sectionTitle,
@@ -99,7 +100,7 @@ export function ManageTrackersScreen() {
       ) : (
         <ul className="space-y-2">
           {active.map((t, i) => (
-            <li key={t.id} className={`${card} flex items-center gap-3 p-3`}>
+            <li key={t.id} className={`${cardBase} flex items-center gap-3 p-3`}>
               <TrackerBadge tracker={t} />
               <div className="min-w-0 flex-1">
                 <p className="truncate font-medium">
@@ -157,7 +158,7 @@ export function ManageTrackersScreen() {
           </p>
           <ul className="space-y-2">
             {archived.map((t) => (
-              <li key={t.id} className={`${card} flex items-center gap-3 p-3 opacity-80`}>
+              <li key={t.id} className={`${cardBase} flex items-center gap-3 p-3 opacity-80`}>
                 <TrackerBadge tracker={t} />
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-medium">{t.name}</p>

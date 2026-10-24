@@ -1,13 +1,15 @@
 import type { ReactNode } from 'react';
 import { Layout, type NavItem } from '../ui/components/Layout';
-import { IconSettings, IconToday } from '../ui/components/icons';
+import { IconHistory, IconSettings, IconToday } from '../ui/components/icons';
 import { ToastProvider } from '../ui/components/ToastProvider';
 import { useRoute, type Route } from '../ui/router';
+import { HistoryScreen } from '../ui/screens/HistoryScreen';
 import { ManageTrackersScreen } from '../ui/screens/ManageTrackersScreen';
 import { TodayScreen } from '../ui/screens/TodayScreen';
 
 const NAV: NavItem[] = [
   { route: { name: 'today' }, label: 'Hoy', icon: IconToday, matches: ['today'] },
+  { route: { name: 'history' }, label: 'Historial', icon: IconHistory, matches: ['history'] },
   {
     route: { name: 'manage' },
     label: 'Rastreadores',
@@ -24,6 +26,8 @@ interface Screen {
 
 function screenFor(route: Route): Screen {
   switch (route.name) {
+    case 'history':
+      return { title: 'Historial', content: <HistoryScreen /> };
     case 'manage':
       return { title: 'Rastreadores', content: <ManageTrackersScreen /> };
     default:
