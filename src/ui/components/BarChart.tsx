@@ -1,6 +1,8 @@
 import { colorHex } from '../../domain/colors';
 import { formatCompact } from '../../domain/format';
 import { niceMax } from '../../domain/series';
+import { downloadSvgAsPng } from '../exportImage';
+import { useRef } from 'react';
 
 export interface Bar {
   key: string;
@@ -19,6 +21,8 @@ interface BarChartProps {
   /** Valor fijo para el tope del eje Y (por ejemplo 5 en escalas). */
   yMax?: number;
   goal?: number | null;
+  /** Si se da, muestra un botón para descargar el gráfico como PNG con este nombre. */
+  downloadName?: string;
 }
 
 const W = 340;
@@ -29,7 +33,8 @@ const TOP = 10;
 const BOTTOM = 24;
 
 /** Gráfico de barras en SVG, con tabla oculta para lectores de pantalla. */
-export function BarChart({ bars, color, title, yMax, goal }: BarChartProps) {
+export function BarChart({ bars, color, title, yMax, goal, downloadName }: BarChartProps) {
+  const svgRef = useRef<SVGSVGElement>(null);
   const hex = colorHex(color);
   const dataMax = Math.max(0, ...bars.map((b) => b.value ?? 0), goal ?? 0);
   const top = yMax ?? niceMax(dataMax);
@@ -43,6 +48,7 @@ export function BarChart({ bars, color, title, yMax, goal }: BarChartProps) {
   return (
     <figure>
       <svg
+        ref={svgRef}
         viewBox={`0 0 ${W} ${H}`}
         className="h-auto w-full text-slate-500 dark:text-slate-400"
         aria-hidden="true"
@@ -112,6 +118,19 @@ export function BarChart({ bars, color, title, yMax, goal }: BarChartProps) {
         )}
       </svg>
       <figcaption className="sr-only">{title}</figcaption>
+      {downloadName && (
+        <div className="mt-1 text-right">
+          <button
+            type="button"
+            className="min-h-11 rounded-lg px-2 text-sm font-medium text-slate-600 underline underline-offset-2 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100"
+            onClick={() => {
+              if (svgRef.current) void downloadSvgAsPng(svgRef.current, downloadName, title);
+            }}
+          >
+            Descargar imagen
+          </button>
+        </div>
+      )}
       <table className="sr-only">
         <caption>{title}</caption>
         <thead>

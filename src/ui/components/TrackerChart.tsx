@@ -103,6 +103,7 @@ export function TrackerChart({ tracker, totals, todayDate }: TrackerChartProps) 
         title={`${tracker.name}: ${meaning.toLowerCase()}`}
         yMax={yMax}
         goal={granularity === 'day' && tracker.type !== 'boolean' ? tracker.dailyGoal : null}
+        downloadName={`pulso-${tracker.name}-${GRANULARITY_LABELS[granularity].toLowerCase()}-${todayDate}.png`}
       />
       <dl className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-4">
         <StatCard
