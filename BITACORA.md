@@ -4,11 +4,11 @@
 
 > Actualiza esta sección cada 5 entradas y al final de la noche. Es lo primero que el dueño va a leer.
 
-- **Estado actual:** (por ejemplo: Fase 1 en curso, 4 de 11 tareas completas)
-- **Lo más destacado hasta ahora:**
-- **Decisiones importantes tomadas:**
-- **Problemas conocidos o pendientes:**
-- **Siguiente paso:**
+- **Estado actual:** Fase 1 en curso, 6 de 11 tareas completas.
+- **Lo más destacado hasta ahora:** Rastreadores personalizables, registro con un toque (toque largo para ajustar y «Deshacer»), vista de hoy con progreso frente a metas, historial editable, rachas y calendario anual estilo GitHub.
+- **Decisiones importantes tomadas:** Fechas como texto local AAAA-MM-DD; ruteo por hash propio; gráficos en SVG propio sin librerías; TypeScript 6 (typescript-eslint aún no soporta la 7).
+- **Problemas conocidos o pendientes:** El despliegue a GitHub Pages solo corre en `main`; hay que fusionar la rama y activar Pages con «GitHub Actions».
+- **Siguiente paso:** Gráficos por rastreador.
 
 ---
 
@@ -28,6 +28,26 @@ Usa exactamente este formato:
 - **Commit:** (hash corto)
 - **Siguiente:**
 -->
+
+### [2026-10-24 13:01] Rachas y mapa de calor anual (Fase 1 · tarea 6)
+
+- **Qué hice:** Pantalla «Estadísticas» con la lista de rastreadores y su racha actual, y pantalla de detalle por rastreador con racha actual, mejor racha, días cumplidos, total de registros y un calendario de 53 semanas (lunes a domingo) estilo GitHub, con meses, días de la semana, leyenda y el detalle de cada día al pasar el dedo o el ratón.
+- **Por qué:** Un día «cumplido» es el que alcanza la meta; sin meta, el que tiene registros (en sí/no, un «Sí»). La racha actual no se rompe por hoy porque el día aún no termina. La intensidad del calendario usa el progreso frente a la meta o, sin meta, el valor relativo al máximo del año. El calendario es un SVG propio (sin librerías) que se desplaza horizontalmente y arranca mostrando lo más reciente, porque 53 columnas no caben legibles en un celular.
+- **Archivos principales:** `src/domain/{streaks,heatmap}.ts`, `src/ui/components/HeatmapChart.tsx`, `src/ui/screens/{StatsScreen,TrackerDetailScreen}.tsx`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (82 pasando) · build ✅
+- **Commit:** ba492ea
+- **Siguiente:** Gráficos por rastreador (día, semana y mes).
+
+### [2026-10-24 13:01] Historial (Fase 1 · tarea 5)
+
+- **Qué hice:** Pantalla de historial con los registros agrupados por día («Hoy», «Ayer», «Martes, 3 de marzo»), filtro por rastreador, carga de 30 días más bajo demanda, edición de valor/fecha/hora/nota y borrado con «Deshacer».
+- **Por qué:** Paginar por días (no por cantidad de registros) mantiene los días completos y la consulta usa el índice `date` de IndexedDB. El borrado no pide confirmación porque se puede deshacer, lo que lo hace más rápido sin riesgo.
+- **Archivos principales:** `src/domain/history.ts`, `src/ui/screens/HistoryScreen.tsx`, `src/ui/components/EntryRow.tsx`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (66 pasando) · build ✅
+- **Commit:** 0a0d5be
+- **Siguiente:** Rachas y mapa de calor anual.
 
 ### [2026-10-24 12:55] Vista de hoy con progreso (Fase 1 · tarea 4)
 
