@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 13:26] Respaldo y restauración en JSON (Fase 2 · 1)
+
+- **Qué hice:** En Ajustes, «Descargar respaldo» genera `pulso-respaldo-AAAA-MM-DD.json` con todos los rastreadores (ícono, color, meta, orden, archivados, marca de ejemplo) y registros. «Restaurar respaldo» valida el archivo completo, muestra un resumen (fecha, cantidades) y deja elegir entre combinar (agregar/actualizar por id) o reemplazar todo. Se guarda la fecha de la última exportación para el recordatorio de respaldo.
+- **Por qué:** El CSV es para análisis pero pierde configuración; el JSON permite cambiar de celular sin perder nada. Formato versionado (`format: 1`) para poder migrar en el futuro. La validación rechaza el archivo entero ante el primer error (con mensaje concreto) para no dejar la base a medias; la restauración corre en una transacción.
+- **Archivos principales:** `src/domain/backup.ts`, `src/data/backupIO.ts`, `src/ui/components/RestoreBackupDialog.tsx`, `src/ui/screens/SettingsScreen.tsx`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (147 pasando) · build ✅
+- **Commit:** f1ede16
+- **Siguiente:** Almacenamiento persistente y recordatorio de respaldo.
+
 ### [2026-10-24 13:24] Diseño, tema y rendimiento (Fase 1 · tarea 11) — Fase 1 completa
 
 - **Qué hice:** Selector de tema Sistema/Claro/Oscuro en Ajustes (también cambia el color de la barra del sistema en Android), sección «Acerca de» con versión y nota de privacidad, títulos de pestaña por pantalla («Hoy · Pulso»), nombre del rastreador como título del detalle, y carga diferida de todas las pantallas salvo «Hoy». Revisé contrastes: el verde de los botones principales pasó de emerald-600 (3,8:1, no cumple AA) a emerald-700 (5,5:1).
