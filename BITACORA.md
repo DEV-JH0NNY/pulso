@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 14:35] Prueba de rendimiento con 3 años de datos (Fase 2 · 24)
+
+- **Qué hice:** Prueba que genera 3 años de datos de ejemplo (más de 6 000 registros en 6 rastreadores) y mide los cálculos de cada pantalla: hallazgos ≈ 14 ms, hallazgos con desfase ≈ 24 ms, estadísticas de todos los rastreadores ≈ 7 ms, detalle (calendario, series, día de la semana) ≈ 2 ms. Falla si alguno pasa de 1,5 s.
+- **Por qué:** Para confirmar con números que no hace falta optimizar (ni índices extra, ni web workers, ni memoización adicional) y que una regresión de complejidad se note en la CI. El umbral es holgado para no fallar en máquinas lentas.
+- **Archivos principales:** `src/domain/perf.test.ts`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (219 pasando) · build ✅
+- **Commit:** 8e45c7f
+- **Siguiente:** Hora del último registro en las tarjetas de Hoy.
+
 ### [2026-10-24 14:34] Pantalla de error amigable (Fase 2 · 23)
 
 - **Qué hice:** Un «error boundary» envuelve cada pantalla: si algo falla al dibujarla, en lugar de una página en blanco aparece «Algo salió mal en esta pantalla», el mensaje técnico, y botones «Reintentar», «Descargar respaldo» y «Recargar la app». La navegación inferior sigue funcionando y cambiar de pantalla reinicia el error.
