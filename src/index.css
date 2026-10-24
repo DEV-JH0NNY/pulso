@@ -73,3 +73,7 @@ dialog::backdrop {
     transform: scale(1.12);
   }
 }
+
+kbd {
+  @apply rounded border border-slate-300 bg-slate-100 px-1 font-sans text-xs dark:border-slate-700 dark:bg-slate-800;
+}

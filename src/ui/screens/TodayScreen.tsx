@@ -19,6 +19,7 @@ import { WelcomeCard } from '../components/WelcomeCard';
 import { BackupReminder } from '../components/BackupReminder';
 import { DailyReminder } from '../components/DailyReminder';
 import { useToday } from '../hooks/useToday';
+import { useTodayShortcuts } from '../hooks/useTodayShortcuts';
 import { routeHref } from '../router';
 
 export function TodayScreen() {
@@ -34,6 +35,15 @@ export function TodayScreen() {
   const [celebrating, setCelebrating] = useState<{ id: string; n: number } | null>(null);
   const toast = useToast();
   const onboardingDone = useOnboardingDone();
+  useTodayShortcuts({
+    onNumber: (i) => {
+      const t = trackers?.[i];
+      // Solo llega aquí con los datos cargados, cuando handleQuickLog ya existe.
+      if (t && entries) void handleQuickLog(t);
+    },
+    onPrevDay: () => setOffset((o) => o + 1),
+    onNextDay: () => setOffset((o) => Math.max(0, o - 1)),
+  });
 
   const values = useMemo(() => {
     const map = new Map<string, number>();
@@ -173,6 +183,10 @@ export function TodayScreen() {
           </ul>
           <p className={`${muted} mt-4 text-center`}>
             Toca para registrar el valor por defecto · mantén presionado o usa «+» para ajustar.
+          </p>
+          <p className={`${muted} mt-1 hidden text-center md:block`}>
+            Atajos de teclado: <kbd>1</kbd>–<kbd>9</kbd> registra el rastreador en esa posición ·{' '}
+            <kbd>←</kbd> <kbd>→</kbd> cambia de día.
           </p>
         </>
       )}

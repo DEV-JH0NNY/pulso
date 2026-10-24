@@ -163,3 +163,22 @@ describe('TodayScreen · último registro', () => {
     expect(await screen.findByText(/Último: 7:05/)).toBeInTheDocument();
   });
 });
+
+describe('TodayScreen · atajos de teclado', () => {
+  it('1–9 registra y las flechas cambian de día', async () => {
+    await createTracker({ ...emptyDraft(), name: 'Café' });
+    await createTracker({ ...emptyDraft(), name: 'Agua' });
+    const { user } = renderWithProviders(<TodayScreen />);
+    await tile('Agua');
+    await user.keyboard('2');
+    await waitFor(async () => {
+      const [e] = await db.entries.toArray();
+      const agua = (await db.trackers.toArray()).find((t) => t.name === 'Agua');
+      expect(e?.trackerId).toBe(agua?.id);
+    });
+    await user.keyboard('{ArrowLeft}');
+    expect(await screen.findByText('Ayer')).toBeInTheDocument();
+    await user.keyboard('{ArrowRight}');
+    expect(screen.getByRole('button', { name: 'Día siguiente' })).toBeDisabled();
+  });
+});
