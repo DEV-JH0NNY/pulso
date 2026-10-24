@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 14:19] Metas semanales (Fase 2 · 18)
+
+- **Qué hice:** Cualquier rastreador puede tener «meta semanal» de 1 a 7 días. En «Hoy» cada tarjeta muestra «Semana: 2/3 días» (en verde con ✓ al cumplirla) y el detalle añade «Racha semanal» (semanas seguidas cumpliendo). La plantilla y el ejemplo de Ejercicio pasan a «3 días por semana».
+- **Por qué:** Hábitos como el ejercicio no son diarios; con meta diaria la racha se rompía siempre. Un día cuenta si cumple la meta diaria (o, sin ella, si tiene registros / un «Sí»), igual que en las rachas. La semana en curso suma a la racha si ya se cumplió pero no la rompe si aún faltan días. Campo opcional `weeklyTarget`, sin migración. «Hoy» ahora carga la semana del día mostrado.
+- **Archivos principales:** `src/domain/weekly.ts`, `src/domain/{types,trackers,backup}.ts`, `src/ui/components/{TrackerForm,TrackerTile}.tsx`, `src/ui/screens/{TodayScreen,TrackerDetailScreen}.tsx`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (201 pasando) · build ✅
+- **Commit:** 756b887
+- **Siguiente:** Buscar en el historial.
+
 ### [2026-10-24 14:16] Documentación al día con capturas (Fase 2 · 17)
 
 - **Qué hice:** Capturas reales generadas con Playwright (Hoy y detalle en claro, Hallazgos e Historial en oscuro) en `docs/capturas/`. README reescrito con todas las funciones actuales agrupadas. `COMO_EJECUTAR.md`: estructura de carpetas detallada con la regla dominio/datos/UI, cómo pasar datos a otro celular y nuevos problemas comunes (acentos en Excel, notificaciones, cambio de celular).
