@@ -4,11 +4,11 @@
 
 > Actualiza esta sección cada 5 entradas y al final de la noche. Es lo primero que el dueño va a leer.
 
-- **Estado actual:** Fase 1 completa (11/11). Fase 2: 38 mejoras hechas en siete rondas de backlog; solo falta la 38 (documentación al día). 253 pruebas. CI en verde en todos los commits que revisé.
+- **Estado actual:** Fase 1 completa (11/11). Fase 2: 39 mejoras hechas en siete rondas de backlog (backlog vacío). 253 pruebas. CI en verde en todos los commits que revisé.
 - **Lo más destacado hasta ahora:** Registro con un toque (también días anteriores, atajos de teclado y celebración al cumplir). Metas diarias «al menos» / «como máximo», metas semanales y días de la semana por rastreador. Historial con búsqueda. Rachas, calendario anual tocable, gráficos, perfil por día de la semana, calidad de datos y resumen anual. Resumen semana/mes y métricas derivadas (fórmulas). Hallazgos con Pearson + valor p + corrección de Benjamini–Hochberg (mismo día y día siguiente, con gráfico en el tiempo y exportación CSV). CSV largo/ancho de ida y vuelta y respaldo JSON con recordatorio. PWA con aviso de actualización y accesos directos. Pantalla de error amigable. Pruebas de accesibilidad (axe) y de rendimiento (3 años de datos).
 - **Decisiones importantes tomadas:** Fechas como texto local AAAA-MM-DD. Ruteo por hash propio. Gráficos, CSV y estadística sin librerías, todo probado y validado contra scipy/statsmodels. Campos nuevos opcionales (`goalDirection`, `weeklyTarget`, `activeDays`) para no migrar la base. La base v2 solo agrega la tabla `derived` (migración probada). TypeScript 6, porque typescript-eslint aún no soporta la 7. Única dependencia añadida fuera del stack: `axe-core` (solo desarrollo). Dockerfile verificado (`prod` y `dev`).
 - **Problemas conocidos o pendientes:** El despliegue a GitHub Pages solo corre en `main`: hay que fusionar la rama `claude/wonderful-rubin-wns5l9` y activar **Settings → Pages → Source: GitHub Actions**. Las notificaciones del recordatorio solo llegan con la app abierta (límite de las PWA sin servidor). Cambiar la meta de un rastreador recalcula también las rachas pasadas (no se guarda historial de metas). La sesión se cortó una vez por límite de uso; no se perdió trabajo (ver la entrada de la tarea 39).
-- **Siguiente paso:** Documentación al día (tarea 38) y luego otra ronda de revisión crítica.
+- **Siguiente paso:** Otra ronda de revisión crítica.
 
 ---
 
@@ -28,6 +28,16 @@ Usa exactamente este formato:
 - **Commit:** (hash corto)
 - **Siguiente:**
 -->
+
+### [2026-10-24 17:21] Documentación al día (Fase 2 · 38)
+
+- **Qué hice:** Regeneré las capturas del README con la versión actual. Agregué al README las funciones de las rondas 4–7: metas semanales, días de la semana, atajos de teclado, búsqueda, calidad de datos, métricas derivadas, resumen anual, Benjamini–Hochberg, gráfico en el tiempo, importación de CSV ancho, pantalla de error y accesos directos.
+- **Por qué:** El README es lo primero que el dueño verá en GitHub y se había quedado atrás.
+- **Archivos principales:** `README.md`, `docs/capturas/*.png`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** formato ✅ (sin cambios de código)
+- **Commit:** e7fa735
+- **Siguiente:** Nueva ronda de revisión crítica.
 
 ### [2026-10-24 17:20] Días de la semana por rastreador (Fase 2 · 39)
 
