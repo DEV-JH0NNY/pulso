@@ -24,7 +24,7 @@ interface LayoutProps {
 
 export function Layout({ title, route, nav, back, actions, banner, children }: LayoutProps) {
   return (
-    <div className="mx-auto flex min-h-dvh max-w-xl flex-col">
+    <div className="mx-auto flex min-h-dvh max-w-xl md:max-w-3xl flex-col">
       <a
         href="#contenido"
         className="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-50 focus:rounded-lg focus:bg-white focus:px-3 focus:py-2 focus:text-slate-900"
@@ -52,7 +52,7 @@ export function Layout({ title, route, nav, back, actions, banner, children }: L
         aria-label="Principal"
         className="fixed inset-x-0 bottom-0 z-30 border-t border-slate-200 bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur dark:border-slate-800 dark:bg-slate-900/95"
       >
-        <ul className="mx-auto flex max-w-xl">
+        <ul className="mx-auto flex max-w-xl md:max-w-3xl">
           {nav.map((item) => {
             const active = item.matches.includes(route.name);
             const Icon = item.icon;

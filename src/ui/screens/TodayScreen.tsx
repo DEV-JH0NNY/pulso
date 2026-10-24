@@ -154,7 +154,7 @@ export function TodayScreen() {
       ) : (
         <>
           <ul
-            className={`grid grid-cols-2 gap-3 ${isToday ? '' : 'rounded-2xl ring-2 ring-amber-400 ring-offset-4 ring-offset-slate-50 dark:ring-offset-slate-950'}`}
+            className={`grid grid-cols-2 gap-3 sm:grid-cols-3 ${isToday ? '' : 'rounded-2xl ring-2 ring-amber-400 ring-offset-4 ring-offset-slate-50 dark:ring-offset-slate-950'}`}
             aria-label={isToday ? 'Rastreadores de hoy' : `Rastreadores del ${formatLongDate(day)}`}
           >
             {trackers.map((t) => (

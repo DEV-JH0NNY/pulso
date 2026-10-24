@@ -79,7 +79,7 @@ export function TrackerDetailScreen({ id }: { id: string }) {
         </button>
       </div>
 
-      <dl className="grid grid-cols-2 gap-3">
+      <dl className="grid grid-cols-2 gap-3 md:grid-cols-4">
         <StatCard
           label="Racha actual"
           value={days(streaks.current)}

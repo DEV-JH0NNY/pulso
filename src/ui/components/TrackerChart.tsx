@@ -104,7 +104,7 @@ export function TrackerChart({ tracker, totals, todayDate }: TrackerChartProps) 
         yMax={yMax}
         goal={granularity === 'day' && tracker.type !== 'boolean' ? tracker.dailyGoal : null}
       />
-      <dl className="mt-3 grid grid-cols-2 gap-3">
+      <dl className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-4">
         <StatCard
           label={`Promedio (${periodName} con datos)`}
           value={summary.average === null ? '—' : fmt(summary.average)}
