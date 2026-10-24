@@ -4,11 +4,11 @@
 
 > Actualiza esta sección cada 5 entradas y al final de la noche. Es lo primero que el dueño va a leer.
 
-- **Estado actual:** Fase 1 completa (11/11). Fase 2: 6 de 10 ideas del backlog hechas.
-- **Lo más destacado hasta ahora:** Registro con un toque (y en días anteriores), metas, historial, rachas y calendario anual, gráficos, hallazgos con Pearson + valor p (mismo día y día siguiente), CSV y respaldo JSON de ida y vuelta, recordatorio de respaldo, plantillas y resumen semanal/mensual justo.
-- **Decisiones importantes tomadas:** Fechas como texto local AAAA-MM-DD; ruteo por hash propio; gráficos, CSV y estadística sin librerías (todo probado); TypeScript 6 (typescript-eslint aún no soporta la 7); sin dependencias nuevas más allá del stack pedido.
-- **Problemas conocidos o pendientes:** El despliegue a GitHub Pages solo corre en `main`: hay que fusionar la rama `claude/wonderful-rubin-wns5l9` y activar **Settings → Pages → Source: GitHub Actions**.
-- **Siguiente paso:** Aviso de nueva versión de la PWA.
+- **Estado actual:** Fase 1 completa (11/11). Fase 2 en marcha: 21 mejoras hechas en tres rondas de backlog. ~205 pruebas, CI en verde en todos los commits.
+- **Lo más destacado hasta ahora:** Registro con un toque (también en días anteriores, con celebración al cumplir), metas diarias «al menos» / «como máximo» y metas semanales, historial con búsqueda, rachas, calendario anual tocable, gráficos, resumen semana/mes justo, hallazgos con Pearson + valor p (mismo día y día siguiente), CSV largo/ancho, respaldo JSON con recordatorio, plantillas, reordenar arrastrando, PWA con aviso de actualización y accesos directos, y pruebas de accesibilidad con axe.
+- **Decisiones importantes tomadas:** Fechas como texto local AAAA-MM-DD; ruteo por hash propio; gráficos, CSV y estadística sin librerías (todo probado); campos nuevos opcionales (`goalDirection`, `weeklyTarget`) para no migrar la base; TypeScript 6 (typescript-eslint aún no soporta la 7). Única dependencia añadida fuera del stack: `axe-core` (solo desarrollo).
+- **Problemas conocidos o pendientes:** El despliegue a GitHub Pages solo corre en `main`: hay que fusionar la rama `claude/wonderful-rubin-wns5l9` y activar **Settings → Pages → Source: GitHub Actions**. Las notificaciones del recordatorio solo llegan con la app abierta (límite de las PWA sin servidor).
+- **Siguiente paso:** Rastreadores derivados (fórmulas).
 
 ---
 
@@ -28,6 +28,16 @@ Usa exactamente este formato:
 - **Commit:** (hash corto)
 - **Siguiente:**
 -->
+
+### [2026-10-24 14:24] Celebración al cumplir la meta (Fase 2 · 21)
+
+- **Qué hice:** Cuando un toque hace que se cumpla la meta del día, la tarjeta emite un anillo de su color que se expande y desvanece (700 ms), el celular vibra con un patrón doble y el aviso dice «🎉 ¡Meta de «Agua» cumplida!» (con «Deshacer»).
+- **Por qué:** Refuerza el hábito sin ser invasivo. Solo se celebra el momento de pasar de «no cumplida» a «cumplida» (`reachesGoal` en el dominio) y nunca en metas de límite (que se «cumplen» sin hacer nada). Con «reducir movimiento» el anillo no se muestra. Corregí un aviso del linter de React (no usar `Date.now` en el render) usando un contador.
+- **Archivos principales:** `src/domain/aggregate.ts`, `src/ui/components/TrackerTile.tsx`, `src/ui/screens/TodayScreen.tsx`, `src/index.css`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (205 pasando) · build ✅
+- **Commit:** c0e4591
+- **Siguiente:** Rastreadores derivados.
 
 ### [2026-10-24 14:22] Accesos directos de la app instalada (Fase 2 · 20)
 
