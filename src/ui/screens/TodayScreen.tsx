@@ -5,12 +5,12 @@ import { quickLog } from '../../data/quickLog';
 import { dailyTotals, reachesGoal, summarizeDay } from '../../domain/aggregate';
 import { addDays, startOfWeek, toTime } from '../../domain/dates';
 import { formatDayLabel, formatLongDate, formatValue } from '../../domain/format';
-import type { DaySummary } from '../../domain/aggregate';
 import type { EntryDraft, Tracker } from '../../domain/types';
+import { DayNav } from '../components/DayNav';
+import { DaySummaryCard } from '../components/DaySummaryCard';
 import { EntryForm } from '../components/EntryForm';
 import { Modal } from '../components/Modal';
-import { IconChevronLeft, IconChevronRight } from '../components/icons';
-import { buttonPrimary, card, iconButton, muted } from '../components/styles';
+import { buttonPrimary, card, muted } from '../components/styles';
 import { useToast } from '../components/toastContext';
 import { TrackerTile } from '../components/TrackerTile';
 import { useActiveTrackers, useEntriesBetween } from '../hooks/useData';
@@ -110,38 +110,14 @@ export function TodayScreen() {
 
   return (
     <div>
-      <nav aria-label="Cambiar de día" className="-mt-2 mb-3 flex items-center justify-between">
-        <button
-          type="button"
-          className={iconButton}
-          aria-label="Día anterior"
-          onClick={() => setOffset((o) => o + 1)}
-        >
-          <IconChevronLeft />
-        </button>
-        <div className="text-center" aria-live="polite">
-          <p className="font-semibold">{formatDayLabel(day, todayDate)}</p>
-          {offset <= 1 && <p className={muted}>{formatLongDate(day)}</p>}
-          {!isToday && (
-            <button
-              type="button"
-              className="text-sm font-semibold text-emerald-700 underline underline-offset-2 dark:text-emerald-400"
-              onClick={() => setOffset(0)}
-            >
-              Volver a hoy
-            </button>
-          )}
-        </div>
-        <button
-          type="button"
-          className={iconButton}
-          aria-label="Día siguiente"
-          disabled={isToday}
-          onClick={() => setOffset((o) => Math.max(0, o - 1))}
-        >
-          <IconChevronRight />
-        </button>
-      </nav>
+      <DayNav
+        day={day}
+        todayDate={todayDate}
+        offset={offset}
+        onPrev={() => setOffset((o) => o + 1)}
+        onNext={() => setOffset((o) => Math.max(0, o - 1))}
+        onToday={() => setOffset(0)}
+      />
       {isToday && <DailyReminder loggedToday={values.size > 0} />}
       {isToday && <BackupReminder />}
       {trackers.length > 0 && (
@@ -215,59 +191,5 @@ export function TodayScreen() {
         )}
       </Modal>
     </div>
-  );
-}
-
-function DaySummaryCard({
-  summary,
-  total,
-  dayLabel,
-}: {
-  summary: DaySummary;
-  total: number;
-  dayLabel: string;
-}) {
-  const ratio = summary.withGoal > 0 ? summary.met / summary.withGoal : 0;
-  const r = 26;
-  const circumference = 2 * Math.PI * r;
-  return (
-    <section aria-label="Resumen del día" className={`${card} mb-4 flex items-center gap-4`}>
-      {summary.withGoal > 0 && (
-        <svg viewBox="0 0 64 64" className="h-16 w-16 shrink-0 -rotate-90" aria-hidden="true">
-          <circle
-            cx="32"
-            cy="32"
-            r={r}
-            fill="none"
-            strokeWidth="8"
-            className="stroke-slate-200 dark:stroke-slate-800"
-          />
-          <circle
-            cx="32"
-            cy="32"
-            r={r}
-            fill="none"
-            strokeWidth="8"
-            strokeLinecap="round"
-            className="stroke-emerald-500 transition-[stroke-dashoffset] duration-500"
-            strokeDasharray={circumference}
-            strokeDashoffset={circumference * (1 - ratio)}
-          />
-        </svg>
-      )}
-      <div>
-        {summary.withGoal > 0 ? (
-          <p className="text-lg font-semibold">
-            {summary.met} de {summary.withGoal} metas cumplidas
-          </p>
-        ) : (
-          <p className="text-lg font-semibold">Sin metas diarias</p>
-        )}
-        <p className={muted}>
-          {summary.logged} de {total} rastreadores con registros {dayLabel}
-          {summary.withGoal > 0 && summary.met === summary.withGoal ? ' · ¡Día completo! 🎉' : ''}
-        </p>
-      </div>
-    </section>
   );
 }
