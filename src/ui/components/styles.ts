@@ -7,7 +7,7 @@ export const card = `${cardBase} p-4`;
 const buttonBase =
   'inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50';
 
-export const buttonPrimary = `${buttonBase} bg-emerald-600 text-white hover:bg-emerald-700 dark:bg-emerald-500 dark:text-slate-950 dark:hover:bg-emerald-400`;
+export const buttonPrimary = `${buttonBase} bg-emerald-700 text-white hover:bg-emerald-800 dark:bg-emerald-500 dark:text-slate-950 dark:hover:bg-emerald-400`;
 export const buttonSecondary = `${buttonBase} border border-slate-300 bg-white text-slate-800 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800`;
 export const buttonDanger = `${buttonBase} bg-rose-600 text-white hover:bg-rose-700`;
 export const buttonGhost = `${buttonBase} text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800`;

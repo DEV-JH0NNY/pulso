@@ -5,6 +5,7 @@ import { plural } from '../../domain/format';
 import { IconChevronRight } from '../components/icons';
 import { ClearSampleButton } from '../components/ClearSampleButton';
 import { ImportCsvDialog } from '../components/ImportCsvDialog';
+import { ThemePicker } from '../components/ThemePicker';
 import { useHasSampleData } from '../hooks/useSample';
 import { loadSampleData } from '../../data/sample';
 import { buttonSecondary, card, muted, sectionTitle } from '../components/styles';
@@ -40,6 +41,11 @@ export function SettingsScreen() {
         </span>
         <IconChevronRight className="h-5 w-5 text-slate-400" />
       </a>
+
+      <h2 className={sectionTitle}>Apariencia</h2>
+      <div className={card}>
+        <ThemePicker />
+      </div>
 
       <h2 className={sectionTitle}>Tus datos</h2>
       <div className={`${card} space-y-3`}>
@@ -78,6 +84,19 @@ export function SettingsScreen() {
             Cargar datos de ejemplo
           </button>
         )}
+      </div>
+
+      <h2 className={sectionTitle}>Acerca de</h2>
+      <div className={`${card} space-y-2 ${muted}`}>
+        <p>
+          <strong className="text-slate-900 dark:text-slate-100">Pulso</strong> versión{' '}
+          {__APP_VERSION__}.
+        </p>
+        <p>
+          Sin cuentas, sin anuncios y sin telemetría. Todo se guarda en este navegador (IndexedDB) y
+          funciona sin conexión. Si borras los datos del navegador o desinstalas la app, se pierden:
+          exporta un respaldo de vez en cuando.
+        </p>
       </div>
 
       <ImportCsvDialog open={importing} onClose={() => setImporting(false)} />

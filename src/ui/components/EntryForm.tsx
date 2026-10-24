@@ -18,7 +18,7 @@ interface EntryFormProps {
 type Errors = Partial<Record<keyof EntryDraft, string>>;
 
 const segment =
-  'flex min-h-11 flex-1 cursor-pointer items-center justify-center rounded-xl border border-slate-300 font-semibold has-[:checked]:border-emerald-600 has-[:checked]:bg-emerald-600 has-[:checked]:text-white has-[:focus-visible]:outline has-[:focus-visible]:outline-sky-500 dark:border-slate-700 dark:has-[:checked]:border-emerald-500 dark:has-[:checked]:bg-emerald-500 dark:has-[:checked]:text-slate-950';
+  'flex min-h-11 flex-1 cursor-pointer items-center justify-center rounded-xl border border-slate-300 font-semibold has-[:checked]:border-emerald-700 has-[:checked]:bg-emerald-700 has-[:checked]:text-white has-[:focus-visible]:outline has-[:focus-visible]:outline-sky-500 dark:border-slate-700 dark:has-[:checked]:border-emerald-500 dark:has-[:checked]:bg-emerald-500 dark:has-[:checked]:text-slate-950';
 
 export function EntryForm({
   tracker,

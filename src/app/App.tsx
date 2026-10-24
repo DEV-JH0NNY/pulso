@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { lazy, Suspense, useEffect, type ReactNode } from 'react';
 import { Layout, type NavItem } from '../ui/components/Layout';
 import {
   IconHistory,
@@ -8,15 +8,31 @@ import {
   IconToday,
 } from '../ui/components/icons';
 import { SampleBanner } from '../ui/components/SampleBanner';
+import { muted } from '../ui/components/styles';
 import { ToastProvider } from '../ui/components/ToastProvider';
+import { useTracker } from '../ui/hooks/useData';
 import { useRoute, type Route } from '../ui/router';
-import { HistoryScreen } from '../ui/screens/HistoryScreen';
-import { InsightsScreen } from '../ui/screens/InsightsScreen';
-import { SettingsScreen } from '../ui/screens/SettingsScreen';
-import { ManageTrackersScreen } from '../ui/screens/ManageTrackersScreen';
-import { StatsScreen } from '../ui/screens/StatsScreen';
 import { TodayScreen } from '../ui/screens/TodayScreen';
-import { TrackerDetailScreen } from '../ui/screens/TrackerDetailScreen';
+
+// Las pantallas que no son "Hoy" se cargan bajo demanda para aligerar la carga inicial.
+const HistoryScreen = lazy(() =>
+  import('../ui/screens/HistoryScreen').then((m) => ({ default: m.HistoryScreen })),
+);
+const StatsScreen = lazy(() =>
+  import('../ui/screens/StatsScreen').then((m) => ({ default: m.StatsScreen })),
+);
+const TrackerDetailScreen = lazy(() =>
+  import('../ui/screens/TrackerDetailScreen').then((m) => ({ default: m.TrackerDetailScreen })),
+);
+const InsightsScreen = lazy(() =>
+  import('../ui/screens/InsightsScreen').then((m) => ({ default: m.InsightsScreen })),
+);
+const SettingsScreen = lazy(() =>
+  import('../ui/screens/SettingsScreen').then((m) => ({ default: m.SettingsScreen })),
+);
+const ManageTrackersScreen = lazy(() =>
+  import('../ui/screens/ManageTrackersScreen').then((m) => ({ default: m.ManageTrackersScreen })),
+);
 
 const NAV: NavItem[] = [
   { route: { name: 'today' }, label: 'Hoy', icon: IconToday, matches: ['today'] },
@@ -42,7 +58,7 @@ interface Screen {
   content: ReactNode;
 }
 
-function screenFor(route: Route): Screen {
+function screenFor(route: Route, trackerName: string | undefined): Screen {
   switch (route.name) {
     case 'history':
       return { title: 'Historial', content: <HistoryScreen /> };
@@ -50,7 +66,7 @@ function screenFor(route: Route): Screen {
       return { title: 'Estadísticas', content: <StatsScreen /> };
     case 'tracker':
       return {
-        title: 'Detalle',
+        title: trackerName ?? 'Detalle',
         back: { name: 'stats' },
         content: <TrackerDetailScreen key={route.id} id={route.id} />,
       };
@@ -64,14 +80,20 @@ function screenFor(route: Route): Screen {
         back: { name: 'settings' },
         content: <ManageTrackersScreen />,
       };
-    default:
+    case 'today':
       return { title: 'Hoy', content: <TodayScreen /> };
   }
 }
 
 export function App() {
   const route = useRoute();
-  const screen = screenFor(route);
+  const tracker = useTracker(route.name === 'tracker' ? route.id : '');
+  const screen = screenFor(route, tracker?.name);
+
+  useEffect(() => {
+    document.title = `${screen.title} · Pulso`;
+  }, [screen.title]);
+
   return (
     <ToastProvider>
       <Layout
@@ -81,7 +103,7 @@ export function App() {
         back={screen.back}
         banner={<SampleBanner />}
       >
-        {screen.content}
+        <Suspense fallback={<p className={muted}>Cargando…</p>}>{screen.content}</Suspense>
       </Layout>
     </ToastProvider>
   );

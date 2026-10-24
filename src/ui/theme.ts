@@ -18,6 +18,10 @@ function prefersDark(): boolean {
 export function applyTheme(pref: ThemePreference): void {
   const dark = pref === 'dark' || (pref === 'system' && prefersDark());
   document.documentElement.classList.toggle('dark', dark);
+  // La barra del sistema (Android) sigue el tema elegido, no solo el del sistema.
+  document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]').forEach((m) => {
+    m.content = dark ? '#020617' : '#f8fafc';
+  });
 }
 
 export function saveThemePreference(pref: ThemePreference): void {
