@@ -29,7 +29,7 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 7. ✅ **Aviso de nueva versión de la PWA:** mostrar «Hay una versión nueva · Actualizar» en lugar de esperar a cerrar todas las pestañas.
 8. ✅ **Estadísticas por día de la semana:** promedio de cada rastreador de lunes a domingo.
 9. ✅ **Exportación CSV ancha (un día por fila):** lista para pandas o una hoja de cálculo.
-10. ⬜ **Recordatorio diario dentro de la app:** aviso a una hora elegida si aún no has registrado nada (con permiso de notificaciones cuando el navegador lo permita).
+10. ✅ **Recordatorio diario dentro de la app:** aviso a una hora elegida si aún no has registrado nada (con permiso de notificaciones cuando el navegador lo permita).
 
 ## Completadas
 
@@ -53,3 +53,4 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 - [2026-10-24] Aviso de nueva versión de la PWA (Fase 2 · 7).
 - [2026-10-24] Estadísticas por día de la semana (Fase 2 · 8).
 - [2026-10-24] Exportación CSV ancha (Fase 2 · 9).
+- [2026-10-24] Recordatorio diario (Fase 2 · 10).

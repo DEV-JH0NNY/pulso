@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 13:50] Recordatorio diario (Fase 2 · 10)
+
+- **Qué hice:** En Ajustes, «Recordarme registrar cada día» con hora elegible (20:00 por defecto). Después de esa hora, si hoy no hay registros, «Hoy» muestra un aviso. Al activarlo se pide permiso de notificaciones; si se concede, llega una notificación a esa hora mientras la app esté abierta.
+- **Por qué:** Sin servidor de push (prohibido por las reglas: nada de servicios externos) los navegadores no permiten programar notificaciones con la app cerrada. En lugar de prometer algo que no funciona, la interfaz explica el límite con claridad. La regla vive en el dominio (`shouldShowDailyReminder`).
+- **Archivos principales:** `src/domain/reminder.ts`, `src/ui/components/{DailyReminder,ReminderSettings}.tsx`, `src/ui/hooks/useSetting.ts`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (173 pasando) · build ✅
+- **Commit:** bd5a02d
+- **Siguiente:** Backlog vacío: revisión crítica de la app y nuevas ideas.
+
 ### [2026-10-24 13:48] Exportación CSV ancha (Fase 2 · 9)
 
 - **Qué hice:** Botón «CSV por día (ancho)» en Ajustes: una fila por fecha (continua, sin saltos entre la primera y la última) y una columna por rastreador con su valor diario (`Sueño (h)`, `Ánimo (1-5)`…); las celdas vacías son días sin registro.
