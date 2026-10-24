@@ -66,7 +66,7 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 
 ### Ronda 6
 
-32. ⬜ **Calidad de datos:** cobertura de cada rastreador (días con registro en los últimos 30 y 90 días) y el hueco más largo, para saber qué tan confiables son los análisis.
+32. ✅ **Calidad de datos:** cobertura de cada rastreador (días con registro en los últimos 30 y 90 días) y el hueco más largo, para saber qué tan confiables son los análisis.
 33. ⬜ **Importar también CSV ancho** (un día por fila), detectándolo automáticamente.
 34. ⬜ **Atajos de teclado en escritorio:** 1–9 registra el rastreador n en «Hoy»; ← / → cambia de día.
 35. ⬜ **Ajuste para desactivar la vibración.**
@@ -116,3 +116,4 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 - [2026-10-24] Restaurar respaldos con más seguridad (Fase 2 · 29).
 - [2026-10-24] Pantallas anchas (Fase 2 · 30).
 - [2026-10-24] Comparar dos rastreadores en el tiempo (Fase 2 · 31).
+- [2026-10-24] Calidad de datos (Fase 2 · 32).

@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 14:57] Calidad de datos (Fase 2 · 32)
+
+- **Qué hice:** Sección «Calidad de datos» en el detalle de cada rastreador: días con registro en los últimos 30 y 90 días (con barra y porcentaje) y el hueco más largo sin registros desde el primer registro («7 días (8 – 14 oct)»), con una nota de que los días sin registro nunca se cuentan como cero.
+- **Por qué:** Un usuario de datos quiere saber cuánto confiar en un promedio o una correlación; la cobertura lo dice de un vistazo y motiva a llenar huecos. Los días antes del primer registro no cuentan como hueco; el día de hoy tampoco (aún puede registrarse).
+- **Archivos principales:** `src/domain/quality.ts`, `src/ui/components/DataQuality.tsx`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (237 pasando) · build ✅
+- **Commit:** ffb914a
+- **Siguiente:** Importar también CSV ancho.
+
 ### [2026-10-24 14:55] Verificación real del Dockerfile
 
 - **Qué hice:** Levanté el demonio de Docker del entorno y construí las etapas `prod` y `dev` del `Dockerfile`. `prod` (build + nginx) sirve `index.html`, `sw.js` y `manifest.webmanifest` con 200; `dev` arranca Vite en el puerto 5173 y sirve los módulos.
