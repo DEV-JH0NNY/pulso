@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 14:22] Accesos directos de la app instalada (Fase 2 · 20)
+
+- **Qué hice:** El manifest declara atajos (`shortcuts`): en Android, mantener presionado el ícono de Pulso muestra «Historial», «Estadísticas» y «Hallazgos». También se añadieron `id` (identidad estable de la PWA) y `categories`. Verifiqué el manifest generado en `dist/`.
+- **Por qué:** Es gratis en peso y acerca las pantallas más consultadas. «Hoy» no necesita atajo porque es la pantalla de inicio. Las rutas por hash funcionan sin servidor.
+- **Archivos principales:** `vite.config.ts`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (203 pasando) · build ✅
+- **Commit:** 5604062
+- **Siguiente:** Celebración sutil al cumplir la meta del día.
+
 ### [2026-10-24 14:21] Buscar en el historial (Fase 2 · 19)
 
 - **Qué hice:** Campo «Buscar» en Historial que filtra por texto de la nota o nombre del rastreador, sin distinguir mayúsculas ni tildes («cumpleanos» encuentra «Cumpleaños de Ana»). Mientras se busca se recorre todo el historial, no solo los últimos 30 días; se combina con el filtro por rastreador.
