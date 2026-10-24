@@ -4,11 +4,11 @@
 
 > Actualiza esta sección cada 5 entradas y al final de la noche. Es lo primero que el dueño va a leer.
 
-- **Estado actual:** Fase 1 completa (11/11). Fase 2: 39 mejoras hechas en siete rondas de backlog (backlog vacío). 253 pruebas. CI en verde en todos los commits que revisé.
+- **Estado actual:** Fase 1 completa (11/11). Fase 2: 40 mejoras hechas (ronda 8 en curso). 259 pruebas. CI en verde en todos los commits que revisé.
 - **Lo más destacado hasta ahora:** Registro con un toque (también días anteriores, atajos de teclado y celebración al cumplir). Metas diarias «al menos» / «como máximo», metas semanales y días de la semana por rastreador. Historial con búsqueda. Rachas, calendario anual tocable, gráficos, perfil por día de la semana, calidad de datos y resumen anual. Resumen semana/mes y métricas derivadas (fórmulas). Hallazgos con Pearson + valor p + corrección de Benjamini–Hochberg (mismo día y día siguiente, con gráfico en el tiempo y exportación CSV). CSV largo/ancho de ida y vuelta y respaldo JSON con recordatorio. PWA con aviso de actualización y accesos directos. Pantalla de error amigable. Pruebas de accesibilidad (axe) y de rendimiento (3 años de datos).
 - **Decisiones importantes tomadas:** Fechas como texto local AAAA-MM-DD. Ruteo por hash propio. Gráficos, CSV y estadística sin librerías, todo probado y validado contra scipy/statsmodels. Campos nuevos opcionales (`goalDirection`, `weeklyTarget`, `activeDays`) para no migrar la base. La base v2 solo agrega la tabla `derived` (migración probada). TypeScript 6, porque typescript-eslint aún no soporta la 7. Única dependencia añadida fuera del stack: `axe-core` (solo desarrollo). Dockerfile verificado (`prod` y `dev`).
-- **Problemas conocidos o pendientes:** El despliegue a GitHub Pages solo corre en `main`: hay que fusionar la rama `claude/wonderful-rubin-wns5l9` y activar **Settings → Pages → Source: GitHub Actions**. Las notificaciones del recordatorio solo llegan con la app abierta (límite de las PWA sin servidor). Cambiar la meta de un rastreador recalcula también las rachas pasadas (no se guarda historial de metas). La sesión se cortó una vez por límite de uso; no se perdió trabajo (ver la entrada de la tarea 39).
-- **Siguiente paso:** Otra ronda de revisión crítica.
+- **Problemas conocidos o pendientes:** El despliegue a GitHub Pages solo corre en `main`: hay que fusionar la rama `claude/wonderful-rubin-wns5l9` y activar **Settings → Pages → Source: GitHub Actions**. Las notificaciones del recordatorio solo llegan con la app abierta (límite de las PWA sin servidor). La sesión se cortó una vez por límite de uso; no se perdió trabajo (ver la entrada de la tarea 39).
+- **Siguiente paso:** Seguir con la ronda 8 del backlog (duplicar rastreador, nota rápida, prueba de punta a punta, exportar gráfico).
 
 ---
 
@@ -28,6 +28,16 @@ Usa exactamente este formato:
 - **Commit:** (hash corto)
 - **Siguiente:**
 -->
+
+### [2026-10-24 17:26] Historial de metas (Fase 2 · 40)
+
+- **Qué hice:** Al cambiar la meta de un rastreador se guarda la anterior como vigente hasta ayer (`goalChanges`). Las rachas, el calendario anual, las metas semanales, el resumen semana/mes y la vista de días pasados en «Hoy» evalúan cada día con la meta que tenía en ese momento. El respaldo JSON conserva el historial. Al probarlo encontré un bug real y lo corregí: al editar un rastreador, quitar la meta de límite, la meta semanal o los días de la semana no se guardaba, porque la actualización mezclaba los valores nuevos con los viejos. Ahora los campos opcionales que el formulario ya no trae se borran de verdad.
+- **Por qué:** Era un problema conocido anotado en el resumen. Subir la meta de agua de 6 a 8 vasos borraba rachas ya ganadas, lo que es injusto y poco honesto con los datos. Varios cambios el mismo día cuentan como uno solo (vale la meta que había antes de hoy). Es un campo opcional, así que no hubo migración.
+- **Archivos principales:** `src/domain/goalHistory.ts`, `src/domain/{streaks,heatmap,summary,weekly,backup,types}.ts`, `src/data/trackers.ts`, `src/ui/screens/TodayScreen.tsx`, `eslint.config.js` (permite variables con `_` para descartar campos al desestructurar).
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (259 pasando) · build ✅
+- **Commit:** 1e1b20e
+- **Siguiente:** Duplicar un rastreador.
 
 ### [2026-10-24 17:21] Documentación al día (Fase 2 · 38)
 
