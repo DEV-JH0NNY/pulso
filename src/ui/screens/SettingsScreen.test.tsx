@@ -94,3 +94,14 @@ describe('SettingsScreen · respaldo JSON', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent('no es un respaldo de Pulso');
   });
 });
+
+describe('SettingsScreen · respaldo demasiado grande', () => {
+  it('rechaza archivos de más de 50 MB sin leerlos', async () => {
+    const { user } = renderWithProviders(<SettingsScreen />);
+    await user.click(screen.getByRole('button', { name: 'Restaurar respaldo' }));
+    const big = new File(['{}'], 'enorme.json', { type: 'application/json' });
+    Object.defineProperty(big, 'size', { value: 60 * 1024 * 1024 });
+    await user.upload(screen.getByLabelText(/archivo de respaldo/i), big);
+    expect(await screen.findByRole('alert')).toHaveTextContent('supera 50 MB');
+  });
+});

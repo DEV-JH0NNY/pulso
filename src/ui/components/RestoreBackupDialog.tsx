@@ -6,6 +6,8 @@ import { Modal } from './Modal';
 import { buttonDanger, buttonPrimary, buttonSecondary, label, muted } from './styles';
 import { useToast } from './toastContext';
 
+const MAX_BACKUP_BYTES = 50 * 1024 * 1024;
+
 const formatExportedAt = (iso: string) => {
   const d = new Date(iso);
   return Number.isNaN(d.getTime())
@@ -27,7 +29,15 @@ export function RestoreBackupDialog({ open, onClose }: { open: boolean; onClose:
 
   const onFile = async (file: File | undefined) => {
     if (!file) return;
-    setResult(parseBackup(await file.text()));
+    if (file.size > MAX_BACKUP_BYTES) {
+      setResult({ ok: false, error: 'El archivo supera 50 MB; no parece un respaldo de Pulso.' });
+      return;
+    }
+    try {
+      setResult(parseBackup(await file.text()));
+    } catch {
+      setResult({ ok: false, error: 'No se pudo leer el archivo.' });
+    }
   };
 
   const confirm = async () => {
@@ -37,6 +47,11 @@ export function RestoreBackupDialog({ open, onClose }: { open: boolean; onClose:
       await restoreBackup(result.backup, mode);
       toast({ message: 'Respaldo restaurado' });
       close();
+    } catch (e) {
+      // La restauración es una transacción: si falla, la base queda como estaba.
+      toast({
+        message: `No se pudo restaurar (tus datos no cambiaron): ${e instanceof Error ? e.message : String(e)}`,
+      });
     } finally {
       setBusy(false);
     }
