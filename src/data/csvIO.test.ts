@@ -35,3 +35,16 @@ describe('importación y exportación con la base de datos', () => {
     expect(await db.trackers.count()).toBe(1);
   });
 });
+
+describe('apariencia al importar', () => {
+  it('asigna ícono según el nombre del rastreador nuevo', async () => {
+    const plan = planImport(
+      'fecha,hora,rastreador,valor,unidad\n2026-01-01,08:00,Café,2,tazas\n2026-01-01,09:00,Raro,1,\n',
+      [],
+      [],
+    );
+    await applyImport(plan);
+    const icons = Object.fromEntries((await db.trackers.toArray()).map((t) => [t.name, t.icon]));
+    expect(icons).toEqual({ Café: '☕', Raro: '📊' });
+  });
+});

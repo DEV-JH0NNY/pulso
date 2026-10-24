@@ -1,3 +1,4 @@
+import { suggestAppearance } from '../domain/appearance';
 import { TRACKER_COLORS } from '../domain/colors';
 import { entriesToCsv, entriesToWideCsv, type ImportPlan } from '../domain/csvData';
 import { newId } from '../domain/ids';
@@ -29,11 +30,13 @@ export async function applyImport(plan: ImportPlan): Promise<ImportResult> {
     const now = Date.now();
 
     const created: Tracker[] = plan.newTrackers.map((p, i) => {
+      const suggested = suggestAppearance(p.name);
       const t: Tracker = {
         id: newId(),
         name: p.name,
-        icon: '📊',
+        icon: suggested?.icon ?? '📊',
         color:
+          suggested?.color ??
           (TRACKER_COLORS[(order + i) % TRACKER_COLORS.length] ?? TRACKER_COLORS[0])?.key ??
           'emerald',
         type: p.type,
