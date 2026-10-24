@@ -1,4 +1,4 @@
-import { screen, waitFor, within } from '@testing-library/react';
+import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { db } from '../../data/db';
 import { resetDb } from '../../data/testUtils';
@@ -102,6 +102,40 @@ describe('ManageTrackersScreen · límite', () => {
     await waitFor(async () => {
       const [t] = await db.trackers.toArray();
       expect(t).toMatchObject({ name: 'Cigarrillos', dailyGoal: 2, goalDirection: 'atMost' });
+    });
+  });
+});
+
+describe('ManageTrackersScreen · arrastrar', () => {
+  it('reordena arrastrando la manija', async () => {
+    await createTracker({ ...emptyDraft(), name: 'A' });
+    await createTracker({ ...emptyDraft(), name: 'B' });
+    await createTracker({ ...emptyDraft(), name: 'C' });
+    const { container } = renderWithProviders(<ManageTrackersScreen />);
+    await screen.findByText('C');
+    const items = Array.from(container.querySelectorAll('li'));
+    // jsdom no calcula posiciones: se simulan filas de 50 px.
+    items.forEach((li, i) => {
+      li.getBoundingClientRect = () =>
+        ({
+          top: i * 50,
+          height: 50,
+          bottom: i * 50 + 50,
+          left: 0,
+          right: 0,
+          width: 0,
+          x: 0,
+          y: i * 50,
+          toJSON: () => ({}),
+        }) as DOMRect;
+    });
+    const handle = items[0]?.querySelector('[title="Arrastra para reordenar"]') as HTMLElement;
+    fireEvent.pointerDown(handle, { button: 0, clientY: 25, pointerId: 1 });
+    fireEvent.pointerMove(handle, { clientY: 130, pointerId: 1 });
+    fireEvent.pointerUp(handle, { clientY: 130, pointerId: 1 });
+    await waitFor(async () => {
+      const names = (await db.trackers.orderBy('order').toArray()).map((t) => t.name);
+      expect(names).toEqual(['B', 'C', 'A']);
     });
   });
 });

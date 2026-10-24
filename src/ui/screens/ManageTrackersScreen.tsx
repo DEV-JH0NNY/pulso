@@ -9,7 +9,15 @@ import {
 import { draftFromTracker, emptyDraft, moveId } from '../../domain/trackers';
 import type { Tracker, TrackerDraft } from '../../domain/types';
 import { ConfirmDialog } from '../components/ConfirmDialog';
-import { IconArchive, IconDown, IconEdit, IconPlus, IconTrash, IconUp } from '../components/icons';
+import {
+  IconArchive,
+  IconDown,
+  IconEdit,
+  IconGrip,
+  IconPlus,
+  IconTrash,
+  IconUp,
+} from '../components/icons';
 import { Modal } from '../components/Modal';
 import {
   buttonPrimary,
@@ -26,6 +34,7 @@ import { TemplatePicker } from '../components/TemplatePicker';
 import { TrackerForm } from '../components/TrackerForm';
 import { SampleTag } from '../components/SampleTag';
 import { useAllTrackers } from '../hooks/useData';
+import { useDragReorder } from '../hooks/useDragReorder';
 import { describeTracker } from '../trackerText';
 
 type Editing =
@@ -36,10 +45,14 @@ export function ManageTrackersScreen() {
   const [editing, setEditing] = useState<Editing>(null);
   const [toDelete, setToDelete] = useState<Tracker | null>(null);
   const toast = useToast();
+  const activeIds = (trackers ?? []).filter((t) => !t.archived).map((t) => t.id);
+  const archivedIds = (trackers ?? []).filter((t) => t.archived).map((t) => t.id);
+  const drag = useDragReorder(activeIds, (ids) => void reorderTrackers([...ids, ...archivedIds]));
 
   if (!trackers) return <p className={muted}>Cargando…</p>;
 
-  const active = trackers.filter((t) => !t.archived);
+  const byId = new Map(trackers.map((t) => [t.id, t]));
+  const active = drag.order.map((id) => byId.get(id)).filter((t): t is Tracker => t !== undefined);
   const archived = trackers.filter((t) => t.archived);
 
   const move = async (id: string, direction: -1 | 1) => {
@@ -92,7 +105,21 @@ export function ManageTrackersScreen() {
       ) : (
         <ul className="space-y-2">
           {active.map((t, i) => (
-            <li key={t.id} className={`${cardBase} flex items-center gap-3 p-3`}>
+            <li
+              key={t.id}
+              ref={drag.itemRef(t.id)}
+              className={`${cardBase} flex items-center gap-2 p-3 ${
+                drag.draggingId === t.id ? 'relative z-10 shadow-lg ring-2 ring-emerald-500' : ''
+              }`}
+            >
+              <span
+                {...drag.handleProps(t.id)}
+                aria-hidden="true"
+                title="Arrastra para reordenar"
+                className="-ml-1 flex h-11 w-6 shrink-0 cursor-grab items-center justify-center text-slate-400 active:cursor-grabbing"
+              >
+                <IconGrip className="h-5 w-5" />
+              </span>
               <TrackerBadge tracker={t} />
               <div className="min-w-0 flex-1">
                 <p className="truncate font-medium">

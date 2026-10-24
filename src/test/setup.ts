@@ -1,7 +1,10 @@
 import 'fake-indexeddb/auto';
 import '@testing-library/jest-dom/vitest';
 import { afterEach } from 'vitest';
-import { cleanup } from '@testing-library/react';
+import { cleanup, configure } from '@testing-library/react';
+
+// Margen para máquinas de CI lentas: las consultas findBy* esperan hasta 3 s.
+configure({ asyncUtilTimeout: 3000 });
 
 afterEach(() => {
   cleanup();
