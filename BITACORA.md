@@ -4,11 +4,11 @@
 
 > Actualiza esta sección cada 5 entradas y al final de la noche. Es lo primero que el dueño va a leer.
 
-- **Estado actual:** Fase 1 completa (11/11). Fase 2 en marcha: 21 mejoras hechas en tres rondas de backlog. ~205 pruebas, CI en verde en todos los commits.
-- **Lo más destacado hasta ahora:** Registro con un toque (también en días anteriores, con celebración al cumplir), metas diarias «al menos» / «como máximo» y metas semanales, historial con búsqueda, rachas, calendario anual tocable, gráficos, resumen semana/mes justo, hallazgos con Pearson + valor p (mismo día y día siguiente), CSV largo/ancho, respaldo JSON con recordatorio, plantillas, reordenar arrastrando, PWA con aviso de actualización y accesos directos, y pruebas de accesibilidad con axe.
-- **Decisiones importantes tomadas:** Fechas como texto local AAAA-MM-DD; ruteo por hash propio; gráficos, CSV y estadística sin librerías (todo probado); campos nuevos opcionales (`goalDirection`, `weeklyTarget`) para no migrar la base; TypeScript 6 (typescript-eslint aún no soporta la 7). Única dependencia añadida fuera del stack: `axe-core` (solo desarrollo).
-- **Problemas conocidos o pendientes:** El despliegue a GitHub Pages solo corre en `main`: hay que fusionar la rama `claude/wonderful-rubin-wns5l9` y activar **Settings → Pages → Source: GitHub Actions**. Las notificaciones del recordatorio solo llegan con la app abierta (límite de las PWA sin servidor).
-- **Siguiente paso:** Rastreadores derivados (fórmulas).
+- **Estado actual:** Fase 1 completa (11/11). Fase 2: 31 mejoras hechas en cinco rondas de backlog. 232 pruebas, CI en verde en todos los commits.
+- **Lo más destacado hasta ahora:** Registro con un toque (también días anteriores, con celebración), metas diarias «al menos»/«como máximo» y semanales, historial con búsqueda, rachas, calendario anual tocable, gráficos, resumen semana/mes, métricas derivadas (fórmulas), hallazgos con Pearson + valor p + corrección de Benjamini–Hochberg (mismo día y día siguiente, con gráfico en el tiempo y exportación CSV), CSV largo/ancho, respaldo JSON con recordatorio, PWA con aviso de actualización y accesos directos, pantalla de error amigable, pruebas de accesibilidad (axe) y de rendimiento (3 años de datos).
+- **Decisiones importantes tomadas:** Fechas como texto local AAAA-MM-DD; ruteo por hash propio; gráficos, CSV y estadística sin librerías (todo probado y validado contra scipy/statsmodels); campos nuevos opcionales (`goalDirection`, `weeklyTarget`) para no migrar; base de datos v2 solo agrega la tabla `derived` (migración probada); TypeScript 6 (typescript-eslint aún no soporta la 7). Única dependencia añadida fuera del stack: `axe-core` (solo desarrollo).
+- **Problemas conocidos o pendientes:** El despliegue a GitHub Pages solo corre en `main`: hay que fusionar la rama `claude/wonderful-rubin-wns5l9` y activar **Settings → Pages → Source: GitHub Actions**. Las notificaciones del recordatorio solo llegan con la app abierta (límite de las PWA sin servidor). No pude probar el `Dockerfile` en este entorno (no hay Docker); está escrito con imágenes oficiales y los mismos comandos que la CI.
+- **Siguiente paso:** Nueva ronda de revisión crítica.
 
 ---
 
@@ -28,6 +28,16 @@ Usa exactamente este formato:
 - **Commit:** (hash corto)
 - **Siguiente:**
 -->
+
+### [2026-10-24 14:51] Comparar dos rastreadores en el tiempo (Fase 2 · 31)
+
+- **Qué hice:** Cada hallazgo tiene «Ver en el tiempo»: un gráfico de líneas con ambos rastreadores normalizados (puntaje z) en los últimos 60 días en común, con leyenda, rango de fechas y una nota de cómo leerlo. La segunda serie va punteada.
+- **Por qué:** El diagrama de dispersión muestra la relación pero oculta el tiempo; ver las dos series juntas ayuda a notar si la relación viene de un periodo puntual (unas semanas de parciales) o es constante, lo que suma honestidad al hallazgo. Normalizar permite superponer horas y pesos. Se agregó `dates` a cada correlación y `zScores` al dominio.
+- **Archivos principales:** `src/domain/{insights,stats}.ts`, `src/ui/components/DualLineChart.tsx`, `src/ui/screens/InsightsScreen.tsx`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (232 pasando) · build ✅
+- **Commit:** 90fa960
+- **Siguiente:** Nueva revisión crítica y siguiente ronda de ideas.
 
 ### [2026-10-24 14:47] Pantallas anchas (Fase 2 · 30)
 
