@@ -5,7 +5,7 @@ Leyenda: ✅ hecho · 🔄 en curso · ⬜ pendiente
 ## Fase 1 — Lo inicial (obligatorio, en orden de prioridad)
 
 1. ✅ **Base del proyecto:** estructura, TypeScript estricto, lint, formato, pruebas, CI, Docker y despliegue en GitHub Pages.
-2. ⬜ **Rastreadores personalizables:** crear, editar, archivar y reordenar (nombre, ícono, color, tipo, meta diaria opcional).
+2. ✅ **Rastreadores personalizables:** crear, editar, archivar y reordenar (nombre, ícono, color, tipo, meta diaria opcional).
 3. ⬜ **Registro rápido:** un toque registra el valor por defecto; toque largo o botón secundario para ajustar valor, fecha, hora y nota; deshacer.
 4. ⬜ **Vista de hoy:** progreso de cada rastreador frente a su meta.
 5. ⬜ **Historial:** registros por día, editable y con opción de borrar.
@@ -23,3 +23,4 @@ _(Se llena al terminar la Fase 1.)_
 ## Completadas
 
 - [2026-10-24] Base del proyecto (Fase 1 · tarea 1).
+- [2026-10-24] Rastreadores personalizables (Fase 1 · tarea 2).
