@@ -1,5 +1,6 @@
 import { screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { exportBackup } from '../../data/backupIO';
 import { db } from '../../data/db';
 import { addEntry } from '../../data/entries';
 import { resetDb } from '../../data/testUtils';
@@ -60,5 +61,36 @@ describe('SettingsScreen · CSV', () => {
     );
     expect(await screen.findByRole('alert')).toHaveTextContent(/Faltan columnas/);
     expect(screen.queryByRole('button', { name: /^Importar \d/ })).not.toBeInTheDocument();
+  });
+});
+
+describe('SettingsScreen · respaldo JSON', () => {
+  it('restaura un respaldo combinando con los datos actuales', async () => {
+    const t = await createTracker({ ...emptyDraft(), name: 'Café', dailyGoal: 3 });
+    await addEntry(t.id, { value: 2, date: '2026-01-01', time: '08:00', note: '' });
+    const json = await exportBackup();
+    await resetDb();
+    await createTracker({ ...emptyDraft(), name: 'Agua' });
+
+    const { user } = renderWithProviders(<SettingsScreen />);
+    await user.click(screen.getByRole('button', { name: 'Restaurar respaldo' }));
+    await user.upload(
+      screen.getByLabelText(/archivo de respaldo/i),
+      new File([json], 'r.json', { type: 'application/json' }),
+    );
+    expect(await screen.findByText(/1 rastreador/)).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Combinar y restaurar' }));
+    await waitFor(async () => expect(await db.trackers.count()).toBe(2));
+    expect(await db.entries.count()).toBe(1);
+  });
+
+  it('muestra el error de un archivo inválido', async () => {
+    const { user } = renderWithProviders(<SettingsScreen />);
+    await user.click(screen.getByRole('button', { name: 'Restaurar respaldo' }));
+    await user.upload(
+      screen.getByLabelText(/archivo de respaldo/i),
+      new File(['{}'], 'r.json', { type: 'application/json' }),
+    );
+    expect(await screen.findByRole('alert')).toHaveTextContent('no es un respaldo de Pulso');
   });
 });

@@ -10,3 +10,6 @@ export async function setSetting(key: string, value: unknown): Promise<void> {
 }
 
 export const ONBOARDING_DONE = 'onboardingDone';
+
+/** Marca de tiempo (ms) de la última exportación CSV o JSON. */
+export const LAST_EXPORT_AT = 'lastExportAt';

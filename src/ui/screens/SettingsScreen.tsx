@@ -1,10 +1,13 @@
 import { useState } from 'react';
+import { exportBackup } from '../../data/backupIO';
 import { exportCsv } from '../../data/csvIO';
+import { LAST_EXPORT_AT, setSetting } from '../../data/settings';
 import { today } from '../../domain/dates';
 import { plural } from '../../domain/format';
 import { IconChevronRight } from '../components/icons';
 import { ClearSampleButton } from '../components/ClearSampleButton';
 import { ImportCsvDialog } from '../components/ImportCsvDialog';
+import { RestoreBackupDialog } from '../components/RestoreBackupDialog';
 import { ThemePicker } from '../components/ThemePicker';
 import { useHasSampleData } from '../hooks/useSample';
 import { loadSampleData } from '../../data/sample';
@@ -15,6 +18,7 @@ import { routeHref } from '../router';
 
 export function SettingsScreen() {
   const [importing, setImporting] = useState(false);
+  const [restoring, setRestoring] = useState(false);
   const toast = useToast();
   const hasSample = useHasSampleData();
 
@@ -26,7 +30,14 @@ export function SettingsScreen() {
       return;
     }
     downloadText(`pulso-${today()}.csv`, csv, 'text/csv');
+    await setSetting(LAST_EXPORT_AT, Date.now());
     toast({ message: `Exportado: ${plural(rows, 'registro')}` });
+  };
+
+  const doBackup = async () => {
+    downloadText(`pulso-respaldo-${today()}.json`, await exportBackup(), 'application/json');
+    await setSetting(LAST_EXPORT_AT, Date.now());
+    toast({ message: 'Respaldo descargado' });
   };
 
   return (
@@ -60,6 +71,19 @@ export function SettingsScreen() {
           </button>
           <button type="button" className={buttonSecondary} onClick={() => setImporting(true)}>
             Importar CSV
+          </button>
+        </div>
+        <p className={`${muted} border-t border-slate-200 pt-3 dark:border-slate-800`}>
+          El <strong>respaldo completo</strong> (JSON) guarda también la configuración de cada
+          rastreador: ícono, color, meta, orden y archivados. Úsalo para pasar tus datos a otro
+          celular.
+        </p>
+        <div className="flex flex-wrap gap-2">
+          <button type="button" className={buttonSecondary} onClick={() => void doBackup()}>
+            Descargar respaldo
+          </button>
+          <button type="button" className={buttonSecondary} onClick={() => setRestoring(true)}>
+            Restaurar respaldo
           </button>
         </div>
       </div>
@@ -100,6 +124,7 @@ export function SettingsScreen() {
       </div>
 
       <ImportCsvDialog open={importing} onClose={() => setImporting(false)} />
+      <RestoreBackupDialog open={restoring} onClose={() => setRestoring(false)} />
     </div>
   );
 }
