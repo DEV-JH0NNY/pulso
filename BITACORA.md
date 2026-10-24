@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 13:48] Exportación CSV ancha (Fase 2 · 9)
+
+- **Qué hice:** Botón «CSV por día (ancho)» en Ajustes: una fila por fecha (continua, sin saltos entre la primera y la última) y una columna por rastreador con su valor diario (`Sueño (h)`, `Ánimo (1-5)`…); las celdas vacías son días sin registro.
+- **Por qué:** El formato largo es ideal para guardar; el ancho es el que se usa directo para series de tiempo, `df.corr()` en pandas o una tabla dinámica. Las fechas son continuas para que los días faltantes queden explícitos como vacíos (no como cero). Los valores diarios usan la misma agregación que el resto de la app.
+- **Archivos principales:** `src/domain/csvData.ts`, `src/data/csvIO.ts`, `src/ui/screens/SettingsScreen.tsx`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (168 pasando) · build ✅
+- **Commit:** 856b96e
+- **Siguiente:** Recordatorio diario.
+
 ### [2026-10-24 13:46] Estadísticas por día de la semana (Fase 2 · 8)
 
 - **Qué hice:** En el detalle de cada rastreador, un gráfico de lunes a domingo con el promedio de los días con registros (en sí/no, el porcentaje de días con «Sí») y una frase con el mayor y el menor día («Tu mayor día es el sábado ($ 42.893) y el menor, el miércoles»). La tabla accesible incluye cuántos días respaldan cada promedio.
