@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 13:28] Almacenamiento persistente y recordatorio de respaldo (Fase 2 · 2)
+
+- **Qué hice:** Al abrir, la app pide `navigator.storage.persist()` (sin diálogo en Chrome para apps instaladas o usadas a menudo) y Ajustes informa si los datos están protegidos contra borrado por falta de espacio. En «Hoy» aparece una tarjeta «¿Hacemos un respaldo?» cuando hay registros reales de hace más de 7 días y nunca se exportó o pasaron 30 días desde la última exportación; «Ahora no» la aplaza 7 días.
+- **Por qué:** Los datos viven solo en el dispositivo; el mayor riesgo para el dueño es perderlos. La regla está en el dominio (`shouldRemindBackup`) con pruebas. Los datos de ejemplo no cuentan para el recordatorio.
+- **Archivos principales:** `src/domain/backupReminder.ts`, `src/data/storage.ts`, `src/ui/components/BackupReminder.tsx`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (152 pasando) · build ✅
+- **Commit:** 52cd955
+- **Siguiente:** Registrar en días anteriores desde Hoy.
+
 ### [2026-10-24 13:26] Respaldo y restauración en JSON (Fase 2 · 1)
 
 - **Qué hice:** En Ajustes, «Descargar respaldo» genera `pulso-respaldo-AAAA-MM-DD.json` con todos los rastreadores (ícono, color, meta, orden, archivados, marca de ejemplo) y registros. «Restaurar respaldo» valida el archivo completo, muestra un resumen (fecha, cantidades) y deja elegir entre combinar (agregar/actualizar por id) o reemplazar todo. Se guarda la fecha de la última exportación para el recordatorio de respaldo.
