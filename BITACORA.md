@@ -7,7 +7,7 @@
 - **Estado actual:** Fase 1 completa (11/11). Fase 2: 31 mejoras hechas en cinco rondas de backlog. 232 pruebas, CI en verde en todos los commits.
 - **Lo más destacado hasta ahora:** Registro con un toque (también días anteriores, con celebración), metas diarias «al menos»/«como máximo» y semanales, historial con búsqueda, rachas, calendario anual tocable, gráficos, resumen semana/mes, métricas derivadas (fórmulas), hallazgos con Pearson + valor p + corrección de Benjamini–Hochberg (mismo día y día siguiente, con gráfico en el tiempo y exportación CSV), CSV largo/ancho, respaldo JSON con recordatorio, PWA con aviso de actualización y accesos directos, pantalla de error amigable, pruebas de accesibilidad (axe) y de rendimiento (3 años de datos).
 - **Decisiones importantes tomadas:** Fechas como texto local AAAA-MM-DD; ruteo por hash propio; gráficos, CSV y estadística sin librerías (todo probado y validado contra scipy/statsmodels); campos nuevos opcionales (`goalDirection`, `weeklyTarget`) para no migrar; base de datos v2 solo agrega la tabla `derived` (migración probada); TypeScript 6 (typescript-eslint aún no soporta la 7). Única dependencia añadida fuera del stack: `axe-core` (solo desarrollo).
-- **Problemas conocidos o pendientes:** El despliegue a GitHub Pages solo corre en `main`: hay que fusionar la rama `claude/wonderful-rubin-wns5l9` y activar **Settings → Pages → Source: GitHub Actions**. Las notificaciones del recordatorio solo llegan con la app abierta (límite de las PWA sin servidor). No pude probar el `Dockerfile` en este entorno (no hay Docker); está escrito con imágenes oficiales y los mismos comandos que la CI.
+- **Problemas conocidos o pendientes:** El despliegue a GitHub Pages solo corre en `main`: hay que fusionar la rama `claude/wonderful-rubin-wns5l9` y activar **Settings → Pages → Source: GitHub Actions**. Las notificaciones del recordatorio solo llegan con la app abierta (límite de las PWA sin servidor). El `Dockerfile` está verificado (etapas `prod` y `dev` construidas y respondiendo).
 - **Siguiente paso:** Nueva ronda de revisión crítica.
 
 ---
@@ -28,6 +28,16 @@ Usa exactamente este formato:
 - **Commit:** (hash corto)
 - **Siguiente:**
 -->
+
+### [2026-10-24 14:55] Verificación real del Dockerfile
+
+- **Qué hice:** Levanté el demonio de Docker del entorno y construí las etapas `prod` y `dev` del `Dockerfile`. `prod` (build + nginx) sirve `index.html`, `sw.js` y `manifest.webmanifest` con 200; `dev` arranca Vite en el puerto 5173 y sirve los módulos.
+- **Por qué:** En el resumen había dejado constancia de que no lo había probado; ahora está verificado. Para la prueba usé una copia temporal del Dockerfile que solo añade el certificado del proxy de este entorno (sin él, `npm ci` no sale a internet desde el contenedor); el `Dockerfile` del repositorio no cambió y en un computador normal no necesita nada extra.
+- **Archivos principales:** ninguno (solo verificación).
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** docker build prod ✅ · docker build dev ✅ · contenedores respondiendo ✅
+- **Commit:** (sin cambios de código)
+- **Siguiente:** Nueva ronda de revisión crítica.
 
 ### [2026-10-24 14:51] Comparar dos rastreadores en el tiempo (Fase 2 · 31)
 
