@@ -23,7 +23,8 @@ describe('ManageTrackersScreen', () => {
     await user.type(within(dialog).getByLabelText('Meta diaria'), '7,5');
     await user.click(within(dialog).getByRole('button', { name: 'Crear' }));
 
-    expect(await screen.findByText('Sueño')).toBeInTheDocument();
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+    expect(screen.getByText('Sueño')).toBeInTheDocument();
     const [saved] = await db.trackers.toArray();
     expect(saved).toMatchObject({ name: 'Sueño', type: 'quantity', unit: 'h', dailyGoal: 7.5 });
   });
@@ -68,5 +69,22 @@ describe('ManageTrackersScreen', () => {
     await user.click(await screen.findByRole('button', { name: 'Eliminar Viejo' }));
     await user.click(screen.getByRole('button', { name: 'Eliminar' }));
     await waitFor(async () => expect(await db.trackers.count()).toBe(0));
+  });
+});
+
+describe('ManageTrackersScreen · plantillas', () => {
+  it('crea un rastreador desde una plantilla y oculta las que ya existen', async () => {
+    await createTracker({ ...emptyDraft(), name: 'Café' });
+    const { user } = renderWithProviders(<ManageTrackersScreen />);
+    await user.click(await screen.findByRole('button', { name: /nuevo/i }));
+    const dialog = screen.getByRole('dialog', { name: 'Nuevo rastreador' });
+    expect(within(dialog).queryByRole('button', { name: /café/i })).not.toBeInTheDocument();
+    await user.click(within(dialog).getByRole('button', { name: /agua/i }));
+    expect(within(dialog).getByLabelText('Nombre')).toHaveValue('Agua');
+    await user.click(within(dialog).getByRole('button', { name: 'Crear' }));
+    await waitFor(async () => {
+      const agua = (await db.trackers.toArray()).find((t) => t.name === 'Agua');
+      expect(agua).toMatchObject({ unit: 'vasos', dailyGoal: 8, icon: '💧' });
+    });
   });
 });

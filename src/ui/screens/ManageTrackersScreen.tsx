@@ -22,12 +22,14 @@ import {
 } from '../components/styles';
 import { useToast } from '../components/toastContext';
 import { TrackerBadge } from '../components/TrackerBadge';
+import { TemplatePicker } from '../components/TemplatePicker';
 import { TrackerForm } from '../components/TrackerForm';
 import { SampleTag } from '../components/SampleTag';
 import { useAllTrackers } from '../hooks/useData';
 import { describeTracker } from '../trackerText';
 
-type Editing = { mode: 'create' } | { mode: 'edit'; tracker: Tracker } | null;
+type Editing =
+  { mode: 'create'; template: TrackerDraft | null } | { mode: 'edit'; tracker: Tracker } | null;
 
 const toDraft = (t: Tracker): TrackerDraft => ({
   name: t.name,
@@ -86,7 +88,7 @@ export function ManageTrackersScreen() {
         <button
           type="button"
           className={buttonPrimary}
-          onClick={() => setEditing({ mode: 'create' })}
+          onClick={() => setEditing({ mode: 'create', template: null })}
         >
           <IconPlus className="h-5 w-5" /> Nuevo
         </button>
@@ -191,10 +193,23 @@ export function ManageTrackersScreen() {
         title={editing?.mode === 'edit' ? 'Editar rastreador' : 'Nuevo rastreador'}
         onClose={() => setEditing(null)}
       >
+        {editing?.mode === 'create' && (
+          <TemplatePicker
+            existingNames={trackers.map((t) => t.name)}
+            selected={editing.template?.name ?? null}
+            onPick={(template) => setEditing({ mode: 'create', template })}
+          />
+        )}
         {editing && (
           <TrackerForm
-            key={editing.mode === 'edit' ? editing.tracker.id : 'new'}
-            initial={editing.mode === 'edit' ? toDraft(editing.tracker) : emptyDraft()}
+            key={
+              editing.mode === 'edit' ? editing.tracker.id : `new-${editing.template?.name ?? ''}`
+            }
+            initial={
+              editing.mode === 'edit'
+                ? toDraft(editing.tracker)
+                : (editing.template ?? emptyDraft())
+            }
             submitLabel={editing.mode === 'edit' ? 'Guardar' : 'Crear'}
             onSubmit={save}
             onCancel={() => setEditing(null)}
