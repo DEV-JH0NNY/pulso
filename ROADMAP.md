@@ -31,6 +31,15 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 9. ✅ **Exportación CSV ancha (un día por fila):** lista para pandas o una hoja de cálculo.
 10. ✅ **Recordatorio diario dentro de la app:** aviso a una hora elegida si aún no has registrado nada (con permiso de notificaciones cuando el navegador lo permita).
 
+### Ronda 2 (tras revisar la app con ojo crítico)
+
+11. ⬜ **Metas de límite («como máximo»):** hoy toda meta es un mínimo; para café, pantalla o gastos lo útil es un tope (≤ 2 tazas). Afecta progreso, rachas, calendario y resúmenes.
+12. ⬜ **Pruebas automáticas de accesibilidad con axe** sobre las pantallas principales.
+13. ⬜ **Plurales correctos en unidades:** «1 taza» en lugar de «1 tazas».
+14. ⬜ **Tocar un día del calendario anual muestra su valor:** los `title` del SVG no funcionan con el dedo.
+15. ⬜ **Detalle del rastreador más útil:** botón para editarlo y lista de sus registros recientes con edición.
+16. ⬜ **Reordenar arrastrando** (además de los botones subir/bajar).
+
 ## Completadas
 
 - [2026-10-24] Base del proyecto (Fase 1 · tarea 1).
