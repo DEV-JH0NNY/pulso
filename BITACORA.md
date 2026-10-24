@@ -29,6 +29,26 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 13:08] Hallazgos con correlaciones (Fase 1 · tarea 8)
+
+- **Qué hice:** Pantalla «Hallazgos» que compara cada par de rastreadores activos con el coeficiente de Pearson sobre sus totales diarios, usando solo los días en que ambos tienen registros y solo si hay al menos 14. Cada hallazgo trae una frase simple («Los días en que registras más «Café», tiendes a registrar menos «Sueño».»), la fuerza (débil < 0,3 ≤ moderada < 0,5 ≤ fuerte), r, un diagrama de dispersión, y el valor p bilateral (prueba t) explicado en palabras. Advertencia permanente de que correlación no implica causalidad, progreso de los pares a los que les faltan días, aviso de pares donde un rastreador no varía y una sección «¿Cómo se calculan?».
+- **Por qué:** El dueño valora análisis honestos: por eso el valor p, el diagrama con los datos reales y la advertencia sobre comparaciones múltiples. Las relaciones débiles o nulas quedan plegadas en vez de ocultas. La beta incompleta (para la distribución t) se implementó a mano (Lanczos + fracción continua de Numerical Recipes) y se validó contra valores de scipy, para no sumar una librería estadística pesada.
+- **Archivos principales:** `src/domain/{stats,insights}.ts`, `src/ui/screens/InsightsScreen.tsx`, `src/ui/components/ScatterPlot.tsx`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (107 pasando) · build ✅
+- **Commit:** dc808bc
+- **Siguiente:** Exportar e importar CSV.
+
+### [2026-10-24 13:08] Gráficos por rastreador (Fase 1 · tarea 7)
+
+- **Qué hice:** Gráfico de barras en el detalle de cada rastreador con vistas de día (30 días), semana (12 semanas, lunes a domingo) y mes (12 meses), línea de meta en la vista diaria y tarjetas de promedio, máximo, total y periodos con datos. Incluye una tabla oculta con los mismos datos para lectores de pantalla.
+- **Por qué:** Agregación honesta según el tipo: contador y cantidad suman, sí/no cuenta días con «Sí», escala promedia solo los días con datos (no rellena con ceros). El promedio se calcula sobre periodos con datos y lo dice en la etiqueta. SVG propio en lugar de Recharts/Chart.js: se necesitaba un solo tipo de gráfico y así se ahorran ~100 kB.
+- **Archivos principales:** `src/domain/series.ts`, `src/ui/components/{BarChart,TrackerChart}.tsx`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (90 pasando) · build ✅
+- **Commit:** f31c1c0
+- **Siguiente:** Hallazgos (correlaciones).
+
 ### [2026-10-24 13:01] Rachas y mapa de calor anual (Fase 1 · tarea 6)
 
 - **Qué hice:** Pantalla «Estadísticas» con la lista de rastreadores y su racha actual, y pantalla de detalle por rastreador con racha actual, mejor racha, días cumplidos, total de registros y un calendario de 53 semanas (lunes a domingo) estilo GitHub, con meses, días de la semana, leyenda y el detalle de cada día al pasar el dedo o el ratón.
