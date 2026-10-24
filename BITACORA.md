@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 14:41] Exportar los hallazgos como CSV (Fase 2 · 27)
+
+- **Qué hice:** Botón «Exportar hallazgos (CSV)» al final de Hallazgos: una fila por par calculado con `rastreador_a, rastreador_b, desfase_dias, r, n, p, fuerza`, incluidos los débiles y los de desfase (que en pantalla se ocultan o pliegan).
+- **Por qué:** Para un usuario de datos, poder revisar la matriz completa fuera de la app (y aplicar su propia corrección por comparaciones múltiples, por ejemplo) es más honesto que mostrar solo lo destacado. r con 4 decimales y p con 3 cifras significativas.
+- **Archivos principales:** `src/domain/insights.ts`, `src/ui/screens/InsightsScreen.tsx`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (225 pasando) · build ✅
+- **Commit:** af2a30e
+- **Siguiente:** Backlog vacío: nueva revisión crítica.
+
 ### [2026-10-24 14:39] Íconos automáticos al importar (Fase 2 · 26)
 
 - **Qué hice:** Los rastreadores que se crean al importar un CSV reciben ícono y color según palabras clave del nombre, sin importar tildes ni mayúsculas («Horas de SUEÑO» → 💤 violeta, «café» → ☕ ámbar, «Gastos del mes» → 💸 rojo…; 18 grupos). Si no se reconoce, queda 📊 con un color de la paleta.
