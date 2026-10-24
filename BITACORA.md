@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 14:34] Pantalla de error amigable (Fase 2 · 23)
+
+- **Qué hice:** Un «error boundary» envuelve cada pantalla: si algo falla al dibujarla, en lugar de una página en blanco aparece «Algo salió mal en esta pantalla», el mensaje técnico, y botones «Reintentar», «Descargar respaldo» y «Recargar la app». La navegación inferior sigue funcionando y cambiar de pantalla reinicia el error.
+- **Por qué:** Una PWA sin conexión no tiene a quién reportar; lo importante es que el usuario no sienta que perdió sus datos y pueda respaldarlos. Sin telemetría: el detalle solo va a la consola del dispositivo.
+- **Archivos principales:** `src/ui/components/ErrorBoundary.tsx`, `src/app/App.tsx`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (217 pasando) · build ✅
+- **Commit:** fae82c2
+- **Siguiente:** Prueba de rendimiento con 3 años de datos.
+
 ### [2026-10-24 14:30] Métricas derivadas (Fase 2 · 22)
 
 - **Qué hice:** Sección «Métricas derivadas» en Estadísticas: se crea una fórmula diaria entre dos rastreadores (A ÷ B, A − B, A + B, A × B) con nombre y unidad, por ejemplo «Gasto por hora de estudio = Gastos ÷ Estudio (COP/h)». Cada métrica muestra un gráfico de 30 días, el promedio y la mediana. Se incluyen en el respaldo JSON y se borran en cascada si se elimina uno de sus rastreadores (o los datos de ejemplo).

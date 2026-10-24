@@ -51,7 +51,7 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 
 ### Ronda 4
 
-23. ⬜ **Pantalla de error amigable:** si algo falla al dibujar una pantalla, mostrar un mensaje con «Reintentar» y la opción de descargar un respaldo, en vez de una página en blanco.
+23. ✅ **Pantalla de error amigable:** si algo falla al dibujar una pantalla, mostrar un mensaje con «Reintentar» y la opción de descargar un respaldo, en vez de una página en blanco.
 24. ⬜ **Prueba de rendimiento con 3 años de datos** (≈ 20 000 registros) para hallazgos, rachas y series; optimizar si hace falta.
 25. ⬜ **Hora del último registro en las tarjetas de Hoy** («último 8:15 a. m.»), útil para agua o café.
 26. ⬜ **Íconos y colores automáticos al importar CSV** según el nombre (café → ☕, sueño → 💤).
@@ -92,3 +92,4 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 - [2026-10-24] Accesos directos de la app instalada (Fase 2 · 20).
 - [2026-10-24] Celebración al cumplir la meta (Fase 2 · 21).
 - [2026-10-24] Métricas derivadas (Fase 2 · 22).
+- [2026-10-24] Pantalla de error amigable (Fase 2 · 23).
