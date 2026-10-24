@@ -72,3 +72,30 @@ export function isDayDone(
   // Sin meta: cuenta haber registrado (en sí/no, haber respondido "sí").
   return tracker.type === 'boolean' ? value >= 1 : true;
 }
+
+export interface DaySummary {
+  /** Rastreadores activos con meta diaria. */
+  withGoal: number;
+  /** Cuántos de ellos cumplieron la meta. */
+  met: number;
+  /** Rastreadores con al menos un registro en el día. */
+  logged: number;
+}
+
+export function summarizeDay(
+  trackers: Pick<Tracker, 'id' | 'type' | 'dailyGoal'>[],
+  values: Map<string, number>,
+): DaySummary {
+  let withGoal = 0;
+  let met = 0;
+  let logged = 0;
+  for (const t of trackers) {
+    const v = values.get(t.id) ?? null;
+    if (v !== null) logged++;
+    if (t.dailyGoal !== null) {
+      withGoal++;
+      if (progressFor(t, v).met) met++;
+    }
+  }
+  return { withGoal, met, logged };
+}

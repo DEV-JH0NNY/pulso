@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { colorHex } from '../../domain/colors';
+import { progressFor } from '../../domain/aggregate';
 import { formatValue } from '../../domain/format';
 import type { Tracker } from '../../domain/types';
 import { useLongPress } from '../hooks/useLongPress';
-import { IconPlus } from './icons';
+import { progressText } from '../trackerText';
+import { IconCheck, IconPlus } from './icons';
 import { SampleTag } from './SampleTag';
 
 interface TrackerTileProps {
@@ -21,19 +23,20 @@ export function TrackerTile({ tracker, value, onQuickLog, onDetailedLog }: Track
     onQuickLog();
   });
   const hex = colorHex(tracker.color);
-  const valueText = value === null ? 'Sin registros' : formatValue(tracker, value);
+  const valueText = progressText(tracker, value);
+  const progress = progressFor(tracker, value);
   const tapHint =
     tracker.type === 'boolean'
       ? 'marcar Sí'
       : `sumar ${formatValue(tracker, tracker.defaultValue)}`;
 
   return (
-    <div className="relative">
+    <div className="relative h-full">
       <button
         type="button"
         {...press}
-        aria-label={`${tracker.name}: ${valueText}. Tocar para ${tapHint}; mantener presionado para ajustar.`}
-        className="flex w-full select-none flex-col items-start gap-2 rounded-2xl border border-slate-200 bg-white p-3 text-left shadow-sm transition-transform active:scale-[0.97] dark:border-slate-800 dark:bg-slate-900"
+        aria-label={`${tracker.name}: ${valueText}${progress.met ? ', meta cumplida' : ''}. Tocar para ${tapHint}; mantener presionado para ajustar.`}
+        className="flex h-full w-full select-none flex-col items-start gap-2 rounded-2xl border border-slate-200 bg-white p-3 text-left shadow-sm transition-transform active:scale-[0.97] dark:border-slate-800 dark:bg-slate-900"
         style={{ borderTopColor: hex, borderTopWidth: 4 }}
       >
         <span
@@ -47,7 +50,21 @@ export function TrackerTile({ tracker, value, onQuickLog, onDetailedLog }: Track
           {tracker.name}
           {tracker.isSample && <SampleTag />}
         </span>
-        <span className="text-sm text-slate-600 dark:text-slate-400">{valueText}</span>
+        <span className="flex items-center gap-1 text-sm text-slate-600 dark:text-slate-400">
+          {progress.met && <IconCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />}
+          {valueText}
+        </span>
+        {progress.ratio !== null && (
+          <span
+            aria-hidden="true"
+            className="block h-2 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800"
+          >
+            <span
+              className="block h-full rounded-full transition-[width] duration-300"
+              style={{ width: `${Math.round(progress.ratio * 100)}%`, backgroundColor: hex }}
+            />
+          </span>
+        )}
       </button>
       <button
         type="button"

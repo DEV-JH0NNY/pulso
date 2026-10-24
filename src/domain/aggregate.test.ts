@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { dailyTotals, dailyValue, isDayDone, progressFor } from './aggregate';
+import { dailyTotals, dailyValue, isDayDone, progressFor, summarizeDay } from './aggregate';
 
 describe('valor diario', () => {
   it('suma contadores y cantidades', () => {
@@ -56,5 +56,22 @@ describe('progreso', () => {
     expect(isDayDone({ type: 'boolean', dailyGoal: null }, 0)).toBe(false);
     expect(isDayDone({ type: 'counter', dailyGoal: 3 }, 2)).toBe(false);
     expect(isDayDone({ type: 'counter', dailyGoal: 3 }, 3)).toBe(true);
+  });
+});
+
+describe('resumen del día', () => {
+  it('cuenta metas cumplidas y rastreadores registrados', () => {
+    const trackers = [
+      { id: 'a', type: 'counter' as const, dailyGoal: 2 },
+      { id: 'b', type: 'boolean' as const, dailyGoal: 1 },
+      { id: 'c', type: 'scale' as const, dailyGoal: null },
+      { id: 'd', type: 'quantity' as const, dailyGoal: 8 },
+    ];
+    const values = new Map([
+      ['a', 3],
+      ['b', 0],
+      ['c', 4],
+    ]);
+    expect(summarizeDay(trackers, values)).toEqual({ withGoal: 3, met: 1, logged: 3 });
   });
 });

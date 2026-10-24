@@ -72,9 +72,29 @@ describe('TodayScreen', () => {
     await createTracker({ ...emptyDraft(), name: 'Ejercicio', type: 'boolean' });
     const { user } = renderWithProviders(<TodayScreen />);
     await user.click(await tile('Ejercicio'));
-    await screen.findByText('Sí');
+    await screen.findByText('Hecho');
     await user.click(await tile('Ejercicio'));
     expect(await screen.findByText('«Ejercicio» ya está marcado hoy')).toBeInTheDocument();
     expect(await db.entries.count()).toBe(1);
+  });
+});
+
+describe('TodayScreen · progreso', () => {
+  it('muestra el progreso frente a la meta y el resumen', async () => {
+    await createTracker({ ...emptyDraft(), name: 'Agua', unit: 'vasos', dailyGoal: 2 });
+    await createTracker({ ...emptyDraft(), name: 'Leer', type: 'boolean', dailyGoal: 1 });
+    const { user } = renderWithProviders(<TodayScreen />);
+    expect(await screen.findByText('0 de 2 metas cumplidas')).toBeInTheDocument();
+    expect(screen.getByText('0 / 2 vasos')).toBeInTheDocument();
+    expect(screen.getByText('Pendiente')).toBeInTheDocument();
+
+    await user.click(await tile('Agua'));
+    expect(await screen.findByText('1 / 2 vasos')).toBeInTheDocument();
+    await user.click(await tile('Agua'));
+    expect(await screen.findByText('1 de 2 metas cumplidas')).toBeInTheDocument();
+    expect(await tile('Agua')).toHaveAccessibleName(/meta cumplida/);
+
+    await user.click(await tile('Leer'));
+    expect(await screen.findByText(/día completo/i)).toBeInTheDocument();
   });
 });
