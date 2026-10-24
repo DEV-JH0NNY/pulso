@@ -22,7 +22,7 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 
 1. ✅ **Respaldo y restauración completos en JSON:** rastreadores con su configuración (íconos, colores, metas, orden, archivados) y todos los registros; restauración validada que reemplaza o combina.
 2. ✅ **Almacenamiento persistente y recordatorio de respaldo:** pedir `navigator.storage.persist()` para que el navegador no borre los datos, y avisar si pasaron más de 30 días sin exportar.
-3. ⬜ **Registrar en días anteriores desde Hoy:** flechas para moverse entre días en la pantalla principal (olvidé registrar ayer).
+3. ✅ **Registrar en días anteriores desde Hoy:** flechas para moverse entre días en la pantalla principal (olvidé registrar ayer).
 4. ⬜ **Plantillas de rastreadores comunes:** crear con un toque Sueño, Agua, Café, Estudio, Ejercicio, Ánimo, Gastos…
 5. ⬜ **Resumen semanal y mensual:** esta semana frente a la anterior por rastreador (promedio, metas cumplidas, cambio %).
 6. ⬜ **Hallazgos con desfase de un día:** ¿lo de hoy se relaciona con lo de mañana? (por ejemplo, sueño de anoche → ánimo de hoy).
@@ -46,3 +46,4 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 - [2026-10-24] Diseño: tema, contraste, es-CO, carga diferida (Fase 1 · tarea 11). **Fase 1 completa.**
 - [2026-10-24] Respaldo y restauración en JSON (Fase 2 · 1).
 - [2026-10-24] Almacenamiento persistente y recordatorio de respaldo (Fase 2 · 2).
+- [2026-10-24] Registrar en días anteriores (Fase 2 · 3).

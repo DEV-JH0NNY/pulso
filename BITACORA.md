@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 13:30] Registrar en días anteriores (Fase 2 · 3)
+
+- **Qué hice:** Flechas «Día anterior / Día siguiente» en la pantalla principal. En un día pasado, los toques registran en esa fecha (con la hora actual), el resumen y el progreso son de ese día, las tarjetas quedan enmarcadas en ámbar para que no haya confusión, y aparece «Volver a hoy». El aviso de deshacer dice el día («(ayer)»).
+- **Por qué:** Olvidar registrar es lo más común; antes había que abrir el diálogo detallado y cambiar la fecha. Se guarda el desplazamiento en días (no la fecha) para que la vista siga a «hoy» si pasa la medianoche. No se permite avanzar más allá de hoy.
+- **Archivos principales:** `src/ui/screens/TodayScreen.tsx`, `src/data/quickLog.ts`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (153 pasando) · build ✅
+- **Commit:** 9f9d6fd
+- **Siguiente:** Plantillas de rastreadores comunes.
+
 ### [2026-10-24 13:28] Almacenamiento persistente y recordatorio de respaldo (Fase 2 · 2)
 
 - **Qué hice:** Al abrir, la app pide `navigator.storage.persist()` (sin diálogo en Chrome para apps instaladas o usadas a menudo) y Ajustes informa si los datos están protegidos contra borrado por falta de espacio. En «Hoy» aparece una tarjeta «¿Hacemos un respaldo?» cuando hay registros reales de hace más de 7 días y nunca se exportó o pasaron 30 días desde la última exportación; «Ahora no» la aplaza 7 días.
