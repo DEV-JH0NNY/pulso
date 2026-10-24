@@ -12,7 +12,7 @@ Leyenda: ✅ hecho · 🔄 en curso · ⬜ pendiente
 6. ✅ **Rachas y mapa de calor anual** por rastreador.
 7. ✅ **Gráficos** por rastreador con vistas de día, semana y mes.
 8. ✅ **Hallazgos:** correlaciones de Pearson entre totales diarios (mínimo 14 días en común).
-9. ⬜ **Exportar e importar CSV** en formato largo con validación de errores.
+9. ✅ **Exportar e importar CSV** en formato largo con validación de errores.
 10. ⬜ **Datos de ejemplo** marcados como tales, con botón para borrarlos.
 11. ⬜ **Diseño:** celular primero, modo claro y oscuro, es-CO (fechas, números y COP).
 
@@ -30,3 +30,4 @@ _(Se llena al terminar la Fase 1.)_
 - [2026-10-24] Rachas y mapa de calor (Fase 1 · tarea 6).
 - [2026-10-24] Gráficos (Fase 1 · tarea 7).
 - [2026-10-24] Hallazgos (Fase 1 · tarea 8).
+- [2026-10-24] Exportar e importar CSV (Fase 1 · tarea 9).

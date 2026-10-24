@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 13:14] Exportar e importar CSV (Fase 1 · tarea 9)
+
+- **Qué hice:** Nueva pantalla «Ajustes» (reemplaza la pestaña «Rastreadores», que ahora vive dentro de Ajustes). Exportación a CSV en formato largo `fecha,hora,rastreador,valor,unidad,nota` (RFC 4180, CRLF, UTF-8, ordenado por fecha y hora). Importación con vista previa: registros válidos, rastreadores que se crearán (con el tipo inferido), duplicados omitidos y errores por número de línea con mensajes concretos («Fecha «2026-02-30» no es válida (usa AAAA-MM-DD)», «La unidad «min» no coincide con la de «Sueño» (h)»…). Se puede importar solo las filas válidas; todo se aplica en una transacción.
+- **Por qué:** Valores con punto decimal y sin separador de miles para que pandas, SQL o Excel los lean sin sorpresas. La columna `unidad` usa «sí/no» y «1-5» para sí/no y escala, así una ida y vuelta conserva el tipo (probado: exportar → borrar → importar → exportar da el mismo archivo). Al importar se aceptan coma o punto y coma como separador (Excel en español usa «;»), coma o punto decimal, columnas en cualquier orden y horas tipo «7:05». Los rastreadores se asocian por nombre sin distinguir mayúsculas. Sin BOM: con BOM, pandas lee la primera columna como «﻿fecha»; se prefirió la limpieza para herramientas de datos. No se alteran notas que empiecen por «=» (inyección de fórmulas en Excel) para no modificar los datos del usuario; son sus propios datos.
+- **Archivos principales:** `src/domain/{csv,csvData}.ts`, `src/data/csvIO.ts`, `src/ui/components/ImportCsvDialog.tsx`, `src/ui/screens/SettingsScreen.tsx`.
+- **Dependencias nuevas:** ninguna (parser CSV propio de ~70 líneas en lugar de PapaParse).
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (131 pasando) · build ✅
+- **Commit:** 2ec8d4c
+- **Siguiente:** Datos de ejemplo.
+
 ### [2026-10-24 13:08] Hallazgos con correlaciones (Fase 1 · tarea 8)
 
 - **Qué hice:** Pantalla «Hallazgos» que compara cada par de rastreadores activos con el coeficiente de Pearson sobre sus totales diarios, usando solo los días en que ambos tienen registros y solo si hay al menos 14. Cada hallazgo trae una frase simple («Los días en que registras más «Café», tiendes a registrar menos «Sueño».»), la fuerza (débil < 0,3 ≤ moderada < 0,5 ≤ fuerte), r, un diagrama de dispersión, y el valor p bilateral (prueba t) explicado en palabras. Advertencia permanente de que correlación no implica causalidad, progreso de los pares a los que les faltan días, aviso de pares donde un rastreador no varía y una sección «¿Cómo se calculan?».
