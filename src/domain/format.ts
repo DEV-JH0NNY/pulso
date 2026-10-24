@@ -105,3 +105,13 @@ export function parseDecimal(text: string): number {
   if (!/^-?(\d+\.?\d*|\.\d+)$/.test(t)) return Number.NaN;
   return Number(t);
 }
+
+const compactFormatter = new Intl.NumberFormat(LOCALE, {
+  notation: 'compact',
+  maximumFractionDigits: 1,
+});
+
+/** Número compacto para ejes de gráficos ("25 mil", "1,2 M"). */
+export function formatCompact(value: number): string {
+  return compactFormatter.format(value);
+}

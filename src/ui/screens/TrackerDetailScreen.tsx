@@ -6,6 +6,7 @@ import { SampleTag } from '../components/SampleTag';
 import { StatCard } from '../components/StatCard';
 import { card, muted, sectionTitle } from '../components/styles';
 import { TrackerBadge } from '../components/TrackerBadge';
+import { TrackerChart } from '../components/TrackerChart';
 import { useTracker } from '../hooks/useData';
 import { useToday } from '../hooks/useToday';
 import { useTrackerTotals } from '../hooks/useTrackerTotals';
@@ -57,6 +58,11 @@ export function TrackerDetailScreen({ id }: { id: string }) {
             ? 'Un día cuenta para la racha cuando respondes «Sí».'
             : 'Un día cuenta para la racha cuando tiene al menos un registro.'}
       </p>
+
+      <h2 className={sectionTitle}>Gráfico</h2>
+      <div className={card}>
+        <TrackerChart tracker={tracker} totals={data.totals} todayDate={todayDate} />
+      </div>
 
       <h2 className={sectionTitle}>Último año</h2>
       <div className={card}>
