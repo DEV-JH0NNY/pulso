@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 14:01] Plurales correctos en unidades (Fase 2 · 13)
+
+- **Qué hice:** Cuando el valor es 1, la unidad se muestra en singular: «1 taza», «1 vaso», «1 vez», «1 mes». Abreviaturas cortas («h», «km», «min») no cambian.
+- **Por qué:** Detalle de pulido que se nota en cada toque. Regla simple para el español (-ces → -z; -ses/-res/-les/-nes/-des → quitar «es»; resto → quitar «s») en lugar de pedir al usuario el singular y el plural.
+- **Archivos principales:** `src/domain/format.ts`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (190 pasando) · build ✅
+- **Commit:** 9c245fa
+- **Siguiente:** Tocar un día del calendario anual para ver su valor.
+
 ### [2026-10-24 13:58] Pruebas automáticas de accesibilidad (Fase 2 · 12)
 
 - **Qué hice:** Prueba que carga los datos de ejemplo y corre axe-core sobre Hoy, Historial, Estadísticas, detalle de rastreador, Hallazgos, Ajustes, Rastreadores y el diálogo de nuevo rastreador. Encontró un problema real: el aviso «Estás viendo datos de ejemplo» estaba fuera de cualquier región (landmark); ahora es un `<aside>` con nombre.
