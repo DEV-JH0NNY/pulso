@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 15:07] Refactor de la pantalla Hoy (Fase 2 · 37)
+
+- **Qué hice:** Extraje `DayNav` (flechas y «Volver a hoy») y `DaySummaryCard` (anillo de metas) a componentes propios. `TodayScreen.tsx` pasó de 273 a 195 líneas sin cambiar el comportamiento (todas las pruebas de la pantalla siguen pasando sin tocarlas).
+- **Por qué:** La pantalla principal había crecido con cada mejora (días anteriores, recordatorios, celebración, atajos); separar piezas sin estado la hace más fácil de leer y de cambiar.
+- **Archivos principales:** `src/ui/screens/TodayScreen.tsx`, `src/ui/components/{DayNav,DaySummaryCard}.tsx`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (246 pasando) · build ✅
+- **Commit:** 2f5c091
+- **Siguiente:** Documentación al día.
+
 ### [2026-10-24 15:05] Resumen anual «Tu año en Pulso» (Fase 2 · 36)
 
 - **Qué hice:** Nueva pantalla (desde Estadísticas, ruta `#/anual`) con una frase resumen («En 2026 registraste 753 veces en 120 días. Tu mes más activo fue agosto»), registros totales, días con registros, rastreadores usados, gráfico de registros por mes y, por rastreador, total del año (o días con «Sí», o promedio), días con registros, mejor racha y mejor mes. Selector de año cuando hay datos de varios años. Incluida en las pruebas de accesibilidad.

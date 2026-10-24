@@ -74,7 +74,7 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 
 ### Ronda 7
 
-37. ⬜ **Refactor de la pantalla Hoy:** separar la navegación por días y el resumen en componentes propios (el archivo creció con cada mejora).
+37. ✅ **Refactor de la pantalla Hoy:** separar la navegación por días y el resumen en componentes propios (el archivo creció con cada mejora).
 38. ⬜ **Documentación al día:** README y capturas con las funciones de las rondas 4–6.
 39. ⬜ **Días de la semana por rastreador:** mostrar en «Hoy» solo los días que aplican (por ejemplo, gimnasio lunes, miércoles y viernes).
 
@@ -127,3 +127,4 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 - [2026-10-24] Atajos de teclado (Fase 2 · 34).
 - [2026-10-24] Desactivar la vibración (Fase 2 · 35).
 - [2026-10-24] Resumen anual (Fase 2 · 36).
+- [2026-10-24] Refactor de la pantalla Hoy (Fase 2 · 37).
