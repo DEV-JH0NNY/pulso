@@ -1,4 +1,5 @@
 import { dailyTotals } from './aggregate';
+import { addDays } from './dates';
 import { formatNumber } from './format';
 import { correlationPValue, pearson } from './stats';
 import type { Entry, Tracker } from './types';
@@ -20,6 +21,8 @@ export interface Correlation {
   strength: Strength;
   /** Pares (valor de a, valor de b) de cada día en común, para el diagrama de dispersión. */
   points: [number, number][];
+  /** 0: mismo día; 1: a de un día frente a b del día siguiente. */
+  lag: 0 | 1;
 }
 
 export interface PendingPair {
@@ -62,42 +65,77 @@ export function computeInsights(
     for (let j = i + 1; j < trackers.length; j++) {
       const a = trackers[i] as Tracker;
       const b = trackers[j] as Tracker;
-      const ta = totals.get(a.id) as Map<string, number>;
-      const tb = totals.get(b.id) as Map<string, number>;
-      const xs: number[] = [];
-      const ys: number[] = [];
-      for (const [date, va] of ta) {
-        const vb = tb.get(date);
-        if (vb !== undefined) {
-          xs.push(va);
-          ys.push(vb);
-        }
-      }
-      const n = xs.length;
-      if (n < minDays) {
-        pending.push({ a, b, n });
-        continue;
-      }
-      const r = pearson(xs, ys);
-      if (r === null) {
-        constant.push({ a, b, n });
-        continue;
-      }
-      correlations.push({
-        a,
-        b,
-        r,
-        n,
-        p: correlationPValue(r, n),
-        strength: strengthOf(r),
-        points: xs.map((x, k) => [x, ys[k] as number]),
-      });
+      const res = correlatePair(a, b, totals, 0, minDays);
+      if (res.kind === 'ok') correlations.push(res.correlation);
+      else if (res.kind === 'pending') pending.push(res.pair);
+      else constant.push(res.pair);
     }
   }
 
   correlations.sort((x, y) => Math.abs(y.r) - Math.abs(x.r));
   pending.sort((x, y) => y.n - x.n);
   return { correlations, pending, constant };
+}
+
+type PairResult =
+  { kind: 'pending' | 'constant'; pair: PendingPair } | { kind: 'ok'; correlation: Correlation };
+
+function correlatePair(
+  a: Tracker,
+  b: Tracker,
+  totals: Map<string, Map<string, number>>,
+  lag: 0 | 1,
+  minDays: number,
+): PairResult {
+  const ta = totals.get(a.id) as Map<string, number>;
+  const tb = totals.get(b.id) as Map<string, number>;
+  const xs: number[] = [];
+  const ys: number[] = [];
+  for (const [date, va] of ta) {
+    const vb = tb.get(lag === 0 ? date : addDays(date, lag));
+    if (vb !== undefined) {
+      xs.push(va);
+      ys.push(vb);
+    }
+  }
+  const n = xs.length;
+  if (n < minDays) return { kind: 'pending', pair: { a, b, n } };
+  const r = pearson(xs, ys);
+  if (r === null) return { kind: 'constant', pair: { a, b, n } };
+  return {
+    kind: 'ok',
+    correlation: {
+      a,
+      b,
+      r,
+      n,
+      p: correlationPValue(r, n),
+      strength: strengthOf(r),
+      points: xs.map((x, k) => [x, ys[k] as number]),
+      lag,
+    },
+  };
+}
+
+/**
+ * Correlaciones con un día de desfase: el total de `a` en un día frente al de
+ * `b` al día siguiente, para cada par ordenado (a ≠ b). Solo devuelve las calculables.
+ */
+export function computeLaggedCorrelations(
+  trackers: Tracker[],
+  entries: Pick<Entry, 'trackerId' | 'date' | 'value'>[],
+  minDays = MIN_COMMON_DAYS,
+): Correlation[] {
+  const totals = new Map(trackers.map((t) => [t.id, dailyTotals(t, entries)]));
+  const out: Correlation[] = [];
+  for (const a of trackers) {
+    for (const b of trackers) {
+      if (a.id === b.id) continue;
+      const res = correlatePair(a, b, totals, 1, minDays);
+      if (res.kind === 'ok') out.push(res.correlation);
+    }
+  }
+  return out.sort((x, y) => Math.abs(y.r) - Math.abs(x.r));
 }
 
 function condition(t: Tracker): string {
@@ -123,8 +161,11 @@ function outcome(t: Tracker, positive: boolean): string {
 }
 
 /** Frase en lenguaje simple: "Los días en que registras más «Café», tiendes a registrar menos «Sueño»." */
-export function describeCorrelation(c: Pick<Correlation, 'a' | 'b' | 'r'>): string {
-  return `Los días en que ${condition(c.a)}, tiendes a ${outcome(c.b, c.r > 0)}.`;
+export function describeCorrelation(
+  c: Pick<Correlation, 'a' | 'b' | 'r'> & { lag?: 0 | 1 },
+): string {
+  const when = c.lag === 1 ? 'al día siguiente ' : '';
+  return `Los días en que ${condition(c.a)}, ${when}tiendes a ${outcome(c.b, c.r > 0)}.`;
 }
 
 /** Explicación honesta de la confianza en el resultado. */

@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { formatNumber } from '../../domain/format';
 import {
   computeInsights,
+  computeLaggedCorrelations,
   describeConfidence,
   describeCorrelation,
   MIN_COMMON_DAYS,
@@ -60,6 +61,15 @@ export function InsightsScreen() {
     () => (trackers && entries ? computeInsights(trackers, entries) : undefined),
     [trackers, entries],
   );
+  const lagged = useMemo(
+    () =>
+      trackers && entries
+        ? computeLaggedCorrelations(trackers, entries).filter(
+            (c) => c.strength === 'moderada' || c.strength === 'fuerte',
+          )
+        : [],
+    [trackers, entries],
+  );
 
   if (!insights || !trackers) return <p className={muted}>Cargando…</p>;
 
@@ -105,6 +115,22 @@ export function InsightsScreen() {
           <ul className="space-y-3">
             {relevant.map((c) => (
               <CorrelationCard key={`${c.a.id}-${c.b.id}`} c={c} />
+            ))}
+          </ul>
+        </>
+      )}
+
+      {lagged.length > 0 && (
+        <>
+          <h2 className={sectionTitle}>Al día siguiente ({lagged.length})</h2>
+          <p className={`${muted} mb-2`}>
+            Compara lo de un día con lo del día siguiente. Ojo: si dos cosas ya van juntas el mismo
+            día y cambian poco de un día a otro, también aparecerán aquí sin que haya un efecto de
+            un día al otro.
+          </p>
+          <ul className="space-y-3">
+            {lagged.map((c) => (
+              <CorrelationCard key={`lag-${c.a.id}-${c.b.id}`} c={c} />
             ))}
           </ul>
         </>

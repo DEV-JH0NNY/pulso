@@ -1,6 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { addDays } from './dates';
-import { computeInsights, describeConfidence, describeCorrelation, strengthOf } from './insights';
+import {
+  computeInsights,
+  computeLaggedCorrelations,
+  describeConfidence,
+  describeCorrelation,
+  strengthOf,
+} from './insights';
 import type { Entry, Tracker } from './types';
 
 const tracker = (id: string, name: string, type: Tracker['type'] = 'quantity'): Tracker => ({
@@ -94,5 +100,29 @@ describe('hallazgos', () => {
     );
     expect(describeConfidence({ n: 20, p: 0.0004 })).toMatch(/poco probable.*p < 0,001/);
     expect(describeConfidence({ n: 15, p: 0.2 })).toMatch(/podría ser casualidad \(p = 0,2\)/);
+  });
+});
+
+describe('hallazgos con desfase', () => {
+  it('detecta que lo de un día se relaciona con el día siguiente', () => {
+    const sleep = tracker('s', 'Sueño');
+    const mood = tracker('m', 'Ánimo', 'scale');
+    const s = Array.from({ length: 30 }, (_, i) => 5 + ((i * 7) % 5));
+    // El ánimo de cada día copia el sueño del día anterior.
+    const m = [3, ...s.slice(0, -1).map((v) => Math.min(5, Math.max(1, v - 4)))];
+    const lagged = computeLaggedCorrelations(
+      [sleep, mood],
+      [...entries('s', s), ...entries('m', m)],
+    );
+    const top = lagged[0];
+    expect(top?.a.id).toBe('s');
+    expect(top?.b.id).toBe('m');
+    expect(top?.lag).toBe(1);
+    expect(top?.r).toBeGreaterThan(0.9);
+    expect(top?.n).toBe(29);
+    if (!top) throw new Error('sin resultados');
+    expect(describeCorrelation(top)).toBe(
+      'Los días en que registras más «Sueño», al día siguiente tiendes a calificar «Ánimo» más alto.',
+    );
   });
 });

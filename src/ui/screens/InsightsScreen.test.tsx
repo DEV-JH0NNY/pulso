@@ -57,3 +57,34 @@ describe('InsightsScreen', () => {
     expect(screen.getByRole('img', { name: /diagrama de dispersión/i })).toBeInTheDocument();
   });
 });
+
+describe('InsightsScreen · desfase', () => {
+  it('muestra relaciones con el día siguiente', async () => {
+    const coffee = await createTracker({ ...emptyDraft(), name: 'Café' });
+    const sleep = await createTracker({
+      ...emptyDraft(),
+      name: 'Sueño',
+      type: 'quantity',
+      unit: 'h',
+    });
+    const cups = Array.from({ length: 25 }, (_, i) => 1 + ((i * 7) % 5));
+    const rows: Entry[] = cups.flatMap((c, i) => {
+      const base = {
+        time: '08:00',
+        note: '',
+        createdAt: 0,
+        isSample: false,
+        date: addDays('2026-01-01', i),
+      };
+      // El sueño de cada día depende del café del día anterior.
+      const prev = cups[i - 1] ?? 3;
+      return [
+        { ...base, id: newId(), trackerId: coffee.id, value: c },
+        { ...base, id: newId(), trackerId: sleep.id, value: 10 - prev },
+      ];
+    });
+    await db.entries.bulkAdd(rows);
+    renderWithProviders(<InsightsScreen />);
+    expect(await screen.findByRole('heading', { name: /al día siguiente/i })).toBeInTheDocument();
+  });
+});
