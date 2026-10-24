@@ -55,3 +55,9 @@ dialog::backdrop {
     transform: translateY(0);
   }
 }
+
+@keyframes tile-pop {
+  50% {
+    transform: scale(1.35);
+  }
+}
