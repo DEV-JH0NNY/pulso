@@ -1,8 +1,12 @@
 import { isDayDone } from './aggregate';
+import { withGoalAt } from './goalHistory';
 import { addDays, startOfWeek } from './dates';
 import type { Tracker } from './types';
 
-type WeeklyTracker = Pick<Tracker, 'type' | 'dailyGoal' | 'goalDirection' | 'weeklyTarget'>;
+type WeeklyTracker = Pick<
+  Tracker,
+  'type' | 'dailyGoal' | 'goalDirection' | 'weeklyTarget' | 'goalChanges'
+>;
 
 /** Días cumplidos (ver `isDayDone`) en la semana de lunes a domingo que empieza en `weekStart`. */
 function doneInWeek(
@@ -15,7 +19,7 @@ function doneInWeek(
   for (let i = 0; i < 7; i++) {
     const d = addDays(weekStart, i);
     if (d > upTo) break;
-    if (isDayDone(tracker, totals.get(d) ?? null)) done++;
+    if (isDayDone(withGoalAt(tracker, d), totals.get(d) ?? null)) done++;
   }
   return done;
 }

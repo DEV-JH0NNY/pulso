@@ -73,6 +73,23 @@ function parseTracker(raw: unknown, i: number): Tracker | string {
     dailyGoal: dailyGoal as number | null,
     ...(raw.goalDirection === 'atMost' ? { goalDirection: 'atMost' as const } : {}),
     ...(isNumber(raw.weeklyTarget) ? { weeklyTarget: raw.weeklyTarget } : {}),
+    ...(Array.isArray(raw.goalChanges)
+      ? {
+          goalChanges: raw.goalChanges
+            .filter(
+              (c): c is { until: string; dailyGoal: number | null; goalDirection?: string } =>
+                isObject(c) &&
+                isString(c.until) &&
+                isValidISODate(c.until) &&
+                (c.dailyGoal === null || isNumber(c.dailyGoal)),
+            )
+            .map((c) => ({
+              until: c.until,
+              dailyGoal: c.dailyGoal,
+              ...(c.goalDirection === 'atMost' ? { goalDirection: 'atMost' as const } : {}),
+            })),
+        }
+      : {}),
     ...(Array.isArray(raw.activeDays) && raw.activeDays.every(isNumber)
       ? { activeDays: raw.activeDays as number[] }
       : {}),

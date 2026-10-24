@@ -1,4 +1,5 @@
 import { isDayDone } from './aggregate';
+import { withGoalAt } from './goalHistory';
 import { addDays, addMonths, daysBetween, startOfMonth, startOfWeek } from './dates';
 import type { Tracker } from './types';
 
@@ -26,7 +27,7 @@ export interface PeriodComparison {
 }
 
 function statsFor(
-  tracker: Pick<Tracker, 'type' | 'dailyGoal'>,
+  tracker: Pick<Tracker, 'type' | 'dailyGoal' | 'goalDirection' | 'goalChanges'>,
   totals: Map<string, number>,
   from: string,
   to: string,
@@ -41,7 +42,7 @@ function statsFor(
     daysWithData++;
     sum += v;
     if (v >= 1) yes++;
-    if (isDayDone(tracker, v)) daysDone++;
+    if (isDayDone(withGoalAt(tracker, d), v)) daysDone++;
   }
   let value: number | null = null;
   if (daysWithData > 0) {
@@ -55,7 +56,7 @@ function statsFor(
  * número de días del periodo anterior, para que la comparación sea justa a mitad de semana o mes.
  */
 export function comparePeriods(
-  tracker: Pick<Tracker, 'type' | 'dailyGoal'>,
+  tracker: Pick<Tracker, 'type' | 'dailyGoal' | 'goalDirection' | 'goalChanges'>,
   totals: Map<string, number>,
   todayDate: string,
   period: SummaryPeriod,

@@ -1,4 +1,5 @@
 import { isDayDone } from './aggregate';
+import { withGoalAt } from './goalHistory';
 import { addDays, daysBetween } from './dates';
 import { isScheduled } from './schedule';
 import type { Tracker } from './types';
@@ -17,14 +18,14 @@ export interface Streaks {
  * La racha actual no se rompe por hoy: el día todavía no termina.
  */
 export function computeStreaks(
-  tracker: Pick<Tracker, 'type' | 'dailyGoal' | 'goalDirection' | 'activeDays'>,
+  tracker: Pick<Tracker, 'type' | 'dailyGoal' | 'goalDirection' | 'activeDays' | 'goalChanges'>,
   totals: Map<string, number>,
   todayDate: string,
 ): Streaks {
   if (tracker.activeDays && tracker.activeDays.length > 0)
     return scheduledStreaks(tracker, totals, todayDate);
   const done = [...totals.entries()]
-    .filter(([date, v]) => date <= todayDate && isDayDone(tracker, v))
+    .filter(([date, v]) => date <= todayDate && isDayDone(withGoalAt(tracker, date), v))
     .map(([date]) => date)
     .sort();
   const doneSet = new Set(done);
@@ -54,7 +55,7 @@ export function computeStreaks(
  * salvo hoy, que todavía no termina.
  */
 function scheduledStreaks(
-  tracker: Pick<Tracker, 'type' | 'dailyGoal' | 'goalDirection' | 'activeDays'>,
+  tracker: Pick<Tracker, 'type' | 'dailyGoal' | 'goalDirection' | 'activeDays' | 'goalChanges'>,
   totals: Map<string, number>,
   todayDate: string,
 ): Streaks {
@@ -66,7 +67,7 @@ function scheduledStreaks(
   let doneDays = 0;
   let current = 0;
   for (let d = first; d <= todayDate; d = addDays(d, 1)) {
-    const done = isDayDone(tracker, totals.get(d) ?? null);
+    const done = isDayDone(withGoalAt(tracker, d), totals.get(d) ?? null);
     if (done) doneDays++;
     // Un día libre con registro cumplido también suma, pero nunca rompe la racha.
     if (done) run++;

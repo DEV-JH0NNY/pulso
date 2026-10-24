@@ -1,3 +1,5 @@
+import { today } from '../domain/dates';
+import { recordGoalChange } from '../domain/goalHistory';
 import { newId } from '../domain/ids';
 import { normalizeDraft, sortTrackers, validateTrackerDraft } from '../domain/trackers';
 import type { Tracker, TrackerDraft } from '../domain/types';
@@ -44,10 +46,25 @@ export async function createTracker(
   return tracker;
 }
 
-export async function updateTracker(id: string, draft: TrackerDraft): Promise<void> {
+/**
+ * Guarda los cambios. Si cambia la meta, la anterior queda registrada como
+ * vigente hasta ayer para que los días pasados se sigan evaluando con ella.
+ */
+export async function updateTracker(
+  id: string,
+  draft: TrackerDraft,
+  todayDate: string = today(),
+): Promise<void> {
   assertValid(draft);
-  const count = await db.trackers.update(id, normalizeDraft(draft));
-  if (count === 0) throw new Error('El rastreador no existe.');
+  await db.transaction('rw', db.trackers, async () => {
+    const existing = await db.trackers.get(id);
+    if (!existing) throw new Error('El rastreador no existe.');
+    const next = normalizeDraft(draft);
+    const goalChanges = recordGoalChange(existing, next, todayDate);
+    // Los campos opcionales que el borrador ya no trae deben borrarse, no heredarse.
+    const { goalDirection: _gd, weeklyTarget: _wt, activeDays: _ad, ...base } = existing;
+    await db.trackers.put({ ...base, ...next, goalChanges });
+  });
 }
 
 export async function setTrackerArchived(id: string, archived: boolean): Promise<void> {

@@ -1,4 +1,5 @@
 import { isLimitGoal, progressFor } from './aggregate';
+import { withGoalAt } from './goalHistory';
 import { addDays, startOfWeek } from './dates';
 import type { Tracker } from './types';
 
@@ -52,7 +53,7 @@ export function levelFor(
 
 /** Construye el calendario de las últimas `weeks` semanas terminando en la semana de hoy. */
 export function buildHeatmap(
-  tracker: Pick<Tracker, 'type' | 'dailyGoal' | 'goalDirection'>,
+  tracker: Pick<Tracker, 'type' | 'dailyGoal' | 'goalDirection' | 'goalChanges'>,
   totals: Map<string, number>,
   todayDate: string,
   weeks = 53,
@@ -70,7 +71,12 @@ export function buildHeatmap(
       const date = addDays(start, w * 7 + d);
       const future = date > todayDate;
       const value = future ? null : (totals.get(date) ?? null);
-      column.push({ date, value, level: future ? 0 : levelFor(tracker, value, max), future });
+      column.push({
+        date,
+        value,
+        level: future ? 0 : levelFor(withGoalAt(tracker, date), value, max),
+        future,
+      });
     }
     const month = (column[0] as HeatCell).date.slice(0, 7);
     if (month !== lastMonth) {

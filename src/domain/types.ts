@@ -1,4 +1,6 @@
 /** Tipos de rastreador soportados. */
+import type { GoalChange } from './goalHistory';
+
 export type TrackerType = 'counter' | 'quantity' | 'boolean' | 'scale';
 
 export const TRACKER_TYPES: readonly TrackerType[] = ['counter', 'quantity', 'boolean', 'scale'];
@@ -39,6 +41,8 @@ export interface Tracker {
    * todos. Los días que no aplican no rompen rachas ni aparecen en «Hoy».
    */
   activeDays?: number[] | null;
+  /** Metas anteriores, para evaluar cada día con la meta que tenía entonces. */
+  goalChanges?: GoalChange[];
   archived: boolean;
   /** Posición en las listas (menor primero). */
   order: number;

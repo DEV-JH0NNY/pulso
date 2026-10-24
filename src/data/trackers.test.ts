@@ -70,3 +70,29 @@ describe('borrar rastreador con métricas derivadas', () => {
     expect(await db.derived.count()).toBe(0);
   });
 });
+
+describe('editar campos opcionales y metas', () => {
+  it('quitar la meta semanal, los días o el límite se guarda de verdad', async () => {
+    const t = await createTracker({
+      ...emptyDraft(),
+      name: 'Café',
+      dailyGoal: 2,
+      goalDirection: 'atMost',
+      weeklyTarget: 3,
+      activeDays: [0, 2],
+    });
+    await updateTracker(t.id, { ...emptyDraft(), name: 'Café', dailyGoal: 2 }, '2026-10-24');
+    const saved = await db.trackers.get(t.id);
+    expect(saved?.goalDirection).toBeUndefined();
+    expect(saved?.weeklyTarget).toBeUndefined();
+    expect(saved?.activeDays).toBeUndefined();
+  });
+
+  it('cambiar la meta guarda la anterior en el historial', async () => {
+    const t = await createTracker({ ...emptyDraft(), name: 'Agua', dailyGoal: 6 });
+    await updateTracker(t.id, { ...emptyDraft(), name: 'Agua', dailyGoal: 8 }, '2026-10-24');
+    expect((await db.trackers.get(t.id))?.goalChanges).toEqual([
+      { until: '2026-10-23', dailyGoal: 6 },
+    ]);
+  });
+});

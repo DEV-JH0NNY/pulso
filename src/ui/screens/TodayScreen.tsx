@@ -16,6 +16,7 @@ import { TrackerTile } from '../components/TrackerTile';
 import { useActiveTrackers, useEntriesBetween } from '../hooks/useData';
 import { weekProgress } from '../../domain/weekly';
 import { isScheduled } from '../../domain/schedule';
+import { withGoalAt } from '../../domain/goalHistory';
 import { useOnboardingDone } from '../hooks/useSample';
 import { WelcomeCard } from '../components/WelcomeCard';
 import { BackupReminder } from '../components/BackupReminder';
@@ -69,7 +70,7 @@ export function TodayScreen() {
   const renderTile = (t: Tracker) => (
     <li key={t.id}>
       <TrackerTile
-        tracker={t}
+        tracker={withGoalAt(t, day)}
         value={values.get(t.id) ?? null}
         week={weekProgress(t, dailyTotals(t, entries ?? []), day)}
         celebrate={celebrating?.id === t.id ? celebrating.n : 0}
@@ -100,7 +101,7 @@ export function TodayScreen() {
       toast({ message: `«${t.name}» ya está marcado ${isToday ? 'hoy' : 'ese día'}` });
       return;
     }
-    if (reachesGoal(t, dayValues, entry.value)) {
+    if (reachesGoal(withGoalAt(t, day), dayValues, entry.value)) {
       setCelebrating((c) => ({ id: t.id, n: (c?.n ?? 0) + 1 }));
       vibrate([15, 60, 15]);
       undoable(`🎉 ¡Meta de «${t.name}» cumplida!`, entry.id);
@@ -139,7 +140,10 @@ export function TodayScreen() {
       {isToday && <BackupReminder />}
       {trackers.length > 0 && (
         <DaySummaryCard
-          summary={summarizeDay(scheduled, values)}
+          summary={summarizeDay(
+            scheduled.map((t) => withGoalAt(t, day)),
+            values,
+          )}
           total={scheduled.length}
           dayLabel={isToday ? 'hoy' : 'ese día'}
         />
