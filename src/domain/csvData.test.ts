@@ -187,3 +187,33 @@ describe('exportar CSV ancho', () => {
     expect(entriesToWideCsv([sleep], [])).toBe('fecha,Sueño (h)\r\n');
   });
 });
+
+describe('importar CSV ancho', () => {
+  it('detecta el formato y crea un registro por celda con valor', () => {
+    const plan = planImport(
+      'fecha,Sueño (h),Café (tazas),Ejercicio (sí/no)\n2026-01-01,7.5,2,1\n2026-01-02,,3,0\n',
+      [],
+      [],
+    );
+    expect(plan.fatal).toBeNull();
+    expect(plan.errors).toEqual([]);
+    expect(plan.newTrackers).toEqual([
+      { name: 'Sueño', type: 'quantity', unit: 'h' },
+      { name: 'Café', type: 'counter', unit: 'tazas' },
+      { name: 'Ejercicio', type: 'boolean', unit: '' },
+    ]);
+    expect(plan.rows.map((r) => [r.date, r.time, r.trackerName, r.value])).toEqual([
+      ['2026-01-01', '12:00', 'Sueño', 7.5],
+      ['2026-01-01', '12:00', 'Café', 2],
+      ['2026-01-01', '12:00', 'Ejercicio', 1],
+      ['2026-01-02', '12:00', 'Café', 3],
+      ['2026-01-02', '12:00', 'Ejercicio', 0],
+    ]);
+  });
+
+  it('reporta errores con el número de línea original', () => {
+    const plan = planImport('fecha,Ánimo (1-5)\n2026-01-01,2.5\n', [], []);
+    expect(plan.errors[0]).toMatchObject({ line: 2 });
+    expect(plan.errors[0]?.message).toMatch(/entre 1 y 5/);
+  });
+});

@@ -111,8 +111,11 @@ export function planImport(text: string, trackers: Tracker[], existing: Entry[])
   if (!text.trim()) return emptyPlan('El archivo está vacío.');
   const parsed = parseCsv(text);
   if (parsed.error) return emptyPlan(parsed.error);
-  const [header, ...body] = parsed.rows;
-  if (!header) return emptyPlan('El archivo está vacío.');
+  const [rawHeader, ...rawBody] = parsed.rows;
+  if (!rawHeader) return emptyPlan('El archivo está vacío.');
+  const { header, body } = isWideHeader(rawHeader.fields)
+    ? wideToLong(rawHeader.fields, rawBody)
+    : { header: rawHeader, body: rawBody };
 
   const columns = header.fields.map((f) => normalizeUnit(f));
   const index = Object.fromEntries(CSV_COLUMNS.map((c) => [c, columns.indexOf(c)])) as Record<
@@ -241,6 +244,46 @@ export function planImport(text: string, trackers: Tracker[], existing: Entry[])
     duplicates,
     fatal: null,
   };
+}
+
+/** Hora asignada a los registros importados desde CSV ancho (que no traen hora). */
+export const WIDE_IMPORT_TIME = '12:00';
+
+/** Formato ancho: primera columna «fecha» y ninguna columna «rastreador» ni «valor». */
+function isWideHeader(fields: string[]): boolean {
+  const cols = fields.map((f) => normalizeUnit(f));
+  return (
+    cols[0] === 'fecha' &&
+    !cols.includes('rastreador') &&
+    !cols.includes('valor') &&
+    cols.length > 1
+  );
+}
+
+/** "Sueño (h)" → nombre «Sueño» y unidad «h». */
+function parseWideColumn(title: string): { name: string; unit: string } {
+  const m = /^(.*?)\s*\(([^)]*)\)\s*$/.exec(title.trim());
+  return m
+    ? { name: (m[1] ?? '').trim(), unit: (m[2] ?? '').trim() }
+    : { name: title.trim(), unit: '' };
+}
+
+/** Convierte filas de CSV ancho en filas del formato largo (una por celda con valor). */
+function wideToLong(
+  headerFields: string[],
+  rows: { line: number; fields: string[] }[],
+): { header: { line: number; fields: string[] }; body: { line: number; fields: string[] }[] } {
+  const columns = headerFields.slice(1).map(parseWideColumn);
+  const body: { line: number; fields: string[] }[] = [];
+  for (const { line, fields } of rows) {
+    const date = fields[0] ?? '';
+    columns.forEach((col, i) => {
+      const value = (fields[i + 1] ?? '').trim();
+      if (value !== '')
+        body.push({ line, fields: [date, WIDE_IMPORT_TIME, col.name, value, col.unit, ''] });
+    });
+  }
+  return { header: { line: 1, fields: [...CSV_COLUMNS] }, body };
 }
 
 function capitalize(s: string): string {

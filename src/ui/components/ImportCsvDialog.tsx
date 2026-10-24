@@ -76,7 +76,9 @@ export function ImportCsvDialog({ open, onClose }: { open: boolean; onClose: () 
           />
           <p className={`${muted} mt-2`}>
             Formato largo con encabezado <code>{CSV_COLUMNS.join(',')}</code>. Fechas AAAA-MM-DD,
-            horas HH:mm, separado por comas o punto y coma.
+            horas HH:mm, separado por comas o punto y coma. También acepta formato ancho (
+            <code>fecha,Sueño (h),Café (tazas)…</code>): cada celda con valor se importa como un
+            registro a las 12:00.
           </p>
         </div>
 
