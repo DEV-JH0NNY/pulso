@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 14:14] Reordenar arrastrando (Fase 2 · 16)
+
+- **Qué hice:** Cada rastreador activo tiene una manija (⋮⋮) para arrastrarlo; la lista se reordena en vivo y se guarda al soltar. Los botones subir/bajar siguen ahí como alternativa accesible con teclado y lector de pantalla (la manija se oculta a tecnologías de asistencia para no duplicar). Además subí a 3 s la espera de `findBy*` en las pruebas tras ver un fallo intermitente por tiempos bajo carga (9 corridas seguidas en verde después).
+- **Por qué:** Arrastrar es lo que se espera en un celular. Implementado con pointer events y `setPointerCapture` (ratón, dedo y lápiz) en ~50 líneas, sin librerías de drag and drop; `touch-action: none` solo en la manija para no bloquear el desplazamiento de la página. La lógica de posiciones está en el dominio con pruebas.
+- **Archivos principales:** `src/domain/reorder.ts`, `src/ui/hooks/useDragReorder.ts`, `src/ui/screens/ManageTrackersScreen.tsx`, `src/test/setup.ts`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (195 pasando) · build ✅
+- **Commit:** 935bee5
+- **Siguiente:** Backlog vacío otra vez: nueva revisión crítica.
+
 ### [2026-10-24 14:07] Detalle del rastreador más útil (Fase 2 · 15)
 
 - **Qué hice:** El detalle de cada rastreador tiene un botón «Editar» (mismo formulario que en Rastreadores) y una sección «Registros recientes» con los últimos 10 (y botón para ver todos), cada uno editable o borrable con deshacer.

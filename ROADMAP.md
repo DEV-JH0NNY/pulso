@@ -38,7 +38,7 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 13. ✅ **Plurales correctos en unidades:** «1 taza» en lugar de «1 tazas».
 14. ✅ **Tocar un día del calendario anual muestra su valor:** los `title` del SVG no funcionan con el dedo.
 15. ✅ **Detalle del rastreador más útil:** botón para editarlo y lista de sus registros recientes con edición.
-16. ⬜ **Reordenar arrastrando** (además de los botones subir/bajar).
+16. ✅ **Reordenar arrastrando** (además de los botones subir/bajar).
 
 ## Completadas
 
@@ -68,3 +68,4 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 - [2026-10-24] Plurales correctos en unidades (Fase 2 · 13).
 - [2026-10-24] Calendario anual interactivo (Fase 2 · 14).
 - [2026-10-24] Detalle del rastreador más útil (Fase 2 · 15).
+- [2026-10-24] Reordenar arrastrando (Fase 2 · 16).
