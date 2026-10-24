@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { isLimitGoal } from '../../domain/aggregate';
 import { formatNumber } from '../../domain/format';
 import { computeStreaks } from '../../domain/streaks';
 import { HeatmapChart } from '../components/HeatmapChart';
@@ -27,7 +28,12 @@ export function TrackerDetailScreen({ id }: { id: string }) {
   if (tracker === null) return <p className={`${card} ${muted}`}>Este rastreador no existe.</p>;
   if (!tracker || !data || !streaks) return <p className={muted}>Cargando…</p>;
 
-  const doneLabel = tracker.dailyGoal !== null ? 'Días con meta cumplida' : 'Días con registros';
+  const doneLabel =
+    tracker.dailyGoal === null
+      ? 'Días con registros'
+      : isLimitGoal(tracker)
+        ? 'Días dentro del límite'
+        : 'Días con meta cumplida';
 
   return (
     <div>
@@ -53,11 +59,13 @@ export function TrackerDetailScreen({ id }: { id: string }) {
         <StatCard label="Registros" value={formatNumber(data.entries.length)} />
       </dl>
       <p className={`${muted} mt-2`}>
-        {tracker.dailyGoal !== null
-          ? 'Un día cuenta para la racha cuando cumples la meta.'
-          : tracker.type === 'boolean'
-            ? 'Un día cuenta para la racha cuando respondes «Sí».'
-            : 'Un día cuenta para la racha cuando tiene al menos un registro.'}
+        {tracker.dailyGoal !== null && isLimitGoal(tracker)
+          ? 'Un día cuenta para la racha cuando registras y no pasas del límite (registra 0 los días sin consumo).'
+          : tracker.dailyGoal !== null
+            ? 'Un día cuenta para la racha cuando cumples la meta.'
+            : tracker.type === 'boolean'
+              ? 'Un día cuenta para la racha cuando respondes «Sí».'
+              : 'Un día cuenta para la racha cuando tiene al menos un registro.'}
       </p>
 
       <h2 className={sectionTitle}>Gráfico</h2>

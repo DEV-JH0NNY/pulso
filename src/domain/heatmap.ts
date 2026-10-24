@@ -1,4 +1,4 @@
-import { progressFor } from './aggregate';
+import { isLimitGoal, progressFor } from './aggregate';
 import { addDays, startOfWeek } from './dates';
 import type { Tracker } from './types';
 
@@ -23,11 +23,15 @@ const clampLevel = (n: number): HeatLevel => Math.max(0, Math.min(4, n)) as Heat
 
 /** Intensidad de 0 a 4 para un valor diario. */
 export function levelFor(
-  tracker: Pick<Tracker, 'type' | 'dailyGoal'>,
+  tracker: Pick<Tracker, 'type' | 'dailyGoal' | 'goalDirection'>,
   value: number | null,
   max: number,
 ): HeatLevel {
   if (value === null) return 0;
+  if (tracker.dailyGoal !== null && isLimitGoal(tracker)) {
+    // Límite: dentro del tope es un buen día; pasarse, el nivel más bajo.
+    return value <= tracker.dailyGoal ? 4 : 1;
+  }
   if (tracker.dailyGoal !== null) {
     const { ratio, met } = progressFor(tracker, value);
     if (met) return 4;
@@ -48,7 +52,7 @@ export function levelFor(
 
 /** Construye el calendario de las últimas `weeks` semanas terminando en la semana de hoy. */
 export function buildHeatmap(
-  tracker: Pick<Tracker, 'type' | 'dailyGoal'>,
+  tracker: Pick<Tracker, 'type' | 'dailyGoal' | 'goalDirection'>,
   totals: Map<string, number>,
   todayDate: string,
   weeks = 53,

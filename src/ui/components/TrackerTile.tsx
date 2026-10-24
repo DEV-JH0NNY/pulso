@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { colorHex } from '../../domain/colors';
-import { progressFor } from '../../domain/aggregate';
+import { isLimitGoal, progressFor } from '../../domain/aggregate';
 import { formatValue } from '../../domain/format';
 import type { Tracker } from '../../domain/types';
 import { useLongPress } from '../hooks/useLongPress';
@@ -25,6 +25,11 @@ export function TrackerTile({ tracker, value, onQuickLog, onDetailedLog }: Track
   const hex = colorHex(tracker.color);
   const valueText = progressText(tracker, value);
   const progress = progressFor(tracker, value);
+  const overLimit =
+    isLimitGoal(tracker) &&
+    value !== null &&
+    tracker.dailyGoal !== null &&
+    value > tracker.dailyGoal;
   const tapHint =
     tracker.type === 'boolean'
       ? 'marcar Sí'
@@ -35,7 +40,7 @@ export function TrackerTile({ tracker, value, onQuickLog, onDetailedLog }: Track
       <button
         type="button"
         {...press}
-        aria-label={`${tracker.name}: ${valueText}${progress.met ? ', meta cumplida' : ''}. Tocar para ${tapHint}; mantener presionado para ajustar.`}
+        aria-label={`${tracker.name}: ${valueText}${progress.met ? (isLimitGoal(tracker) ? ', dentro del límite' : ', meta cumplida') : ''}${overLimit ? ', límite superado' : ''}. Tocar para ${tapHint}; mantener presionado para ajustar.`}
         className="flex h-full w-full select-none flex-col items-start gap-2 rounded-2xl border border-slate-200 bg-white p-3 text-left shadow-sm transition-transform active:scale-[0.97] dark:border-slate-800 dark:bg-slate-900"
         style={{ borderTopColor: hex, borderTopWidth: 4 }}
       >
@@ -61,7 +66,10 @@ export function TrackerTile({ tracker, value, onQuickLog, onDetailedLog }: Track
           >
             <span
               className="block h-full rounded-full transition-[width] duration-300"
-              style={{ width: `${Math.round(progress.ratio * 100)}%`, backgroundColor: hex }}
+              style={{
+                width: `${Math.round(progress.ratio * 100)}%`,
+                backgroundColor: overLimit ? '#e11d48' : hex,
+              }}
             />
           </span>
         )}

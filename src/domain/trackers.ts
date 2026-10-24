@@ -78,8 +78,14 @@ export function validateTrackerDraft(draft: TrackerDraft): DraftErrors {
 
 /** Limpia espacios y campos que no aplican al tipo. */
 export function normalizeDraft(draft: TrackerDraft): TrackerDraft {
-  const unit = draft.type === 'counter' || draft.type === 'quantity' ? draft.unit.trim() : '';
-  return { ...draft, name: draft.name.trim(), icon: draft.icon.trim(), unit };
+  const numeric = draft.type === 'counter' || draft.type === 'quantity';
+  const unit = numeric ? draft.unit.trim() : '';
+  const out: TrackerDraft = { ...draft, name: draft.name.trim(), icon: draft.icon.trim(), unit };
+  // Solo se guarda el sentido cuando es un límite con meta; el resto es "al menos" implícito.
+  if (numeric && draft.dailyGoal !== null && draft.goalDirection === 'atMost')
+    out.goalDirection = 'atMost';
+  else delete out.goalDirection;
+  return out;
 }
 
 /** Valida que un valor sea registrable para el tipo del rastreador. */

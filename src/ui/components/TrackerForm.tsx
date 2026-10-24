@@ -5,6 +5,7 @@ import { defaultsForType, validateTrackerDraft, type DraftErrors } from '../../d
 import {
   TRACKER_TYPE_LABELS,
   TRACKER_TYPES,
+  type GoalDirection,
   type TrackerDraft,
   type TrackerType,
 } from '../../domain/types';
@@ -37,6 +38,9 @@ export function TrackerForm({ initial, submitLabel, onSubmit, onCancel }: Tracke
   const [defaultText, setDefaultText] = useState(numText(initial.defaultValue));
   const [hasGoal, setHasGoal] = useState(initial.dailyGoal !== null);
   const [goalText, setGoalText] = useState(numText(initial.dailyGoal));
+  const [goalDirection, setGoalDirection] = useState<GoalDirection>(
+    initial.goalDirection ?? 'atLeast',
+  );
   const [errors, setErrors] = useState<DraftErrors>({});
   const [saving, setSaving] = useState(false);
   const id = useId();
@@ -59,6 +63,7 @@ export function TrackerForm({ initial, submitLabel, onSubmit, onCancel }: Tracke
     unit,
     defaultValue: parseDecimal(defaultText),
     dailyGoal: hasGoal ? (type === 'boolean' ? 1 : parseDecimal(goalText)) : null,
+    goalDirection,
   });
 
   const handleSubmit = async (e: FormEvent) => {
@@ -279,10 +284,43 @@ export function TrackerForm({ initial, submitLabel, onSubmit, onCancel }: Tracke
             {type === 'boolean' ? 'Meta: hacerlo todos los días' : 'Tener meta diaria'}
           </span>
         </label>
+        {hasGoal && (type === 'counter' || type === 'quantity') && (
+          <fieldset className="mt-2">
+            <legend className={label}>Tipo de meta</legend>
+            <div className="flex gap-2">
+              {(
+                [
+                  ['atLeast', 'Al menos', 'Ej.: 8 vasos de agua'],
+                  ['atMost', 'Como máximo', 'Ej.: 2 tazas de café'],
+                ] as const
+              ).map(([value, text, hint]) => (
+                <label
+                  key={value}
+                  className="flex flex-1 cursor-pointer flex-col rounded-xl border border-slate-200 p-3 has-[:checked]:border-emerald-600 has-[:checked]:bg-emerald-50 has-[:focus-visible]:outline has-[:focus-visible]:outline-sky-500 dark:border-slate-700 dark:has-[:checked]:bg-emerald-950/40"
+                >
+                  <input
+                    type="radio"
+                    name={`${id}-direction`}
+                    value={value}
+                    checked={goalDirection === value}
+                    onChange={() => setGoalDirection(value)}
+                    className="sr-only"
+                  />
+                  <span className="font-medium">{text}</span>
+                  <span className="text-xs text-slate-600 dark:text-slate-400">{hint}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+        )}
         {hasGoal && type !== 'boolean' && (
           <div className="mt-2">
             <label htmlFor={`${id}-goal`} className={label}>
-              {type === 'scale' ? 'Promedio mínimo del día (1–5)' : 'Meta diaria'}
+              {type === 'scale'
+                ? 'Promedio mínimo del día (1–5)'
+                : goalDirection === 'atMost'
+                  ? 'Límite diario'
+                  : 'Meta diaria'}
             </label>
             <input
               id={`${id}-goal`}

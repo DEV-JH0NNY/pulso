@@ -1,3 +1,4 @@
+import { isLimitGoal } from '../domain/aggregate';
 import { formatValue, isCurrencyUnit } from '../domain/format';
 import { TRACKER_TYPE_LABELS, type Tracker } from '../domain/types';
 
@@ -10,7 +11,9 @@ export function describeTracker(t: Tracker): string {
         ? 'meta diaria'
         : t.type === 'scale'
           ? `meta ≥ ${formatValue(t, t.dailyGoal)}`
-          : `meta ${formatValue(t, t.dailyGoal)}`,
+          : isLimitGoal(t)
+            ? `límite ${formatValue(t, t.dailyGoal)}`
+            : `meta ${formatValue(t, t.dailyGoal)}`,
     );
   }
   return parts.join(' · ');
@@ -30,5 +33,7 @@ export function progressText(t: Tracker, value: number | null): string {
       : `${formatValue(t, value)} (meta ${formatValue(t, goal)})`;
   }
   const current = value ?? 0;
+  if (isLimitGoal(t))
+    return `${formatValue({ ...t, unit: isCurrencyUnit(t.unit) ? t.unit : '' }, current)} / máx. ${formatValue(t, goal)}`;
   return `${formatValue({ ...t, unit: isCurrencyUnit(t.unit) ? t.unit : '' }, current)} / ${formatValue(t, goal)}`;
 }

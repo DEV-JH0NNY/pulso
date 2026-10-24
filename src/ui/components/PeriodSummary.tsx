@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { dailyTotals } from '../../domain/aggregate';
+import { dailyTotals, isLimitGoal } from '../../domain/aggregate';
 import { formatNumber, formatValue, plural } from '../../domain/format';
 import { comparePeriods, type PeriodComparison, type SummaryPeriod } from '../../domain/summary';
 import type { Entry, Tracker } from '../../domain/types';
@@ -75,7 +75,8 @@ export function PeriodSummary({ trackers, entries, todayDate }: PeriodSummaryPro
               <p className="truncate font-medium">{t.name}</p>
               {t.dailyGoal !== null && (
                 <p className="text-xs text-slate-600 dark:text-slate-400">
-                  Meta cumplida {c.current.daysDone} de {plural(c.elapsedDays, 'día')}
+                  {isLimitGoal(t) ? 'Dentro del límite' : 'Meta cumplida'} {c.current.daysDone} de{' '}
+                  {plural(c.elapsedDays, 'día')}
                 </p>
               )}
             </div>

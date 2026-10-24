@@ -39,3 +39,17 @@ describe('textos de rastreador', () => {
     );
   });
 });
+
+describe('textos de límites', () => {
+  it('muestra el límite', () => {
+    const cafe = {
+      ...base,
+      type: 'counter' as const,
+      unit: 'tazas',
+      dailyGoal: 2,
+      goalDirection: 'atMost' as const,
+    };
+    expect(describeTracker(cafe)).toBe('Contador · límite 2 tazas');
+    expect(progressText(cafe, 1)).toBe('1 / máx. 2 tazas');
+  });
+});

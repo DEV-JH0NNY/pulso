@@ -88,3 +88,20 @@ describe('ManageTrackersScreen · plantillas', () => {
     });
   });
 });
+
+describe('ManageTrackersScreen · límite', () => {
+  it('crea un rastreador con meta «como máximo»', async () => {
+    const { user } = renderWithProviders(<ManageTrackersScreen />);
+    await user.click(await screen.findByRole('button', { name: /nuevo/i }));
+    const dialog = screen.getByRole('dialog', { name: 'Nuevo rastreador' });
+    await user.type(within(dialog).getByLabelText('Nombre'), 'Cigarrillos');
+    await user.click(within(dialog).getByLabelText('Tener meta diaria'));
+    await user.click(within(dialog).getByLabelText(/como máximo/i));
+    await user.type(within(dialog).getByLabelText('Límite diario'), '2');
+    await user.click(within(dialog).getByRole('button', { name: 'Crear' }));
+    await waitFor(async () => {
+      const [t] = await db.trackers.toArray();
+      expect(t).toMatchObject({ name: 'Cigarrillos', dailyGoal: 2, goalDirection: 'atMost' });
+    });
+  });
+});

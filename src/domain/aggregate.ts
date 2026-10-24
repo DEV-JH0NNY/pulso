@@ -46,12 +46,26 @@ export interface Progress {
 }
 
 /** Progreso de un valor diario frente a la meta del rastreador. */
+/** ¿La meta del rastreador es un límite («como máximo»)? */
+export function isLimitGoal(tracker: Pick<Tracker, 'type' | 'goalDirection'>): boolean {
+  return (
+    tracker.goalDirection === 'atMost' &&
+    (tracker.type === 'counter' || tracker.type === 'quantity')
+  );
+}
+
 export function progressFor(
-  tracker: Pick<Tracker, 'type' | 'dailyGoal'>,
+  tracker: Pick<Tracker, 'type' | 'dailyGoal' | 'goalDirection'>,
   value: number | null,
 ): Progress {
   const goal = tracker.dailyGoal;
   if (goal === null || goal <= 0) return { value, ratio: null, met: false };
+  if (isLimitGoal(tracker)) {
+    // En un límite la barra muestra cuánto se ha "gastado" del tope. Sin registros
+    // no se da por cumplido: no se sabe si fue cero o si no se registró.
+    if (value === null) return { value, ratio: 0, met: false };
+    return { value, ratio: Math.min(1, Math.max(0, value / goal)), met: value <= goal };
+  }
   if (value === null) return { value, ratio: 0, met: false };
   if (tracker.type === 'scale') {
     // En escala la meta es un promedio mínimo: el progreso parte de 1 (el mínimo posible).
@@ -64,7 +78,7 @@ export function progressFor(
 
 /** ¿El día cuenta como "cumplido" para rachas y calendario? */
 export function isDayDone(
-  tracker: Pick<Tracker, 'type' | 'dailyGoal'>,
+  tracker: Pick<Tracker, 'type' | 'dailyGoal' | 'goalDirection'>,
   value: number | null,
 ): boolean {
   if (value === null) return false;
@@ -83,7 +97,7 @@ export interface DaySummary {
 }
 
 export function summarizeDay(
-  trackers: Pick<Tracker, 'id' | 'type' | 'dailyGoal'>[],
+  trackers: Pick<Tracker, 'id' | 'type' | 'dailyGoal' | 'goalDirection'>[],
   values: Map<string, number>,
 ): DaySummary {
   let withGoal = 0;

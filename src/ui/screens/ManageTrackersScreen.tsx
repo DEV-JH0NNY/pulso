@@ -39,6 +39,7 @@ const toDraft = (t: Tracker): TrackerDraft => ({
   unit: t.unit,
   defaultValue: t.defaultValue,
   dailyGoal: t.dailyGoal,
+  goalDirection: t.goalDirection,
 });
 
 export function ManageTrackersScreen() {

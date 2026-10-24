@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { dailyTotals, dailyValue, isDayDone, progressFor, summarizeDay } from './aggregate';
+import {
+  dailyTotals,
+  dailyValue,
+  isDayDone,
+  isLimitGoal,
+  progressFor,
+  summarizeDay,
+} from './aggregate';
 
 describe('valor diario', () => {
   it('suma contadores y cantidades', () => {
@@ -73,5 +80,24 @@ describe('resumen del día', () => {
       ['c', 4],
     ]);
     expect(summarizeDay(trackers, values)).toEqual({ withGoal: 3, met: 1, logged: 3 });
+  });
+});
+
+describe('metas de límite', () => {
+  const limit = { type: 'counter' as const, dailyGoal: 2, goalDirection: 'atMost' as const };
+  it('se cumple al no pasar del tope', () => {
+    expect(progressFor(limit, 1)).toEqual({ value: 1, ratio: 0.5, met: true });
+    expect(progressFor(limit, 2).met).toBe(true);
+    expect(progressFor(limit, 3)).toMatchObject({ ratio: 1, met: false });
+  });
+  it('sin registros no se da por cumplido', () => {
+    expect(progressFor(limit, null).met).toBe(false);
+    expect(isDayDone(limit, null)).toBe(false);
+    expect(isDayDone(limit, 0)).toBe(true);
+  });
+  it('solo aplica a contador y cantidad', () => {
+    expect(isLimitGoal(limit)).toBe(true);
+    expect(isLimitGoal({ type: 'scale', goalDirection: 'atMost' })).toBe(false);
+    expect(isLimitGoal({ type: 'counter' })).toBe(false);
   });
 });

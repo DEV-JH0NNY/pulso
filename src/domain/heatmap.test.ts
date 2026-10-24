@@ -51,3 +51,11 @@ describe('buildHeatmap', () => {
     expect(hm.months.map((m) => m.date.slice(0, 7))).toEqual(['2026-09', '2026-10']);
   });
 });
+
+describe('mapa de calor con límite', () => {
+  it('dentro del tope es 4 y pasarse es 1', () => {
+    const t = { type: 'counter' as const, dailyGoal: 2, goalDirection: 'atMost' as const };
+    expect(levelFor(t, 1, 5)).toBe(4);
+    expect(levelFor(t, 3, 5)).toBe(1);
+  });
+});

@@ -10,6 +10,9 @@ export const TRACKER_TYPE_LABELS: Record<TrackerType, string> = {
   scale: 'Escala 1–5',
 };
 
+/** Sentido de la meta: alcanzar al menos el valor, o no pasar de él (límite). */
+export type GoalDirection = 'atLeast' | 'atMost';
+
 export interface Tracker {
   id: string;
   name: string;
@@ -24,6 +27,11 @@ export interface Tracker {
   defaultValue: number;
   /** Meta diaria opcional. En sí/no es 1 (hacerlo); en escala, el promedio mínimo. */
   dailyGoal: number | null;
+  /**
+   * Solo aplica a contador y cantidad. Ausente equivale a 'atLeast' (así los
+   * datos guardados antes de existir este campo siguen funcionando sin migrar).
+   */
+  goalDirection?: GoalDirection;
   archived: boolean;
   /** Posición en las listas (menor primero). */
   order: number;
@@ -48,7 +56,7 @@ export interface Entry {
 /** Datos editables de un rastreador (sin campos de sistema). */
 export type TrackerDraft = Pick<
   Tracker,
-  'name' | 'icon' | 'color' | 'type' | 'unit' | 'defaultValue' | 'dailyGoal'
+  'name' | 'icon' | 'color' | 'type' | 'unit' | 'defaultValue' | 'dailyGoal' | 'goalDirection'
 >;
 
 /** Datos editables de un registro. */

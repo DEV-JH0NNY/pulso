@@ -92,3 +92,21 @@ describe('orden', () => {
     expect(moveId(['a', 'b', 'c'], 'z', 1)).toEqual(['a', 'b', 'c']);
   });
 });
+
+describe('normalización del sentido de la meta', () => {
+  it('solo guarda atMost en contador/cantidad con meta', () => {
+    expect(normalizeDraft(draft({ dailyGoal: 2, goalDirection: 'atMost' })).goalDirection).toBe(
+      'atMost',
+    );
+    expect(
+      'goalDirection' in normalizeDraft(draft({ dailyGoal: null, goalDirection: 'atMost' })),
+    ).toBe(false);
+    expect(
+      'goalDirection' in
+        normalizeDraft(draft({ type: 'scale', dailyGoal: 4, goalDirection: 'atMost' })),
+    ).toBe(false);
+    expect(
+      'goalDirection' in normalizeDraft(draft({ dailyGoal: 2, goalDirection: 'atLeast' })),
+    ).toBe(false);
+  });
+});

@@ -44,7 +44,8 @@ const SAMPLE_TRACKERS: SampleTracker[] = [
     type: 'counter',
     unit: 'tazas',
     defaultValue: 1,
-    dailyGoal: null,
+    dailyGoal: 3,
+    goalDirection: 'atMost',
   },
   {
     id: 'ejercicio',
