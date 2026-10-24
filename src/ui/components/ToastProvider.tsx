@@ -35,18 +35,32 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             className="pointer-events-auto flex w-full max-w-md items-center justify-between gap-3 rounded-xl bg-slate-900 px-4 py-2 text-sm text-white shadow-lg motion-safe:animate-[toast-in_150ms_ease-out] dark:bg-slate-100 dark:text-slate-900"
           >
             <span>{toast.message}</span>
-            {toast.actionLabel && toast.onAction && (
-              <button
-                type="button"
-                className="min-h-11 rounded-lg px-3 font-semibold text-emerald-300 hover:bg-white/10 dark:text-emerald-700 dark:hover:bg-slate-900/10"
-                onClick={() => {
-                  toast.onAction?.();
-                  setToast(null);
-                }}
-              >
-                {toast.actionLabel}
-              </button>
-            )}
+            <span className="flex shrink-0">
+              {toast.secondaryLabel && toast.onSecondary && (
+                <button
+                  type="button"
+                  className="min-h-11 rounded-lg px-3 font-semibold hover:bg-white/10 dark:hover:bg-slate-900/10"
+                  onClick={() => {
+                    toast.onSecondary?.();
+                    setToast(null);
+                  }}
+                >
+                  {toast.secondaryLabel}
+                </button>
+              )}
+              {toast.actionLabel && toast.onAction && (
+                <button
+                  type="button"
+                  className="min-h-11 rounded-lg px-3 font-semibold text-emerald-300 hover:bg-white/10 dark:text-emerald-700 dark:hover:bg-slate-900/10"
+                  onClick={() => {
+                    toast.onAction?.();
+                    setToast(null);
+                  }}
+                >
+                  {toast.actionLabel}
+                </button>
+              )}
+            </span>
           </div>
         )}
       </div>

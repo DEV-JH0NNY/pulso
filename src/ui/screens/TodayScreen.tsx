@@ -5,7 +5,8 @@ import { quickLog } from '../../data/quickLog';
 import { dailyTotals, reachesGoal, summarizeDay } from '../../domain/aggregate';
 import { addDays, startOfWeek, toTime } from '../../domain/dates';
 import { formatDayLabel, formatLongDate, formatValue } from '../../domain/format';
-import type { EntryDraft, Tracker } from '../../domain/types';
+import type { Entry, EntryDraft, Tracker } from '../../domain/types';
+import { NoteDialog } from '../components/NoteDialog';
 import { DayNav } from '../components/DayNav';
 import { DaySummaryCard } from '../components/DaySummaryCard';
 import { EntryForm } from '../components/EntryForm';
@@ -35,6 +36,7 @@ export function TodayScreen() {
   // Se carga la semana del día mostrado para calcular también las metas semanales.
   const entries = useEntriesBetween(startOfWeek(day), day);
   const [detailed, setDetailed] = useState<Tracker | null>(null);
+  const [noteFor, setNoteFor] = useState<Entry | null>(null);
   const [celebrating, setCelebrating] = useState<{ id: string; n: number } | null>(null);
   const toast = useToast();
   const onboardingDone = useOnboardingDone();
@@ -85,11 +87,13 @@ export function TodayScreen() {
     return <p className={muted}>Cargando…</p>;
   if (trackers.length === 0 && !onboardingDone) return <WelcomeCard />;
 
-  const undoable = (message: string, entryId: string) =>
+  const undoable = (message: string, entry: Entry) =>
     toast({
       message,
       actionLabel: 'Deshacer',
-      onAction: () => void deleteEntry(entryId),
+      onAction: () => void deleteEntry(entry.id),
+      secondaryLabel: 'Nota',
+      onSecondary: () => setNoteFor(entry),
     });
 
   const handleQuickLog = async (t: Tracker) => {
@@ -104,7 +108,7 @@ export function TodayScreen() {
     if (reachesGoal(withGoalAt(t, day), dayValues, entry.value)) {
       setCelebrating((c) => ({ id: t.id, n: (c?.n ?? 0) + 1 }));
       vibrate([15, 60, 15]);
-      undoable(`🎉 ¡Meta de «${t.name}» cumplida!`, entry.id);
+      undoable(`🎉 ¡Meta de «${t.name}» cumplida!`, entry);
       return;
     }
     vibrate(10);
@@ -113,7 +117,7 @@ export function TodayScreen() {
         ? formatValue(t, entry.value)
         : `+${formatValue(t, entry.value)}`;
     const when = isToday ? '' : ` (${formatDayLabel(day, todayDate).toLowerCase()})`;
-    undoable(`${t.icon} ${t.name}: ${amount}${when}`, entry.id);
+    undoable(`${t.icon} ${t.name}: ${amount}${when}`, entry);
   };
 
   const handleDetailed = async (draft: EntryDraft) => {
@@ -121,7 +125,7 @@ export function TodayScreen() {
     const entry = await addEntry(detailed.id, draft);
     undoable(
       `${detailed.icon} ${detailed.name}: ${formatValue(detailed, entry.value)} registrado`,
-      entry.id,
+      entry,
     );
     setDetailed(null);
   };
@@ -186,6 +190,8 @@ export function TodayScreen() {
           </p>
         </>
       )}
+
+      <NoteDialog entry={noteFor} onClose={() => setNoteFor(null)} />
 
       <Modal
         open={detailed !== null}

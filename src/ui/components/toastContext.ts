@@ -4,6 +4,9 @@ export interface ToastOptions {
   message: string;
   actionLabel?: string;
   onAction?: () => void;
+  /** Acción adicional, a la izquierda de la principal (por ejemplo, «Nota»). */
+  secondaryLabel?: string;
+  onSecondary?: () => void;
   /** Milisegundos antes de ocultarse. */
   duration?: number;
 }

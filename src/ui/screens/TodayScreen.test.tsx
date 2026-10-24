@@ -194,3 +194,15 @@ describe('TodayScreen · días de la semana', () => {
     expect(screen.getByText('0 de 1 rastreadores con registros hoy')).toBeInTheDocument();
   });
 });
+
+describe('TodayScreen · nota rápida', () => {
+  it('agrega una nota desde el aviso', async () => {
+    await createTracker({ ...emptyDraft(), name: 'Café' });
+    const { user } = renderWithProviders(<TodayScreen />);
+    await user.click(await tile('Café'));
+    await user.click(await screen.findByRole('button', { name: 'Nota' }));
+    await user.type(screen.getByLabelText('Nota'), 'Con pandebono');
+    await user.click(screen.getByRole('button', { name: 'Guardar' }));
+    await waitFor(async () => expect((await db.entries.toArray())[0]?.note).toBe('Con pandebono'));
+  });
+});
