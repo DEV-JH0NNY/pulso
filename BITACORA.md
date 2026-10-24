@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 14:30] Métricas derivadas (Fase 2 · 22)
+
+- **Qué hice:** Sección «Métricas derivadas» en Estadísticas: se crea una fórmula diaria entre dos rastreadores (A ÷ B, A − B, A + B, A × B) con nombre y unidad, por ejemplo «Gasto por hora de estudio = Gastos ÷ Estudio (COP/h)». Cada métrica muestra un gráfico de 30 días, el promedio y la mediana. Se incluyen en el respaldo JSON y se borran en cascada si se elimina uno de sus rastreadores (o los datos de ejemplo).
+- **Por qué:** Lo sugería el encargo y encaja con un usuario de datos. Es una entidad aparte (no un «tipo» de rastreador) para no tocar el registro rápido ni las rachas. Solo usa días con datos en ambos y omite B = 0 en divisiones (sin inventar valores). Agregué la mediana porque en cocientes un día con B pequeño dispara el promedio (se vio con los datos de ejemplo). Base de datos versión 2: solo agrega la tabla `derived`; Dexie actualiza solo y los datos existentes no cambian. El campo `derived` del respaldo es opcional para seguir aceptando respaldos anteriores.
+- **Archivos principales:** `src/domain/derived.ts`, `src/data/{db,derived,trackers,sample,backupIO}.ts`, `src/domain/{backup,stats}.ts`, `src/ui/components/DerivedMetrics.tsx`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (215 pasando) · build ✅
+- **Commit:** 49fac50
+- **Siguiente:** Backlog vacío: nueva revisión crítica.
+
 ### [2026-10-24 14:24] Celebración al cumplir la meta (Fase 2 · 21)
 
 - **Qué hice:** Cuando un toque hace que se cumpla la meta del día, la tarjeta emite un anillo de su color que se expande y desvanece (700 ms), el celular vibra con un patrón doble y el aviso dice «🎉 ¡Meta de «Agua» cumplida!» (con «Deshacer»).

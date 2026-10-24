@@ -47,7 +47,7 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 19. ✅ **Buscar en el historial por nota o rastreador.**
 20. ✅ **Accesos directos de la app instalada** (mantener presionado el ícono → «Historial», «Hallazgos»).
 21. ✅ **Celebración sutil al cumplir la meta del día** (respetando «reducir movimiento»).
-22. ⬜ **Rastreadores derivados:** fórmula diaria entre dos rastreadores (por ejemplo, gasto por hora de estudio).
+22. ✅ **Rastreadores derivados:** fórmula diaria entre dos rastreadores (por ejemplo, gasto por hora de estudio).
 
 ## Completadas
 
@@ -83,3 +83,4 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 - [2026-10-24] Buscar en el historial (Fase 2 · 19).
 - [2026-10-24] Accesos directos de la app instalada (Fase 2 · 20).
 - [2026-10-24] Celebración al cumplir la meta (Fase 2 · 21).
+- [2026-10-24] Métricas derivadas (Fase 2 · 22).
