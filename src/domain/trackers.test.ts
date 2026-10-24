@@ -119,3 +119,16 @@ describe('meta semanal', () => {
     expect('weeklyTarget' in normalizeDraft(draft({ weeklyTarget: null }))).toBe(false);
   });
 });
+
+describe('días de la semana en el borrador', () => {
+  it('valida y normaliza', () => {
+    expect(validateTrackerDraft(draft({ activeDays: [0, 2, 4] }))).toEqual({});
+    expect(validateTrackerDraft(draft({ activeDays: [7] })).activeDays).toBeDefined();
+    expect(validateTrackerDraft(draft({ activeDays: [1, 1] })).activeDays).toBeDefined();
+    expect(normalizeDraft(draft({ activeDays: [4, 0] })).activeDays).toEqual([0, 4]);
+    expect('activeDays' in normalizeDraft(draft({ activeDays: [0, 1, 2, 3, 4, 5, 6] }))).toBe(
+      false,
+    );
+    expect('activeDays' in normalizeDraft(draft({ activeDays: [] }))).toBe(false);
+  });
+});

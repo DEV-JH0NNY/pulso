@@ -157,3 +157,20 @@ describe('ManageTrackersScreen · meta semanal', () => {
     expect(await screen.findByText(/2 días\/semana/)).toBeInTheDocument();
   });
 });
+
+describe('ManageTrackersScreen · días de la semana', () => {
+  it('guarda los días en que aplica', async () => {
+    const { user } = renderWithProviders(<ManageTrackersScreen />);
+    await user.click(await screen.findByRole('button', { name: /nuevo/i }));
+    const dialog = screen.getByRole('dialog', { name: 'Nuevo rastreador' });
+    await user.type(within(dialog).getByLabelText('Nombre'), 'Clase');
+    await user.click(within(dialog).getByLabelText('sábado'));
+    await user.click(within(dialog).getByLabelText('domingo'));
+    await user.click(within(dialog).getByRole('button', { name: 'Crear' }));
+    await waitFor(async () => {
+      const [t] = await db.trackers.toArray();
+      expect(t?.activeDays).toEqual([0, 1, 2, 3, 4]);
+    });
+    expect(await screen.findByText(/L, M, X, J, V/)).toBeInTheDocument();
+  });
+});

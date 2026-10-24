@@ -5,7 +5,7 @@ import { addEntry } from '../../data/entries';
 import { ONBOARDING_DONE, setSetting } from '../../data/settings';
 import { resetDb } from '../../data/testUtils';
 import { createTracker } from '../../data/trackers';
-import { addDays, today } from '../../domain/dates';
+import { addDays, today, weekdayIndex } from '../../domain/dates';
 import { emptyDraft } from '../../domain/trackers';
 import { renderWithProviders } from '../../test/render';
 import { TodayScreen } from './TodayScreen';
@@ -180,5 +180,17 @@ describe('TodayScreen · atajos de teclado', () => {
     expect(await screen.findByText('Ayer')).toBeInTheDocument();
     await user.keyboard('{ArrowRight}');
     expect(screen.getByRole('button', { name: 'Día siguiente' })).toBeDisabled();
+  });
+});
+
+describe('TodayScreen · días de la semana', () => {
+  it('oculta en «No aplican» los rastreadores sin ese día', async () => {
+    const otherDay = (weekdayIndex(today()) + 1) % 7;
+    await createTracker({ ...emptyDraft(), name: 'Gym', type: 'boolean', activeDays: [otherDay] });
+    await createTracker({ ...emptyDraft(), name: 'Agua' });
+    renderWithProviders(<TodayScreen />);
+    expect(await screen.findByText('No aplican hoy (1)')).toBeInTheDocument();
+    // El resumen solo cuenta los rastreadores que aplican hoy.
+    expect(screen.getByText('0 de 1 rastreadores con registros hoy')).toBeInTheDocument();
   });
 });

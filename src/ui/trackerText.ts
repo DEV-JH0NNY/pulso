@@ -1,4 +1,5 @@
 import { isLimitGoal } from '../domain/aggregate';
+import { describeSchedule } from '../domain/schedule';
 import { formatValue, isCurrencyUnit } from '../domain/format';
 import { TRACKER_TYPE_LABELS, type Tracker } from '../domain/types';
 
@@ -16,6 +17,7 @@ export function describeTracker(t: Tracker): string {
             : `meta ${formatValue(t, t.dailyGoal)}`,
     );
   }
+  if (t.activeDays && t.activeDays.length > 0) parts.push(describeSchedule(t.activeDays));
   if (t.weeklyTarget)
     parts.push(`${t.weeklyTarget} ${t.weeklyTarget === 1 ? 'día' : 'días'}/semana`);
   return parts.join(' · ');

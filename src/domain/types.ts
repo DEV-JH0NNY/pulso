@@ -34,6 +34,11 @@ export interface Tracker {
   goalDirection?: GoalDirection;
   /** Meta semanal: días cumplidos por semana (1–7). Ausente o null si no tiene. */
   weeklyTarget?: number | null;
+  /**
+   * Días de la semana en que aplica (0 = lunes … 6 = domingo). Ausente o vacío:
+   * todos. Los días que no aplican no rompen rachas ni aparecen en «Hoy».
+   */
+  activeDays?: number[] | null;
   archived: boolean;
   /** Posición en las listas (menor primero). */
   order: number;
@@ -67,6 +72,7 @@ export type TrackerDraft = Pick<
   | 'dailyGoal'
   | 'goalDirection'
   | 'weeklyTarget'
+  | 'activeDays'
 >;
 
 /** Datos editables de un registro. */

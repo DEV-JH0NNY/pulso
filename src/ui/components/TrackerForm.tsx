@@ -1,6 +1,7 @@
 import { useId, useState, type FormEvent } from 'react';
 import { SUGGESTED_ICONS, TRACKER_COLORS } from '../../domain/colors';
 import { formatNumber, parseDecimal } from '../../domain/format';
+import { WEEKDAY_NAMES, WEEKDAY_SHORT } from '../../domain/weekday';
 import { defaultsForType, validateTrackerDraft, type DraftErrors } from '../../domain/trackers';
 import {
   TRACKER_TYPE_LABELS,
@@ -38,6 +39,11 @@ export function TrackerForm({ initial, submitLabel, onSubmit, onCancel }: Tracke
   const [defaultText, setDefaultText] = useState(numText(initial.defaultValue));
   const [hasGoal, setHasGoal] = useState(initial.dailyGoal !== null);
   const [goalText, setGoalText] = useState(numText(initial.dailyGoal));
+  const [activeDays, setActiveDays] = useState<number[]>(
+    initial.activeDays && initial.activeDays.length > 0
+      ? initial.activeDays
+      : [0, 1, 2, 3, 4, 5, 6],
+  );
   const [hasWeekly, setHasWeekly] = useState((initial.weeklyTarget ?? null) !== null);
   const [weeklyText, setWeeklyText] = useState(String(initial.weeklyTarget ?? 3));
   const [goalDirection, setGoalDirection] = useState<GoalDirection>(
@@ -67,6 +73,7 @@ export function TrackerForm({ initial, submitLabel, onSubmit, onCancel }: Tracke
     dailyGoal: hasGoal ? (type === 'boolean' ? 1 : parseDecimal(goalText)) : null,
     goalDirection,
     weeklyTarget: hasWeekly ? Number(weeklyText) : null,
+    activeDays,
   });
 
   const handleSubmit = async (e: FormEvent) => {
@@ -337,6 +344,36 @@ export function TrackerForm({ initial, submitLabel, onSubmit, onCancel }: Tracke
         )}
         {errorText('dailyGoal')}
       </div>
+
+      <fieldset>
+        <legend className={label}>Días en que aplica</legend>
+        <div className="flex gap-1">
+          {WEEKDAY_SHORT.map((d, i) => (
+            <label
+              key={i}
+              className="flex h-11 flex-1 cursor-pointer items-center justify-center rounded-xl border border-slate-300 font-semibold has-[:checked]:border-emerald-700 has-[:checked]:bg-emerald-700 has-[:checked]:text-white has-[:focus-visible]:outline has-[:focus-visible]:outline-sky-500 dark:border-slate-700 dark:has-[:checked]:border-emerald-500 dark:has-[:checked]:bg-emerald-500 dark:has-[:checked]:text-slate-950"
+            >
+              <input
+                type="checkbox"
+                className="sr-only"
+                checked={activeDays.includes(i)}
+                aria-label={WEEKDAY_NAMES[i]}
+                onChange={(e) =>
+                  setActiveDays((days) =>
+                    e.target.checked ? [...days, i] : days.filter((x) => x !== i),
+                  )
+                }
+              />
+              <span aria-hidden="true">{d}</span>
+            </label>
+          ))}
+        </div>
+        <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+          Los días sin marcar no aparecen en «Hoy» ni rompen tus rachas. Todos marcados = todos los
+          días.
+        </p>
+        {errorText('activeDays')}
+      </fieldset>
 
       <div>
         <label className="flex min-h-11 items-center gap-3">

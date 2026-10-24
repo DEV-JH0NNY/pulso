@@ -53,6 +53,15 @@ export function validateTrackerDraft(draft: TrackerDraft): DraftErrors {
   if (w !== null && (!Number.isInteger(w) || w < 1 || w > 7))
     errors.weeklyTarget = 'La meta semanal debe ser un entero de 1 a 7 días.';
 
+  const days = draft.activeDays ?? null;
+  if (days !== null && days.length > 0) {
+    if (
+      days.some((d) => !Number.isInteger(d) || d < 0 || d > 6) ||
+      new Set(days).size !== days.length
+    )
+      errors.activeDays = 'Días de la semana inválidos.';
+  }
+
   switch (draft.type) {
     case 'counter':
       if (Number.isFinite(v) && (!isInt(v) || v < 1))
@@ -92,6 +101,7 @@ export function draftFromTracker(t: Tracker): TrackerDraft {
     dailyGoal: t.dailyGoal,
     goalDirection: t.goalDirection,
     weeklyTarget: t.weeklyTarget ?? null,
+    activeDays: t.activeDays ?? null,
   };
 }
 
@@ -105,6 +115,10 @@ export function normalizeDraft(draft: TrackerDraft): TrackerDraft {
     out.goalDirection = 'atMost';
   else delete out.goalDirection;
   if (draft.weeklyTarget == null) delete out.weeklyTarget;
+  // Todos los días (o ninguno marcado) equivale a no tener horario.
+  const days = draft.activeDays ?? [];
+  if (days.length === 0 || days.length === 7) delete out.activeDays;
+  else out.activeDays = [...days].sort((a, b) => a - b);
   return out;
 }
 

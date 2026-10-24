@@ -15,6 +15,7 @@ import { useToast } from '../components/toastContext';
 import { TrackerTile } from '../components/TrackerTile';
 import { useActiveTrackers, useEntriesBetween } from '../hooks/useData';
 import { weekProgress } from '../../domain/weekly';
+import { isScheduled } from '../../domain/schedule';
 import { useOnboardingDone } from '../hooks/useSample';
 import { WelcomeCard } from '../components/WelcomeCard';
 import { BackupReminder } from '../components/BackupReminder';
@@ -38,7 +39,7 @@ export function TodayScreen() {
   const onboardingDone = useOnboardingDone();
   useTodayShortcuts({
     onNumber: (i) => {
-      const t = trackers?.[i];
+      const t = scheduled[i];
       // Solo llega aquí con los datos cargados, cuando handleQuickLog ya existe.
       if (t && entries) void handleQuickLog(t);
     },
@@ -62,6 +63,22 @@ export function TodayScreen() {
     const prev = lastTimes.get(e.trackerId);
     if (!prev || e.time > prev) lastTimes.set(e.trackerId, e.time);
   }
+
+  const scheduled = (trackers ?? []).filter((t) => isScheduled(t, day));
+  const unscheduled = (trackers ?? []).filter((t) => !isScheduled(t, day));
+  const renderTile = (t: Tracker) => (
+    <li key={t.id}>
+      <TrackerTile
+        tracker={t}
+        value={values.get(t.id) ?? null}
+        week={weekProgress(t, dailyTotals(t, entries ?? []), day)}
+        celebrate={celebrating?.id === t.id ? celebrating.n : 0}
+        lastTime={lastTimes.get(t.id) ?? null}
+        onQuickLog={() => void handleQuickLog(t)}
+        onDetailedLog={() => setDetailed(t)}
+      />
+    </li>
+  );
 
   if (!trackers || !entries || onboardingDone === undefined)
     return <p className={muted}>Cargando…</p>;
@@ -122,8 +139,8 @@ export function TodayScreen() {
       {isToday && <BackupReminder />}
       {trackers.length > 0 && (
         <DaySummaryCard
-          summary={summarizeDay(trackers, values)}
-          total={trackers.length}
+          summary={summarizeDay(scheduled, values)}
+          total={scheduled.length}
           dayLabel={isToday ? 'hoy' : 'ese día'}
         />
       )}
@@ -144,20 +161,18 @@ export function TodayScreen() {
             className={`grid grid-cols-2 gap-3 sm:grid-cols-3 ${isToday ? '' : 'rounded-2xl ring-2 ring-amber-400 ring-offset-4 ring-offset-slate-50 dark:ring-offset-slate-950'}`}
             aria-label={isToday ? 'Rastreadores de hoy' : `Rastreadores del ${formatLongDate(day)}`}
           >
-            {trackers.map((t) => (
-              <li key={t.id}>
-                <TrackerTile
-                  tracker={t}
-                  value={values.get(t.id) ?? null}
-                  week={weekProgress(t, dailyTotals(t, entries), day)}
-                  celebrate={celebrating?.id === t.id ? celebrating.n : 0}
-                  lastTime={lastTimes.get(t.id) ?? null}
-                  onQuickLog={() => void handleQuickLog(t)}
-                  onDetailedLog={() => setDetailed(t)}
-                />
-              </li>
-            ))}
+            {scheduled.map(renderTile)}
           </ul>
+          {unscheduled.length > 0 && (
+            <details className="mt-4">
+              <summary className="cursor-pointer py-2 text-sm font-medium text-slate-600 dark:text-slate-400">
+                No aplican {isToday ? 'hoy' : 'ese día'} ({unscheduled.length})
+              </summary>
+              <ul className="mt-2 grid grid-cols-2 gap-3 opacity-80 sm:grid-cols-3">
+                {unscheduled.map(renderTile)}
+              </ul>
+            </details>
+          )}
           <p className={`${muted} mt-4 text-center`}>
             Toca para registrar el valor por defecto · mantén presionado o usa «+» para ajustar.
           </p>

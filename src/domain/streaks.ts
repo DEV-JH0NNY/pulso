@@ -1,5 +1,6 @@
 import { isDayDone } from './aggregate';
 import { addDays, daysBetween } from './dates';
+import { isScheduled } from './schedule';
 import type { Tracker } from './types';
 
 export interface Streaks {
@@ -16,10 +17,12 @@ export interface Streaks {
  * La racha actual no se rompe por hoy: el día todavía no termina.
  */
 export function computeStreaks(
-  tracker: Pick<Tracker, 'type' | 'dailyGoal'>,
+  tracker: Pick<Tracker, 'type' | 'dailyGoal' | 'goalDirection' | 'activeDays'>,
   totals: Map<string, number>,
   todayDate: string,
 ): Streaks {
+  if (tracker.activeDays && tracker.activeDays.length > 0)
+    return scheduledStreaks(tracker, totals, todayDate);
   const done = [...totals.entries()]
     .filter(([date, v]) => date <= todayDate && isDayDone(tracker, v))
     .map(([date]) => date)
@@ -43,4 +46,33 @@ export function computeStreaks(
   }
 
   return { current, longest, doneDays: done.length };
+}
+
+/**
+ * Rachas para rastreadores con días de la semana: los días que no aplican se
+ * saltan (ni suman ni rompen). Un día programado sin cumplir rompe la racha,
+ * salvo hoy, que todavía no termina.
+ */
+function scheduledStreaks(
+  tracker: Pick<Tracker, 'type' | 'dailyGoal' | 'goalDirection' | 'activeDays'>,
+  totals: Map<string, number>,
+  todayDate: string,
+): Streaks {
+  const dates = [...totals.keys()].filter((d) => d <= todayDate).sort();
+  const first = dates[0];
+  if (!first) return { current: 0, longest: 0, doneDays: 0 };
+  let run = 0;
+  let longest = 0;
+  let doneDays = 0;
+  let current = 0;
+  for (let d = first; d <= todayDate; d = addDays(d, 1)) {
+    const done = isDayDone(tracker, totals.get(d) ?? null);
+    if (done) doneDays++;
+    // Un día libre con registro cumplido también suma, pero nunca rompe la racha.
+    if (done) run++;
+    else if (isScheduled(tracker, d) && d !== todayDate) run = 0;
+    longest = Math.max(longest, run);
+    current = run;
+  }
+  return { current, longest, doneDays };
 }
