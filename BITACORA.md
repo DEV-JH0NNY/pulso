@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 15:00] Atajos de teclado en escritorio (Fase 2 · 34)
+
+- **Qué hice:** En «Hoy», las teclas 1–9 registran el valor por defecto del rastreador en esa posición y ← / → cambian de día. Desde tablet en adelante se muestra la ayuda con las teclas.
+- **Por qué:** En el computador es más rápido que el ratón. Los atajos se ignoran mientras se escribe en un campo, si hay un diálogo abierto o con Ctrl/Alt/Cmd, para no interferir. Los manejadores se guardan en una ref para registrar el listener una sola vez.
+- **Archivos principales:** `src/ui/hooks/useTodayShortcuts.ts`, `src/ui/screens/TodayScreen.tsx`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (240 pasando) · build ✅
+- **Commit:** ab32eb9
+- **Siguiente:** Ajuste para desactivar la vibración.
+
 ### [2026-10-24 14:58] Importar CSV ancho (Fase 2 · 33)
 
 - **Qué hice:** La importación detecta sola el formato ancho (primera columna `fecha`, sin columnas `rastreador`/`valor`) y convierte cada celda con valor en un registro a las 12:00, leyendo nombre y unidad del encabezado («Sueño (h)»). Pasa por la misma validación, vista previa, detección de duplicados y creación de rastreadores que el formato largo; los errores conservan el número de línea del archivo.
