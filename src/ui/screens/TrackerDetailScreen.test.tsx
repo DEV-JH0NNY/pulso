@@ -48,3 +48,13 @@ describe('StatsScreen', () => {
     expect(await within(link).findByText('🔥 3 días')).toBeInTheDocument();
   });
 });
+
+describe('TrackerDetailScreen · día de la semana', () => {
+  it('muestra el perfil semanal', async () => {
+    const t = await seed();
+    renderWithProviders(<TrackerDetailScreen id={t.id} />);
+    expect(
+      await screen.findByRole('table', { name: /leer por día de la semana/i }),
+    ).toBeInTheDocument();
+  });
+});

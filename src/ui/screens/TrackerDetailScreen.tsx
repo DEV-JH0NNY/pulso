@@ -7,6 +7,7 @@ import { StatCard } from '../components/StatCard';
 import { card, muted, sectionTitle } from '../components/styles';
 import { TrackerBadge } from '../components/TrackerBadge';
 import { TrackerChart } from '../components/TrackerChart';
+import { WeekdayChart } from '../components/WeekdayChart';
 import { useTracker } from '../hooks/useData';
 import { useToday } from '../hooks/useToday';
 import { useTrackerTotals } from '../hooks/useTrackerTotals';
@@ -62,6 +63,11 @@ export function TrackerDetailScreen({ id }: { id: string }) {
       <h2 className={sectionTitle}>Gráfico</h2>
       <div className={card}>
         <TrackerChart tracker={tracker} totals={data.totals} todayDate={todayDate} />
+      </div>
+
+      <h2 className={sectionTitle}>Por día de la semana</h2>
+      <div className={card}>
+        <WeekdayChart tracker={tracker} totals={data.totals} />
       </div>
 
       <h2 className={sectionTitle}>Último año</h2>
