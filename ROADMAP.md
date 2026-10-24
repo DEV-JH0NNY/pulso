@@ -69,7 +69,7 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 32. ✅ **Calidad de datos:** cobertura de cada rastreador (días con registro en los últimos 30 y 90 días) y el hueco más largo, para saber qué tan confiables son los análisis.
 33. ✅ **Importar también CSV ancho** (un día por fila), detectándolo automáticamente.
 34. ✅ **Atajos de teclado en escritorio:** 1–9 registra el rastreador n en «Hoy»; ← / → cambia de día.
-35. ⬜ **Ajuste para desactivar la vibración.**
+35. ✅ **Ajuste para desactivar la vibración.**
 36. ⬜ **Resumen anual «Tu año en Pulso»:** totales, mejores rachas y meses destacados.
 
 ## Completadas
@@ -119,3 +119,4 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 - [2026-10-24] Calidad de datos (Fase 2 · 32).
 - [2026-10-24] Importar CSV ancho (Fase 2 · 33).
 - [2026-10-24] Atajos de teclado (Fase 2 · 34).
+- [2026-10-24] Desactivar la vibración (Fase 2 · 35).

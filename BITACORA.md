@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 15:01] Desactivar la vibración (Fase 2 · 35)
+
+- **Qué hice:** En Ajustes → Apariencia, «Vibrar al registrar» (solo aparece si el dispositivo puede vibrar). Todas las vibraciones (toque, toque largo, meta cumplida) pasan por `vibrate()`, que respeta el ajuste.
+- **Por qué:** A algunas personas la vibración les molesta o usan la app en clase. Es una preferencia del aparato (como el tema), por eso va en `localStorage` y no en el respaldo.
+- **Archivos principales:** `src/ui/haptics.ts`, `src/ui/components/VibrationToggle.tsx`, `src/ui/screens/{TodayScreen,SettingsScreen}.tsx`, `src/ui/hooks/useLongPress.ts`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (241 pasando) · build ✅
+- **Commit:** 4f7f8db
+- **Siguiente:** Resumen anual «Tu año en Pulso».
+
 ### [2026-10-24 15:00] Atajos de teclado en escritorio (Fase 2 · 34)
 
 - **Qué hice:** En «Hoy», las teclas 1–9 registran el valor por defecto del rastreador en esa posición y ← / → cambian de día. Desde tablet en adelante se muestra la ayuda con las teclas.
