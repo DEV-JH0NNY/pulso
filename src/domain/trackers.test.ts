@@ -110,3 +110,12 @@ describe('normalización del sentido de la meta', () => {
     ).toBe(false);
   });
 });
+
+describe('meta semanal', () => {
+  it('valida de 1 a 7 y no guarda null', () => {
+    expect(validateTrackerDraft(draft({ weeklyTarget: 3 }))).toEqual({});
+    expect(validateTrackerDraft(draft({ weeklyTarget: 8 })).weeklyTarget).toBeDefined();
+    expect(validateTrackerDraft(draft({ weeklyTarget: 2.5 })).weeklyTarget).toBeDefined();
+    expect('weeklyTarget' in normalizeDraft(draft({ weeklyTarget: null }))).toBe(false);
+  });
+});

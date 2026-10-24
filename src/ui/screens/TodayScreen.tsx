@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { addEntry, deleteEntry } from '../../data/entries';
 import { quickLog } from '../../data/quickLog';
 import { dailyTotals, summarizeDay } from '../../domain/aggregate';
-import { addDays, toTime } from '../../domain/dates';
+import { addDays, startOfWeek, toTime } from '../../domain/dates';
 import { formatDayLabel, formatLongDate, formatValue } from '../../domain/format';
 import type { DaySummary } from '../../domain/aggregate';
 import type { EntryDraft, Tracker } from '../../domain/types';
@@ -12,7 +12,8 @@ import { IconChevronLeft, IconChevronRight } from '../components/icons';
 import { buttonPrimary, card, iconButton, muted } from '../components/styles';
 import { useToast } from '../components/toastContext';
 import { TrackerTile } from '../components/TrackerTile';
-import { useActiveTrackers, useEntriesForDate } from '../hooks/useData';
+import { useActiveTrackers, useEntriesBetween } from '../hooks/useData';
+import { weekProgress } from '../../domain/weekly';
 import { useOnboardingDone } from '../hooks/useSample';
 import { WelcomeCard } from '../components/WelcomeCard';
 import { BackupReminder } from '../components/BackupReminder';
@@ -27,7 +28,8 @@ export function TodayScreen() {
   const day = addDays(todayDate, -offset);
   const isToday = offset === 0;
   const trackers = useActiveTrackers();
-  const entries = useEntriesForDate(day);
+  // Se carga la semana del día mostrado para calcular también las metas semanales.
+  const entries = useEntriesBetween(startOfWeek(day), day);
   const [detailed, setDetailed] = useState<Tracker | null>(null);
   const toast = useToast();
   const onboardingDone = useOnboardingDone();
@@ -143,6 +145,7 @@ export function TodayScreen() {
                 <TrackerTile
                   tracker={t}
                   value={values.get(t.id) ?? null}
+                  week={weekProgress(t, dailyTotals(t, entries), day)}
                   onQuickLog={() => void handleQuickLog(t)}
                   onDetailedLog={() => setDetailed(t)}
                 />

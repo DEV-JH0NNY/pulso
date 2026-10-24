@@ -49,6 +49,10 @@ export function validateTrackerDraft(draft: TrackerDraft): DraftErrors {
   const g = draft.dailyGoal;
   if (!Number.isFinite(v)) errors.defaultValue = 'Escribe un número.';
 
+  const w = draft.weeklyTarget ?? null;
+  if (w !== null && (!Number.isInteger(w) || w < 1 || w > 7))
+    errors.weeklyTarget = 'La meta semanal debe ser un entero de 1 a 7 días.';
+
   switch (draft.type) {
     case 'counter':
       if (Number.isFinite(v) && (!isInt(v) || v < 1))
@@ -87,6 +91,7 @@ export function draftFromTracker(t: Tracker): TrackerDraft {
     defaultValue: t.defaultValue,
     dailyGoal: t.dailyGoal,
     goalDirection: t.goalDirection,
+    weeklyTarget: t.weeklyTarget ?? null,
   };
 }
 
@@ -99,6 +104,7 @@ export function normalizeDraft(draft: TrackerDraft): TrackerDraft {
   if (numeric && draft.dailyGoal !== null && draft.goalDirection === 'atMost')
     out.goalDirection = 'atMost';
   else delete out.goalDirection;
+  if (draft.weeklyTarget == null) delete out.weeklyTarget;
   return out;
 }
 

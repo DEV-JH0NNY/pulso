@@ -57,6 +57,7 @@ function parseTracker(raw: unknown, i: number): Tracker | string {
     defaultValue,
     dailyGoal: dailyGoal as number | null,
     ...(raw.goalDirection === 'atMost' ? { goalDirection: 'atMost' as const } : {}),
+    ...(isNumber(raw.weeklyTarget) ? { weeklyTarget: raw.weeklyTarget } : {}),
     archived: archived === true,
     order: isNumber(order) ? order : i,
     createdAt: isNumber(createdAt) ? createdAt : 0,

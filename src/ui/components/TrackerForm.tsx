@@ -38,6 +38,8 @@ export function TrackerForm({ initial, submitLabel, onSubmit, onCancel }: Tracke
   const [defaultText, setDefaultText] = useState(numText(initial.defaultValue));
   const [hasGoal, setHasGoal] = useState(initial.dailyGoal !== null);
   const [goalText, setGoalText] = useState(numText(initial.dailyGoal));
+  const [hasWeekly, setHasWeekly] = useState((initial.weeklyTarget ?? null) !== null);
+  const [weeklyText, setWeeklyText] = useState(String(initial.weeklyTarget ?? 3));
   const [goalDirection, setGoalDirection] = useState<GoalDirection>(
     initial.goalDirection ?? 'atLeast',
   );
@@ -64,6 +66,7 @@ export function TrackerForm({ initial, submitLabel, onSubmit, onCancel }: Tracke
     defaultValue: parseDecimal(defaultText),
     dailyGoal: hasGoal ? (type === 'boolean' ? 1 : parseDecimal(goalText)) : null,
     goalDirection,
+    weeklyTarget: hasWeekly ? Number(weeklyText) : null,
   });
 
   const handleSubmit = async (e: FormEvent) => {
@@ -333,6 +336,47 @@ export function TrackerForm({ initial, submitLabel, onSubmit, onCancel }: Tracke
           </div>
         )}
         {errorText('dailyGoal')}
+      </div>
+
+      <div>
+        <label className="flex min-h-11 items-center gap-3">
+          <input
+            type="checkbox"
+            checked={hasWeekly}
+            onChange={(e) => setHasWeekly(e.target.checked)}
+            className="h-5 w-5 accent-emerald-600"
+          />
+          <span className="font-medium">Tener meta semanal</span>
+        </label>
+        {hasWeekly && (
+          <div className="mt-2">
+            <label htmlFor={`${id}-weekly`} className={label}>
+              Días por semana
+            </label>
+            <select
+              id={`${id}-weekly`}
+              className={`${input} w-32`}
+              value={weeklyText}
+              onChange={(e) => setWeeklyText(e.target.value)}
+            >
+              {[1, 2, 3, 4, 5, 6, 7].map((n) => (
+                <option key={n} value={String(n)}>
+                  {n}
+                </option>
+              ))}
+            </select>
+            <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+              Para hábitos que no son diarios. Un día cuenta si{' '}
+              {hasGoal
+                ? 'cumple la meta diaria'
+                : type === 'boolean'
+                  ? 'marcas «Sí»'
+                  : 'tiene registros'}
+              .
+            </p>
+          </div>
+        )}
+        {errorText('weeklyTarget')}
       </div>
 
       <div className="flex justify-end gap-2 pt-2">

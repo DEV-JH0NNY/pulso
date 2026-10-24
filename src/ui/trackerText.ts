@@ -16,6 +16,8 @@ export function describeTracker(t: Tracker): string {
             : `meta ${formatValue(t, t.dailyGoal)}`,
     );
   }
+  if (t.weeklyTarget)
+    parts.push(`${t.weeklyTarget} ${t.weeklyTarget === 1 ? 'día' : 'días'}/semana`);
   return parts.join(' · ');
 }
 

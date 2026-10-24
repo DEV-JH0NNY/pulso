@@ -130,3 +130,13 @@ describe('TodayScreen · otros días', () => {
     expect(await screen.findByText('Sin registros')).toBeInTheDocument();
   });
 });
+
+describe('TodayScreen · meta semanal', () => {
+  it('muestra el avance de la semana', async () => {
+    await createTracker({ ...emptyDraft(), name: 'Gym', type: 'boolean', weeklyTarget: 3 });
+    const { user } = renderWithProviders(<TodayScreen />);
+    expect(await screen.findByText('Semana: 0/3 días')).toBeInTheDocument();
+    await user.click(await tile('Gym'));
+    expect(await screen.findByText('Semana: 1/3 días')).toBeInTheDocument();
+  });
+});

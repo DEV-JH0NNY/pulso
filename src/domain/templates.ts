@@ -7,7 +7,7 @@ export const TRACKER_TEMPLATES: readonly TrackerDraft[] = [
   { name: 'Agua', icon: '💧', color: 'sky', type: 'counter', unit: 'vasos', defaultValue: 1, dailyGoal: 8 },
   { name: 'Café', icon: '☕', color: 'amber', type: 'counter', unit: 'tazas', defaultValue: 1, dailyGoal: 3, goalDirection: 'atMost' },
   { name: 'Estudio', icon: '📚', color: 'indigo', type: 'quantity', unit: 'h', defaultValue: 1, dailyGoal: 3 },
-  { name: 'Ejercicio', icon: '🏃', color: 'emerald', type: 'boolean', unit: '', defaultValue: 1, dailyGoal: 1 },
+  { name: 'Ejercicio', icon: '🏃', color: 'emerald', type: 'boolean', unit: '', defaultValue: 1, dailyGoal: null, weeklyTarget: 3 },
   { name: 'Ánimo', icon: '😊', color: 'pink', type: 'scale', unit: '', defaultValue: 3, dailyGoal: null },
   { name: 'Gastos', icon: '💸', color: 'rose', type: 'quantity', unit: 'COP', defaultValue: 10000, dailyGoal: null },
   { name: 'Lectura', icon: '📖', color: 'teal', type: 'quantity', unit: 'páginas', defaultValue: 10, dailyGoal: 20 },

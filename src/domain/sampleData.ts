@@ -55,7 +55,8 @@ const SAMPLE_TRACKERS: SampleTracker[] = [
     type: 'boolean',
     unit: '',
     defaultValue: 1,
-    dailyGoal: 1,
+    dailyGoal: null,
+    weeklyTarget: 3,
   },
   {
     id: 'animo',

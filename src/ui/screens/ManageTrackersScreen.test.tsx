@@ -139,3 +139,21 @@ describe('ManageTrackersScreen · arrastrar', () => {
     });
   });
 });
+
+describe('ManageTrackersScreen · meta semanal', () => {
+  it('guarda la meta semanal', async () => {
+    const { user } = renderWithProviders(<ManageTrackersScreen />);
+    await user.click(await screen.findByRole('button', { name: /nuevo/i }));
+    const dialog = screen.getByRole('dialog', { name: 'Nuevo rastreador' });
+    await user.type(within(dialog).getByLabelText('Nombre'), 'Natación');
+    await user.click(within(dialog).getByLabelText(/sí \/ no/i));
+    await user.click(within(dialog).getByLabelText('Tener meta semanal'));
+    await user.selectOptions(within(dialog).getByLabelText('Días por semana'), '2');
+    await user.click(within(dialog).getByRole('button', { name: 'Crear' }));
+    await waitFor(async () => {
+      const [t] = await db.trackers.toArray();
+      expect(t).toMatchObject({ name: 'Natación', type: 'boolean', weeklyTarget: 2 });
+    });
+    expect(await screen.findByText(/2 días\/semana/)).toBeInTheDocument();
+  });
+});

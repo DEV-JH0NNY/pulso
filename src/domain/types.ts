@@ -32,6 +32,8 @@ export interface Tracker {
    * datos guardados antes de existir este campo siguen funcionando sin migrar).
    */
   goalDirection?: GoalDirection;
+  /** Meta semanal: días cumplidos por semana (1–7). Ausente o null si no tiene. */
+  weeklyTarget?: number | null;
   archived: boolean;
   /** Posición en las listas (menor primero). */
   order: number;
@@ -56,7 +58,15 @@ export interface Entry {
 /** Datos editables de un rastreador (sin campos de sistema). */
 export type TrackerDraft = Pick<
   Tracker,
-  'name' | 'icon' | 'color' | 'type' | 'unit' | 'defaultValue' | 'dailyGoal' | 'goalDirection'
+  | 'name'
+  | 'icon'
+  | 'color'
+  | 'type'
+  | 'unit'
+  | 'defaultValue'
+  | 'dailyGoal'
+  | 'goalDirection'
+  | 'weeklyTarget'
 >;
 
 /** Datos editables de un registro. */

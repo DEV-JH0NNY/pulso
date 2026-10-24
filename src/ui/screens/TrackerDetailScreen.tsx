@@ -3,6 +3,7 @@ import { updateTracker } from '../../data/trackers';
 import { isLimitGoal } from '../../domain/aggregate';
 import { formatDayLabel, formatNumber } from '../../domain/format';
 import { computeStreaks } from '../../domain/streaks';
+import { weeklyStreak } from '../../domain/weekly';
 import { draftFromTracker } from '../../domain/trackers';
 import type { Entry } from '../../domain/types';
 import { EntryEditDialog } from '../components/EntryEditDialog';
@@ -85,6 +86,12 @@ export function TrackerDetailScreen({ id }: { id: string }) {
           hint={streaks.current > 0 ? '🔥 ¡Sigue así!' : undefined}
         />
         <StatCard label="Mejor racha" value={days(streaks.longest)} />
+        {tracker.weeklyTarget ? (
+          <StatCard
+            label={`Racha semanal (${tracker.weeklyTarget} días/semana)`}
+            value={`${weeklyStreak(tracker, data.totals, todayDate)} sem.`}
+          />
+        ) : null}
         <StatCard label={doneLabel} value={days(streaks.doneDays)} />
         <StatCard label="Registros" value={formatNumber(data.entries.length)} />
       </dl>

@@ -4,6 +4,7 @@ import { isLimitGoal, progressFor } from '../../domain/aggregate';
 import { formatValue } from '../../domain/format';
 import type { Tracker } from '../../domain/types';
 import { useLongPress } from '../hooks/useLongPress';
+import type { WeekProgress } from '../../domain/weekly';
 import { progressText } from '../trackerText';
 import { IconCheck, IconPlus } from './icons';
 import { SampleTag } from './SampleTag';
@@ -12,11 +13,13 @@ interface TrackerTileProps {
   tracker: Tracker;
   /** Valor del día o null si no hay registros. */
   value: number | null;
+  /** Progreso de la meta semanal, si el rastreador tiene una. */
+  week?: WeekProgress | null;
   onQuickLog: () => void;
   onDetailedLog: () => void;
 }
 
-export function TrackerTile({ tracker, value, onQuickLog, onDetailedLog }: TrackerTileProps) {
+export function TrackerTile({ tracker, value, week, onQuickLog, onDetailedLog }: TrackerTileProps) {
   const [pulse, setPulse] = useState(0);
   const press = useLongPress(onDetailedLog, () => {
     setPulse((p) => p + 1);
@@ -40,7 +43,7 @@ export function TrackerTile({ tracker, value, onQuickLog, onDetailedLog }: Track
       <button
         type="button"
         {...press}
-        aria-label={`${tracker.name}: ${valueText}${progress.met ? (isLimitGoal(tracker) ? ', dentro del límite' : ', meta cumplida') : ''}${overLimit ? ', límite superado' : ''}. Tocar para ${tapHint}; mantener presionado para ajustar.`}
+        aria-label={`${tracker.name}: ${valueText}${progress.met ? (isLimitGoal(tracker) ? ', dentro del límite' : ', meta cumplida') : ''}${overLimit ? ', límite superado' : ''}${week ? `, semana ${week.done} de ${week.target} días` : ''}. Tocar para ${tapHint}; mantener presionado para ajustar.`}
         className="flex h-full w-full select-none flex-col items-start gap-2 rounded-2xl border border-slate-200 bg-white p-3 text-left shadow-sm transition-transform active:scale-[0.97] dark:border-slate-800 dark:bg-slate-900"
         style={{ borderTopColor: hex, borderTopWidth: 4 }}
       >
@@ -71,6 +74,13 @@ export function TrackerTile({ tracker, value, onQuickLog, onDetailedLog }: Track
                 backgroundColor: overLimit ? '#e11d48' : hex,
               }}
             />
+          </span>
+        )}
+        {week && (
+          <span
+            className={`text-xs font-medium ${week.met ? 'text-emerald-700 dark:text-emerald-400' : 'text-slate-500 dark:text-slate-400'}`}
+          >
+            Semana: {week.done}/{week.target} días{week.met ? ' ✓' : ''}
           </span>
         )}
       </button>
