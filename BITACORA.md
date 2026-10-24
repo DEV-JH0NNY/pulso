@@ -29,6 +29,26 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 12:55] Vista de hoy con progreso (Fase 1 · tarea 4)
+
+- **Qué hice:** Cada tarjeta muestra el progreso frente a la meta («2 / 8 h», «Hecho», «3,5/5 (meta 4/5)») con barra del color del rastreador y marca de meta cumplida. Arriba, un resumen con anillo: «1 de 2 metas cumplidas · 3 de 4 rastreadores con registros hoy» y celebración cuando se completa el día.
+- **Por qué:** El resumen se calcula en el dominio (`summarizeDay`) para probarlo sin interfaz. En escala el progreso parte de 1 (el mínimo posible) para que la barra no engañe.
+- **Archivos principales:** `src/domain/aggregate.ts`, `src/ui/trackerText.ts`, `src/ui/components/TrackerTile.tsx`, `src/ui/screens/TodayScreen.tsx`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (60 pasando) · build ✅
+- **Commit:** 3c690e3
+- **Siguiente:** Historial editable.
+
+### [2026-10-24 12:55] Registro rápido (Fase 1 · tarea 3)
+
+- **Qué hice:** Pantalla de hoy con una tarjeta por rastreador activo. Un toque registra el valor por defecto con la fecha y hora actuales; mantener presionado (500 ms) o el botón «+» abre un diálogo para ajustar valor, fecha, hora y nota. Cada registro muestra un aviso con «Deshacer». Animación sutil al registrar (desactivada con `prefers-reduced-motion`) y vibración corta cuando el dispositivo lo permite.
+- **Por qué:** El toque normal se maneja con `click` y el largo con un temporizador de `pointer events`, así el registro rápido también funciona con teclado (Enter/Espacio) y el botón «+» es la alternativa accesible al toque largo. Un sí/no que ya está en «Sí» hoy no se vuelve a registrar (evita duplicados sin sentido). No se permiten fechas futuras. La fecha de «hoy» se recalcula cada minuto y al volver a la app, por si pasa la medianoche.
+- **Archivos principales:** `src/ui/screens/TodayScreen.tsx`, `src/ui/components/{TrackerTile,EntryForm}.tsx`, `src/ui/hooks/{useLongPress,useToday}.ts`, `src/data/quickLog.ts`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (56 pasando) · build ✅
+- **Commit:** 9181cff
+- **Siguiente:** Progreso frente a la meta en la vista de hoy.
+
 ### [2026-10-24 12:49] Rastreadores personalizables (Fase 1 · tarea 2)
 
 - **Qué hice:** Modelo de dominio (`Tracker`, `Entry`), utilidades de fechas locales como cadenas AAAA-MM-DD, formato es-CO (números, COP, fechas, horas), validación de borradores por tipo, agregación diaria (contador/cantidad suman, sí/no = algún sí, escala = promedio) y progreso frente a la meta. Base de datos Dexie (`trackers`, `entries`, `settings`) con repositorios validados. Armazón de la app: navegación por hash, encabezado, barra inferior, avisos con «Deshacer», `<dialog>` modal accesible, tema claro/oscuro sin destello. Pantalla de gestión: crear, editar, subir/bajar, archivar (con deshacer), restaurar y eliminar (con confirmación y borrado de registros).
