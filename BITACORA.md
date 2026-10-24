@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 14:45] Corrección por comparaciones múltiples (Fase 2 · 28)
+
+- **Qué hice:** Cada correlación tiene ahora un valor p ajustado por Benjamini–Hochberg dentro de su familia (todos los pares del mismo día, o todos los de un día de desfase). La explicación dice si el hallazgo «resiste» la corrección («…incluso considerando que se compararon 15 pares (p ajustado = 0,002)») o si «podría ser un falso positivo». El CSV de hallazgos añade la columna `p_ajustado_bh` y la sección «¿Cómo se calculan?» lo explica.
+- **Por qué:** Con 6 rastreadores hay 15 pares el mismo día y 30 con desfase: a un nivel de 0,05, alguno saldría «significativo» por puro azar. El encargo pide análisis honestos; BH es el estándar para muchas comparaciones sin ser tan conservador como Bonferroni. Validado contra `statsmodels` (`fdr_bh`).
+- **Archivos principales:** `src/domain/{stats,insights}.ts`, `src/ui/screens/InsightsScreen.tsx`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (229 pasando) · build ✅
+- **Commit:** 3a2b20a
+- **Siguiente:** Restaurar respaldos con más seguridad.
+
 ### [2026-10-24 14:41] Exportar los hallazgos como CSV (Fase 2 · 27)
 
 - **Qué hice:** Botón «Exportar hallazgos (CSV)» al final de Hallazgos: una fila por par calculado con `rastreador_a, rastreador_b, desfase_dias, r, n, p, fuerza`, incluidos los débiles y los de desfase (que en pantalla se ocultan o pliegan).
