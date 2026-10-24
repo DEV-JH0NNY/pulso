@@ -4,11 +4,11 @@
 
 > Actualiza esta sección cada 5 entradas y al final de la noche. Es lo primero que el dueño va a leer.
 
-- **Estado actual:** Fase 1 completa (11/11). Fase 2: 31 mejoras hechas en cinco rondas de backlog. 232 pruebas, CI en verde en todos los commits.
-- **Lo más destacado hasta ahora:** Registro con un toque (también días anteriores, con celebración), metas diarias «al menos»/«como máximo» y semanales, historial con búsqueda, rachas, calendario anual tocable, gráficos, resumen semana/mes, métricas derivadas (fórmulas), hallazgos con Pearson + valor p + corrección de Benjamini–Hochberg (mismo día y día siguiente, con gráfico en el tiempo y exportación CSV), CSV largo/ancho, respaldo JSON con recordatorio, PWA con aviso de actualización y accesos directos, pantalla de error amigable, pruebas de accesibilidad (axe) y de rendimiento (3 años de datos).
-- **Decisiones importantes tomadas:** Fechas como texto local AAAA-MM-DD; ruteo por hash propio; gráficos, CSV y estadística sin librerías (todo probado y validado contra scipy/statsmodels); campos nuevos opcionales (`goalDirection`, `weeklyTarget`) para no migrar; base de datos v2 solo agrega la tabla `derived` (migración probada); TypeScript 6 (typescript-eslint aún no soporta la 7). Única dependencia añadida fuera del stack: `axe-core` (solo desarrollo).
-- **Problemas conocidos o pendientes:** El despliegue a GitHub Pages solo corre en `main`: hay que fusionar la rama `claude/wonderful-rubin-wns5l9` y activar **Settings → Pages → Source: GitHub Actions**. Las notificaciones del recordatorio solo llegan con la app abierta (límite de las PWA sin servidor). El `Dockerfile` está verificado (etapas `prod` y `dev` construidas y respondiendo).
-- **Siguiente paso:** Nueva ronda de revisión crítica.
+- **Estado actual:** Fase 1 completa (11/11). Fase 2: 38 mejoras hechas en siete rondas de backlog; solo falta la 38 (documentación al día). 253 pruebas. CI en verde en todos los commits que revisé.
+- **Lo más destacado hasta ahora:** Registro con un toque (también días anteriores, atajos de teclado y celebración al cumplir). Metas diarias «al menos» / «como máximo», metas semanales y días de la semana por rastreador. Historial con búsqueda. Rachas, calendario anual tocable, gráficos, perfil por día de la semana, calidad de datos y resumen anual. Resumen semana/mes y métricas derivadas (fórmulas). Hallazgos con Pearson + valor p + corrección de Benjamini–Hochberg (mismo día y día siguiente, con gráfico en el tiempo y exportación CSV). CSV largo/ancho de ida y vuelta y respaldo JSON con recordatorio. PWA con aviso de actualización y accesos directos. Pantalla de error amigable. Pruebas de accesibilidad (axe) y de rendimiento (3 años de datos).
+- **Decisiones importantes tomadas:** Fechas como texto local AAAA-MM-DD. Ruteo por hash propio. Gráficos, CSV y estadística sin librerías, todo probado y validado contra scipy/statsmodels. Campos nuevos opcionales (`goalDirection`, `weeklyTarget`, `activeDays`) para no migrar la base. La base v2 solo agrega la tabla `derived` (migración probada). TypeScript 6, porque typescript-eslint aún no soporta la 7. Única dependencia añadida fuera del stack: `axe-core` (solo desarrollo). Dockerfile verificado (`prod` y `dev`).
+- **Problemas conocidos o pendientes:** El despliegue a GitHub Pages solo corre en `main`: hay que fusionar la rama `claude/wonderful-rubin-wns5l9` y activar **Settings → Pages → Source: GitHub Actions**. Las notificaciones del recordatorio solo llegan con la app abierta (límite de las PWA sin servidor). Cambiar la meta de un rastreador recalcula también las rachas pasadas (no se guarda historial de metas). La sesión se cortó una vez por límite de uso; no se perdió trabajo (ver la entrada de la tarea 39).
+- **Siguiente paso:** Documentación al día (tarea 38) y luego otra ronda de revisión crítica.
 
 ---
 
@@ -28,6 +28,17 @@ Usa exactamente este formato:
 - **Commit:** (hash corto)
 - **Siguiente:**
 -->
+
+### [2026-10-24 17:20] Días de la semana por rastreador (Fase 2 · 39)
+
+- **Qué hice:** Cada rastreador puede limitarse a ciertos días (botones L M X J V S D en el formulario). En «Hoy», los que no aplican ese día se agrupan en «No aplican hoy (n)», plegado pero se puede registrar igual, y no cuentan en el resumen del día. Las rachas saltan los días libres: no suman si no hay registro y no la rompen. Un registro en un día libre suma. Los atajos 1–9 siguen el orden de la lista visible. La descripción del rastreador muestra los días («L, X, V»).
+- **Por qué:** Un gimnasio de lunes, miércoles y viernes no debería aparecer el martes ni romper la racha. Es un campo opcional `activeDays` (lunes = 0), así que no hubo migración. Marcar todos los días o ninguno equivale a no tenerlo. El respaldo JSON lo conserva.
+- **Nota sobre la sesión:** La sesión se cortó por límite de uso justo después de terminar esta tarea y antes del commit. Al retomar revisé `git status`: el cambio estaba completo. Corrí lint, formato, typecheck, pruebas (253 pasando) y build, todo en verde, e hice commit y push.
+- **Archivos principales:** `src/domain/{schedule,streaks,trackers,types,backup}.ts`, `src/ui/components/TrackerForm.tsx`, `src/ui/screens/TodayScreen.tsx`, `src/ui/trackerText.ts`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (253 pasando) · build ✅
+- **Commit:** b92532f
+- **Siguiente:** Documentación al día (README y capturas con las rondas 4–7).
 
 ### [2026-10-24 15:07] Refactor de la pantalla Hoy (Fase 2 · 37)
 
