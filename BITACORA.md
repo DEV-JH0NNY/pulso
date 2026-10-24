@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 14:37] Hora del último registro (Fase 2 · 25)
+
+- **Qué hice:** Las tarjetas de contadores y cantidades muestran «Último: 7:05 a. m.» cuando el día tiene registros.
+- **Por qué:** Para cosas que se registran varias veces al día (agua, café, cigarrillos) saber cuándo fue la última ayuda a decidir y a no duplicar sin querer. En sí/no y escala no aporta, así que no se muestra.
+- **Archivos principales:** `src/ui/components/TrackerTile.tsx`, `src/ui/screens/TodayScreen.tsx`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (220 pasando) · build ✅
+- **Commit:** e14f95c
+- **Siguiente:** Íconos y colores automáticos al importar CSV.
+
 ### [2026-10-24 14:35] Prueba de rendimiento con 3 años de datos (Fase 2 · 24)
 
 - **Qué hice:** Prueba que genera 3 años de datos de ejemplo (más de 6 000 registros en 6 rastreadores) y mide los cálculos de cada pantalla: hallazgos ≈ 14 ms, hallazgos con desfase ≈ 24 ms, estadísticas de todos los rastreadores ≈ 7 ms, detalle (calendario, series, día de la semana) ≈ 2 ms. Falla si alguno pasa de 1,5 s.
