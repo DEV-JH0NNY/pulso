@@ -57,6 +57,13 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 26. ✅ **Íconos y colores automáticos al importar CSV** según el nombre (café → ☕, sueño → 💤).
 27. ✅ **Exportar los hallazgos como CSV** (a, b, desfase, r, n, p) para analizarlos fuera.
 
+### Ronda 5
+
+28. ⬜ **Corrección por comparaciones múltiples (Benjamini–Hochberg):** con muchos pares, algunos salen «significativos» por azar; mostrar qué hallazgos resisten la corrección.
+29. ⬜ **Restaurar respaldos con más seguridad:** límite de tamaño y mensaje claro para archivos enormes o corruptos.
+30. ⬜ **Pantallas anchas:** tres columnas en «Hoy» desde tablet y contenido más ancho en escritorio.
+31. ⬜ **Comparar dos rastreadores en el tiempo:** en cada hallazgo, un gráfico con ambas series normalizadas para ver cómo se mueven juntas.
+
 ## Completadas
 
 - [2026-10-24] Base del proyecto (Fase 1 · tarea 1).
