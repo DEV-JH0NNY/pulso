@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 13:44] Aviso de nueva versión de la PWA (Fase 2 · 7)
+
+- **Qué hice:** El service worker pasa de actualización automática silenciosa a modo «prompt»: cuando hay una versión nueva aparece arriba «Hay una versión nueva de Pulso · Después / Actualizar». Verifiqué con Playwright sobre el build de producción que el service worker controla la página y que la app (incluidas las pantallas con carga diferida) abre sin conexión.
+- **Por qué:** Con `autoUpdate` la versión nueva solo se ve tras cerrar todas las pestañas, lo que confunde después de un despliegue. Actualizar recarga la página; como todo está en IndexedDB no se pierde nada. Usa `virtual:pwa-register/react` (de vite-plugin-pwa, con workbox-window que ya estaba).
+- **Archivos principales:** `src/ui/components/UpdatePrompt.tsx`, `src/main.tsx`, `vite.config.ts`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (162 pasando) · build ✅ · offline verificado ✅
+- **Commit:** 0de8010
+- **Siguiente:** Estadísticas por día de la semana.
+
 ### [2026-10-24 13:42] Hallazgos con desfase de un día (Fase 2 · 6)
 
 - **Qué hice:** Nueva sección «Al día siguiente» en Hallazgos: correlación entre el total de un rastreador en un día y el de otro al día siguiente, para cada par ordenado («Los días en que registras más «Café», al día siguiente tiendes a registrar menos «Sueño».»). Solo se muestran las moderadas o fuertes, con el mismo mínimo de 14 pares de días, r, valor p y diagrama.
