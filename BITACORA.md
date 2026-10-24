@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 13:58] Pruebas automáticas de accesibilidad (Fase 2 · 12)
+
+- **Qué hice:** Prueba que carga los datos de ejemplo y corre axe-core sobre Hoy, Historial, Estadísticas, detalle de rastreador, Hallazgos, Ajustes, Rastreadores y el diálogo de nuevo rastreador. Encontró un problema real: el aviso «Estás viendo datos de ejemplo» estaba fuera de cualquier región (landmark); ahora es un `<aside>` con nombre.
+- **Por qué:** La accesibilidad es requisito del proyecto; así cualquier regresión rompe la CI. El contraste se desactiva en axe porque jsdom no calcula estilos; se revisó a mano con la fórmula WCAG (ver la entrada de la tarea 11).
+- **Archivos principales:** `src/test/{axe.ts,a11y.test.tsx}`, `src/ui/components/SampleBanner.tsx`.
+- **Dependencias nuevas:** `axe-core` (desarrollo): el motor de reglas de accesibilidad de referencia, sin dependencias, mantenido por Deque. Se usa directo en lugar de `vitest-axe`/`jest-axe` para no sumar un envoltorio.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (188 pasando) · build ✅
+- **Commit:** 2e81d5a
+- **Siguiente:** Plurales correctos en unidades.
+
 ### [2026-10-24 13:56] Metas de límite «como máximo» (Fase 2 · 11)
 
 - **Qué hice:** Al poner meta a un contador o cantidad se elige «Al menos» o «Como máximo». Con límite: la tarjeta muestra «5 / máx. 3 tazas» y la barra se pone roja al pasarse; el resumen del día, las rachas, el calendario (dentro del tope = intensidad máxima, pasarse = mínima) y el resumen semanal lo respetan con textos propios («Días dentro del límite»). Las plantillas Café (≤ 3 tazas) y Pantalla (≤ 3 h) y el Café de ejemplo ahora usan límite.
