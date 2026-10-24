@@ -37,6 +37,26 @@ export default defineConfig({
         orientation: 'portrait',
         background_color: '#0f172a',
         theme_color: '#0f172a',
+        id: base,
+        categories: ['productivity', 'health', 'lifestyle'],
+        // Mantener presionado el ícono de la app instalada muestra estos atajos.
+        shortcuts: [
+          {
+            name: 'Historial',
+            url: `${base}#/historial`,
+            icons: [{ src: 'pwa-192.png', sizes: '192x192' }],
+          },
+          {
+            name: 'Estadísticas',
+            url: `${base}#/estadisticas`,
+            icons: [{ src: 'pwa-192.png', sizes: '192x192' }],
+          },
+          {
+            name: 'Hallazgos',
+            url: `${base}#/hallazgos`,
+            icons: [{ src: 'pwa-192.png', sizes: '192x192' }],
+          },
+        ],
         icons: [
           { src: 'pwa-192.png', sizes: '192x192', type: 'image/png' },
           { src: 'pwa-512.png', sizes: '512x512', type: 'image/png' },
