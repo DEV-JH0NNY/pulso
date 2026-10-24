@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { dailyTotals } from '../../domain/aggregate';
 import { computeStreaks } from '../../domain/streaks';
 import { IconChevronRight } from '../components/icons';
+import { PeriodSummary } from '../components/PeriodSummary';
 import { cardBase, card, muted, sectionTitle } from '../components/styles';
 import { TrackerBadge } from '../components/TrackerBadge';
 import { useAllTrackers, useEntriesBetween } from '../hooks/useData';
@@ -54,6 +55,10 @@ export function StatsScreen() {
 
   return (
     <div>
+      {active.length > 0 && (
+        <PeriodSummary trackers={active} entries={entries} todayDate={todayDate} />
+      )}
+      <h2 className="mb-1 text-lg font-semibold">Por rastreador</h2>
       <p className={`${muted} mb-4`}>
         Elige un rastreador para ver sus rachas, calendario y gráficos.
       </p>
