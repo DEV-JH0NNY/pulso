@@ -6,6 +6,7 @@ import {
   formatTime,
   formatValue,
   parseDecimal,
+  plural,
 } from './format';
 
 const norm = (s: string) => s.replace(/\s/g, ' ');
@@ -52,5 +53,14 @@ describe('parseDecimal', () => {
     expect(parseDecimal('')).toBeNaN();
     expect(parseDecimal('abc')).toBeNaN();
     expect(parseDecimal('1,2,3')).toBeNaN();
+  });
+});
+
+describe('plural', () => {
+  it('elige singular o plural', () => {
+    expect(plural(1, 'registro')).toBe('1 registro');
+    expect(plural(2, 'registro')).toBe('2 registros');
+    expect(plural(1200, 'día')).toBe('1.200 días');
+    expect(plural(2, 'rastreador nuevo', 'rastreadores nuevos')).toBe('2 rastreadores nuevos');
   });
 });

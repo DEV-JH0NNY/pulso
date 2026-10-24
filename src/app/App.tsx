@@ -11,6 +11,7 @@ import { ToastProvider } from '../ui/components/ToastProvider';
 import { useRoute, type Route } from '../ui/router';
 import { HistoryScreen } from '../ui/screens/HistoryScreen';
 import { InsightsScreen } from '../ui/screens/InsightsScreen';
+import { SettingsScreen } from '../ui/screens/SettingsScreen';
 import { ManageTrackersScreen } from '../ui/screens/ManageTrackersScreen';
 import { StatsScreen } from '../ui/screens/StatsScreen';
 import { TodayScreen } from '../ui/screens/TodayScreen';
@@ -27,8 +28,8 @@ const NAV: NavItem[] = [
   },
   { route: { name: 'insights' }, label: 'Hallazgos', icon: IconInsights, matches: ['insights'] },
   {
-    route: { name: 'manage' },
-    label: 'Rastreadores',
+    route: { name: 'settings' },
+    label: 'Ajustes',
     icon: IconSettings,
     matches: ['manage', 'settings'],
   },
@@ -54,8 +55,14 @@ function screenFor(route: Route): Screen {
       };
     case 'insights':
       return { title: 'Hallazgos', content: <InsightsScreen /> };
+    case 'settings':
+      return { title: 'Ajustes', content: <SettingsScreen /> };
     case 'manage':
-      return { title: 'Rastreadores', content: <ManageTrackersScreen /> };
+      return {
+        title: 'Rastreadores',
+        back: { name: 'settings' },
+        content: <ManageTrackersScreen />,
+      };
     default:
       return { title: 'Hoy', content: <TodayScreen /> };
   }

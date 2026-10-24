@@ -115,3 +115,8 @@ const compactFormatter = new Intl.NumberFormat(LOCALE, {
 export function formatCompact(value: number): string {
   return compactFormatter.format(value);
 }
+
+/** "1 registro", "3 registros" (con separador de miles). */
+export function plural(n: number, singular: string, pluralForm = `${singular}s`): string {
+  return `${formatNumber(n)} ${n === 1 ? singular : pluralForm}`;
+}
