@@ -105,3 +105,15 @@ describe('InsightsScreen · exportar', () => {
     vi.unstubAllGlobals();
   });
 });
+
+describe('InsightsScreen · en el tiempo', () => {
+  it('muestra las dos series normalizadas al desplegar', async () => {
+    await seed(20);
+    const { user } = renderWithProviders(<InsightsScreen />);
+    const [summary] = await screen.findAllByText('Ver en el tiempo');
+    await user.click(summary as HTMLElement);
+    expect(
+      screen.getAllByRole('img', { name: /normalizados en el tiempo/i }).length,
+    ).toBeGreaterThan(0);
+  });
+});

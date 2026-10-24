@@ -7,6 +7,7 @@ import {
   median,
   pearson,
   regularizedBeta,
+  zScores,
 } from './stats';
 
 describe('estadística', () => {
@@ -68,5 +69,15 @@ describe('Benjamini–Hochberg', () => {
   it('lista vacía y tope en 1', () => {
     expect(benjaminiHochberg([])).toEqual([]);
     expect(benjaminiHochberg([0.9, 0.95])).toEqual([0.95, 0.95]);
+  });
+});
+
+describe('zScores', () => {
+  it('centra y escala', () => {
+    const z = zScores([2, 4, 6]);
+    expect(z[1]).toBe(0);
+    expect(z[0]).toBeCloseTo(-1.2247, 3);
+    expect(zScores([5, 5])).toEqual([0, 0]);
+    expect(zScores([])).toEqual([]);
   });
 });

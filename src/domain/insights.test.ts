@@ -143,6 +143,7 @@ describe('exportar hallazgos', () => {
         comparisons: 3,
         strength: 'fuerte',
         points: [],
+        dates: [],
         lag: 1,
       },
     ]);

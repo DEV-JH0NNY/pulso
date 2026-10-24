@@ -127,3 +127,11 @@ export function benjaminiHochberg(pValues: number[]): number[] {
   }
   return q;
 }
+
+/** Puntajes z: (x − promedio) / desviación estándar. Si no hay variación, todo es 0. */
+export function zScores(xs: number[]): number[] {
+  if (xs.length === 0) return [];
+  const m = mean(xs);
+  const sd = Math.sqrt(xs.reduce((acc, x) => acc + (x - m) ** 2, 0) / xs.length);
+  return xs.map((x) => (sd === 0 ? 0 : (x - m) / sd));
+}

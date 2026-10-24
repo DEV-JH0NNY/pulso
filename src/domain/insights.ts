@@ -29,6 +29,8 @@ export interface Correlation {
   strength: Strength;
   /** Pares (valor de a, valor de b) de cada día en común, para el diagrama de dispersión. */
   points: [number, number][];
+  /** Fecha de cada punto (la del valor de a). */
+  dates: string[];
   /** 0: mismo día; 1: a de un día frente a b del día siguiente. */
   lag: 0 | 1;
 }
@@ -100,11 +102,13 @@ function correlatePair(
   const tb = totals.get(b.id) as Map<string, number>;
   const xs: number[] = [];
   const ys: number[] = [];
-  for (const [date, va] of ta) {
+  const dates: string[] = [];
+  for (const [date, va] of [...ta].sort(([d1], [d2]) => (d1 < d2 ? -1 : 1))) {
     const vb = tb.get(lag === 0 ? date : addDays(date, lag));
     if (vb !== undefined) {
       xs.push(va);
       ys.push(vb);
+      dates.push(date);
     }
   }
   const n = xs.length;
@@ -123,6 +127,7 @@ function correlatePair(
       comparisons: 1,
       strength: strengthOf(r),
       points: xs.map((x, k) => [x, ys[k] as number]),
+      dates,
       lag,
     },
   };

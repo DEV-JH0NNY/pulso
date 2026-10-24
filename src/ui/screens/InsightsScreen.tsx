@@ -10,6 +10,7 @@ import {
   SIGNIFICANCE,
   type Correlation,
 } from '../../domain/insights';
+import { DualLineChart } from '../components/DualLineChart';
 import { ScatterPlot } from '../components/ScatterPlot';
 import { buttonSecondary, card, muted, sectionTitle } from '../components/styles';
 import { downloadText } from '../download';
@@ -53,6 +54,12 @@ function CorrelationCard({ c }: { c: Correlation }) {
           <p>{describeConfidence(c)}</p>
         </div>
       </div>
+      <details className="mt-3">
+        <summary className="cursor-pointer text-sm font-medium">Ver en el tiempo</summary>
+        <div className="mt-2">
+          <DualLineChart a={c.a} b={c.b} dates={c.dates} points={c.points} lag={c.lag} />
+        </div>
+      </details>
     </li>
   );
 }
