@@ -2,13 +2,14 @@ import { useMemo, useState } from 'react';
 import { addEntry, deleteEntry } from '../../data/entries';
 import { quickLog } from '../../data/quickLog';
 import { dailyTotals, summarizeDay } from '../../domain/aggregate';
-import { toTime } from '../../domain/dates';
-import { formatLongDate, formatValue } from '../../domain/format';
+import { addDays, toTime } from '../../domain/dates';
+import { formatDayLabel, formatLongDate, formatValue } from '../../domain/format';
 import type { DaySummary } from '../../domain/aggregate';
 import type { EntryDraft, Tracker } from '../../domain/types';
 import { EntryForm } from '../components/EntryForm';
 import { Modal } from '../components/Modal';
-import { buttonPrimary, card, muted } from '../components/styles';
+import { IconChevronLeft, IconChevronRight } from '../components/icons';
+import { buttonPrimary, card, iconButton, muted } from '../components/styles';
 import { useToast } from '../components/toastContext';
 import { TrackerTile } from '../components/TrackerTile';
 import { useActiveTrackers, useEntriesForDate } from '../hooks/useData';
@@ -20,8 +21,12 @@ import { routeHref } from '../router';
 
 export function TodayScreen() {
   const todayDate = useToday();
+  // Días hacia atrás desde hoy (0 = hoy). Así la vista sigue a "hoy" al pasar la medianoche.
+  const [offset, setOffset] = useState(0);
+  const day = addDays(todayDate, -offset);
+  const isToday = offset === 0;
   const trackers = useActiveTrackers();
-  const entries = useEntriesForDate(todayDate);
+  const entries = useEntriesForDate(day);
   const [detailed, setDetailed] = useState<Tracker | null>(null);
   const toast = useToast();
   const onboardingDone = useOnboardingDone();
@@ -30,11 +35,11 @@ export function TodayScreen() {
     const map = new Map<string, number>();
     if (!trackers || !entries) return map;
     for (const t of trackers) {
-      const v = dailyTotals(t, entries).get(todayDate);
+      const v = dailyTotals(t, entries).get(day);
       if (v !== undefined) map.set(t.id, v);
     }
     return map;
-  }, [trackers, entries, todayDate]);
+  }, [trackers, entries, day]);
 
   if (!trackers || !entries || onboardingDone === undefined)
     return <p className={muted}>Cargando…</p>;
@@ -48,9 +53,9 @@ export function TodayScreen() {
     });
 
   const handleQuickLog = async (t: Tracker) => {
-    const entry = await quickLog(t, values.get(t.id) ?? null);
+    const entry = await quickLog(t, values.get(t.id) ?? null, new Date(), day);
     if (!entry) {
-      toast({ message: `«${t.name}» ya está marcado hoy` });
+      toast({ message: `«${t.name}» ya está marcado ${isToday ? 'hoy' : 'ese día'}` });
       return;
     }
     navigator.vibrate?.(10);
@@ -58,7 +63,8 @@ export function TodayScreen() {
       t.type === 'boolean' || t.type === 'scale'
         ? formatValue(t, entry.value)
         : `+${formatValue(t, entry.value)}`;
-    undoable(`${t.icon} ${t.name}: ${amount}`, entry.id);
+    const when = isToday ? '' : ` (${formatDayLabel(day, todayDate).toLowerCase()})`;
+    undoable(`${t.icon} ${t.name}: ${amount}${when}`, entry.id);
   };
 
   const handleDetailed = async (draft: EntryDraft) => {
@@ -73,10 +79,45 @@ export function TodayScreen() {
 
   return (
     <div>
-      <p className={`${muted} mb-4`}>{formatLongDate(todayDate)}</p>
-      <BackupReminder />
+      <nav aria-label="Cambiar de día" className="-mt-2 mb-3 flex items-center justify-between">
+        <button
+          type="button"
+          className={iconButton}
+          aria-label="Día anterior"
+          onClick={() => setOffset((o) => o + 1)}
+        >
+          <IconChevronLeft />
+        </button>
+        <div className="text-center" aria-live="polite">
+          <p className="font-semibold">{formatDayLabel(day, todayDate)}</p>
+          {offset <= 1 && <p className={muted}>{formatLongDate(day)}</p>}
+          {!isToday && (
+            <button
+              type="button"
+              className="text-sm font-semibold text-emerald-700 underline underline-offset-2 dark:text-emerald-400"
+              onClick={() => setOffset(0)}
+            >
+              Volver a hoy
+            </button>
+          )}
+        </div>
+        <button
+          type="button"
+          className={iconButton}
+          aria-label="Día siguiente"
+          disabled={isToday}
+          onClick={() => setOffset((o) => Math.max(0, o - 1))}
+        >
+          <IconChevronRight />
+        </button>
+      </nav>
+      {isToday && <BackupReminder />}
       {trackers.length > 0 && (
-        <DaySummaryCard summary={summarizeDay(trackers, values)} total={trackers.length} />
+        <DaySummaryCard
+          summary={summarizeDay(trackers, values)}
+          total={trackers.length}
+          dayLabel={isToday ? 'hoy' : 'ese día'}
+        />
       )}
 
       {trackers.length === 0 ? (
@@ -91,7 +132,10 @@ export function TodayScreen() {
         </div>
       ) : (
         <>
-          <ul className="grid grid-cols-2 gap-3" aria-label="Rastreadores de hoy">
+          <ul
+            className={`grid grid-cols-2 gap-3 ${isToday ? '' : 'rounded-2xl ring-2 ring-amber-400 ring-offset-4 ring-offset-slate-50 dark:ring-offset-slate-950'}`}
+            aria-label={isToday ? 'Rastreadores de hoy' : `Rastreadores del ${formatLongDate(day)}`}
+          >
             {trackers.map((t) => (
               <li key={t.id}>
                 <TrackerTile
@@ -120,7 +164,7 @@ export function TodayScreen() {
             tracker={detailed}
             initial={{
               value: detailed.defaultValue,
-              date: todayDate,
+              date: day,
               time: toTime(new Date()),
               note: '',
             }}
@@ -135,7 +179,15 @@ export function TodayScreen() {
   );
 }
 
-function DaySummaryCard({ summary, total }: { summary: DaySummary; total: number }) {
+function DaySummaryCard({
+  summary,
+  total,
+  dayLabel,
+}: {
+  summary: DaySummary;
+  total: number;
+  dayLabel: string;
+}) {
   const ratio = summary.withGoal > 0 ? summary.met / summary.withGoal : 0;
   const r = 26;
   const circumference = 2 * Math.PI * r;
@@ -173,7 +225,7 @@ function DaySummaryCard({ summary, total }: { summary: DaySummary; total: number
           <p className="text-lg font-semibold">Sin metas diarias</p>
         )}
         <p className={muted}>
-          {summary.logged} de {total} rastreadores con registros hoy
+          {summary.logged} de {total} rastreadores con registros {dayLabel}
           {summary.withGoal > 0 && summary.met === summary.withGoal ? ' · ¡Día completo! 🎉' : ''}
         </p>
       </div>

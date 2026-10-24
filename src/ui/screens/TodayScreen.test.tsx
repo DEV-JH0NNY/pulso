@@ -4,6 +4,7 @@ import { db } from '../../data/db';
 import { ONBOARDING_DONE, setSetting } from '../../data/settings';
 import { resetDb } from '../../data/testUtils';
 import { createTracker } from '../../data/trackers';
+import { addDays, today } from '../../domain/dates';
 import { emptyDraft } from '../../domain/trackers';
 import { renderWithProviders } from '../../test/render';
 import { TodayScreen } from './TodayScreen';
@@ -110,5 +111,22 @@ describe('TodayScreen · progreso', () => {
 
     await user.click(await tile('Leer'));
     expect(await screen.findByText(/día completo/i)).toBeInTheDocument();
+  });
+});
+
+describe('TodayScreen · otros días', () => {
+  it('permite registrar en el día anterior y volver a hoy', async () => {
+    await createTracker({ ...emptyDraft(), name: 'Café' });
+    const { user } = renderWithProviders(<TodayScreen />);
+    await user.click(await screen.findByRole('button', { name: 'Día anterior' }));
+    expect(screen.getByText('Ayer')).toBeInTheDocument();
+    await user.click(await tile('Café'));
+    await waitFor(async () => {
+      const [e] = await db.entries.toArray();
+      expect(e?.date).toBe(addDays(today(), -1));
+    });
+    await user.click(screen.getByRole('button', { name: 'Volver a hoy' }));
+    expect(screen.getByRole('button', { name: 'Día siguiente' })).toBeDisabled();
+    expect(await screen.findByText('Sin registros')).toBeInTheDocument();
   });
 });
