@@ -1,6 +1,12 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
+import { addDays } from '../../domain/dates';
 import { colorHex } from '../../domain/colors';
-import { formatShortDate, formatShortMonth, formatValue } from '../../domain/format';
+import {
+  formatLongDate,
+  formatShortDate,
+  formatShortMonth,
+  formatValue,
+} from '../../domain/format';
 import { buildHeatmap, type HeatLevel } from '../../domain/heatmap';
 import type { Tracker } from '../../domain/types';
 
@@ -26,6 +32,20 @@ export function HeatmapChart({ tracker, totals, todayDate }: HeatmapChartProps) 
   );
   const scroller = useRef<HTMLDivElement>(null);
   const hex = colorHex(tracker.color);
+  const [selected, setSelected] = useState(todayDate);
+  const firstDate = heatmap.weeks[0]?.[0]?.date ?? todayDate;
+  const selectedValue = totals.get(selected);
+
+  // Flechas: izquierda/derecha cambian de semana, arriba/abajo de día.
+  const onKeyDown = (e: KeyboardEvent) => {
+    const step = (
+      { ArrowLeft: -7, ArrowRight: 7, ArrowUp: -1, ArrowDown: 1 } as Record<string, number>
+    )[e.key];
+    if (step === undefined) return;
+    e.preventDefault();
+    const next = addDays(selected, step);
+    if (next >= firstDate && next <= todayDate) setSelected(next);
+  };
 
   useEffect(() => {
     const el = scroller.current;
@@ -42,7 +62,9 @@ export function HeatmapChart({ tracker, totals, todayDate }: HeatmapChartProps) 
         ref={scroller}
         className="overflow-x-auto pb-2"
         tabIndex={0}
-        aria-label="Calendario del último año (desplazable)"
+        role="group"
+        aria-label="Calendario del último año. Usa las flechas para moverte entre días."
+        onKeyDown={onKeyDown}
       >
         <svg
           width={width}
@@ -74,7 +96,11 @@ export function HeatmapChart({ tracker, totals, todayDate }: HeatmapChartProps) 
                   height={CELL}
                   rx={2}
                   fill={fill(cell.level)}
-                  className={cell.level === 0 ? 'fill-slate-200 dark:fill-slate-800' : undefined}
+                  className={`cursor-pointer ${cell.level === 0 ? 'fill-slate-200 dark:fill-slate-800' : ''} ${
+                    cell.date === selected ? 'stroke-slate-900 dark:stroke-white' : ''
+                  }`}
+                  strokeWidth={cell.date === selected ? 2 : 0}
+                  onClick={() => setSelected(cell.date)}
                 >
                   <title>
                     {formatShortDate(cell.date)}:{' '}
@@ -86,6 +112,10 @@ export function HeatmapChart({ tracker, totals, todayDate }: HeatmapChartProps) 
           )}
         </svg>
       </div>
+      <p className="mt-1 text-sm" aria-live="polite">
+        <span className="font-medium">{formatLongDate(selected)}:</span>{' '}
+        {selectedValue === undefined ? 'sin registros' : formatValue(tracker, selectedValue)}
+      </p>
       <div
         className="mt-1 flex items-center justify-end gap-1 text-xs text-slate-500 dark:text-slate-400"
         aria-hidden="true"
