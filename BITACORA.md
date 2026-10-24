@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 15:05] Resumen anual «Tu año en Pulso» (Fase 2 · 36)
+
+- **Qué hice:** Nueva pantalla (desde Estadísticas, ruta `#/anual`) con una frase resumen («En 2026 registraste 753 veces en 120 días. Tu mes más activo fue agosto»), registros totales, días con registros, rastreadores usados, gráfico de registros por mes y, por rastreador, total del año (o días con «Sí», o promedio), días con registros, mejor racha y mejor mes. Selector de año cuando hay datos de varios años. Incluida en las pruebas de accesibilidad.
+- **Por qué:** «Sorprender al dueño»: es el tipo de resumen que da gusto revisar a fin de año y reutiliza todo el dominio existente (totales diarios, series mensuales, rachas). Las rachas se calculan dentro del año.
+- **Archivos principales:** `src/domain/yearReview.ts`, `src/ui/screens/YearReviewScreen.tsx`, `src/ui/router.ts`, `src/app/App.tsx`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (246 pasando) · build ✅
+- **Commit:** 21891a6
+- **Siguiente:** Nueva ronda de revisión crítica.
+
 ### [2026-10-24 15:01] Desactivar la vibración (Fase 2 · 35)
 
 - **Qué hice:** En Ajustes → Apariencia, «Vibrar al registrar» (solo aparece si el dispositivo puede vibrar). Todas las vibraciones (toque, toque largo, meta cumplida) pasan por `vibrate()`, que respeta el ajuste.
