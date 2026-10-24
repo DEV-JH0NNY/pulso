@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 14:47] Pantallas anchas (Fase 2 · 30)
+
+- **Qué hice:** Desde tablet, «Hoy» usa tres columnas; en escritorio el contenido llega a 48 rem (antes 36) y las tarjetas de estadísticas del detalle y del gráfico pasan a cuatro columnas. Revisado con captura a 1100 px.
+- **Por qué:** La app es celular primero, pero el dueño también la abrirá en el computador; con una sola columna estrecha se desperdiciaba la pantalla. Solo clases responsivas de Tailwind, sin cambiar el diseño móvil.
+- **Archivos principales:** `src/ui/components/{Layout,TrackerChart}.tsx`, `src/ui/screens/{TodayScreen,TrackerDetailScreen}.tsx`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (230 pasando) · build ✅
+- **Commit:** c20459c
+- **Siguiente:** Comparar dos rastreadores en el tiempo.
+
 ### [2026-10-24 14:46] Restaurar respaldos con más seguridad (Fase 2 · 29)
 
 - **Qué hice:** La restauración rechaza archivos de más de 50 MB sin leerlos, muestra «No se pudo leer el archivo» si la lectura falla, y si la escritura en la base falla avisa «No se pudo restaurar (tus datos no cambiaron)».

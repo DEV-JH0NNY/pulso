@@ -61,7 +61,7 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 
 28. ✅ **Corrección por comparaciones múltiples (Benjamini–Hochberg):** con muchos pares, algunos salen «significativos» por azar; mostrar qué hallazgos resisten la corrección.
 29. ✅ **Restaurar respaldos con más seguridad:** límite de tamaño y mensaje claro para archivos enormes o corruptos.
-30. ⬜ **Pantallas anchas:** tres columnas en «Hoy» desde tablet y contenido más ancho en escritorio.
+30. ✅ **Pantallas anchas:** tres columnas en «Hoy» desde tablet y contenido más ancho en escritorio.
 31. ⬜ **Comparar dos rastreadores en el tiempo:** en cada hallazgo, un gráfico con ambas series normalizadas para ver cómo se mueven juntas.
 
 ## Completadas
@@ -106,3 +106,4 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 - [2026-10-24] Exportar hallazgos como CSV (Fase 2 · 27).
 - [2026-10-24] Corrección por comparaciones múltiples (Fase 2 · 28).
 - [2026-10-24] Restaurar respaldos con más seguridad (Fase 2 · 29).
+- [2026-10-24] Pantallas anchas (Fase 2 · 30).
