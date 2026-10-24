@@ -3,6 +3,7 @@ import { formatNumber } from '../../domain/format';
 import {
   computeInsights,
   computeLaggedCorrelations,
+  correlationsToCsv,
   describeConfidence,
   describeCorrelation,
   MIN_COMMON_DAYS,
@@ -10,7 +11,9 @@ import {
   type Correlation,
 } from '../../domain/insights';
 import { ScatterPlot } from '../components/ScatterPlot';
-import { card, muted, sectionTitle } from '../components/styles';
+import { buttonSecondary, card, muted, sectionTitle } from '../components/styles';
+import { downloadText } from '../download';
+import { today } from '../../domain/dates';
 import { TrackerBadge } from '../components/TrackerBadge';
 import { useActiveTrackers, useEntriesBetween } from '../hooks/useData';
 
@@ -62,14 +65,19 @@ export function InsightsScreen() {
     [trackers, entries],
   );
   const lagged = useMemo(
-    () =>
-      trackers && entries
-        ? computeLaggedCorrelations(trackers, entries).filter(
-            (c) => c.strength === 'moderada' || c.strength === 'fuerte',
-          )
-        : [],
+    () => (trackers && entries ? computeLaggedCorrelations(trackers, entries) : []),
     [trackers, entries],
   );
+
+  const laggedRelevant = lagged.filter((c) => c.strength === 'moderada' || c.strength === 'fuerte');
+  const exportCsv = () => {
+    if (!insights) return;
+    downloadText(
+      `pulso-hallazgos-${today()}.csv`,
+      correlationsToCsv([...insights.correlations, ...lagged]),
+      'text/csv',
+    );
+  };
 
   if (!insights || !trackers) return <p className={muted}>Cargando…</p>;
 
@@ -120,16 +128,16 @@ export function InsightsScreen() {
         </>
       )}
 
-      {lagged.length > 0 && (
+      {laggedRelevant.length > 0 && (
         <>
-          <h2 className={sectionTitle}>Al día siguiente ({lagged.length})</h2>
+          <h2 className={sectionTitle}>Al día siguiente ({laggedRelevant.length})</h2>
           <p className={`${muted} mb-2`}>
             Compara lo de un día con lo del día siguiente. Ojo: si dos cosas ya van juntas el mismo
             día y cambian poco de un día a otro, también aparecerán aquí sin que haya un efecto de
             un día al otro.
           </p>
           <ul className="space-y-3">
-            {lagged.map((c) => (
+            {laggedRelevant.map((c) => (
               <CorrelationCard key={`lag-${c.a.id}-${c.b.id}`} c={c} />
             ))}
           </ul>
@@ -186,6 +194,17 @@ export function InsightsScreen() {
           porque uno de los rastreadores tiene siempre el mismo valor en los días en común (por
           ejemplo, siempre «Sí»).
         </p>
+      )}
+
+      {insights.correlations.length > 0 && (
+        <div className="mt-6 text-center">
+          <button type="button" className={buttonSecondary} onClick={exportCsv}>
+            Exportar hallazgos (CSV)
+          </button>
+          <p className={`${muted} mt-1`}>
+            Incluye todos los pares calculados, también los débiles y con desfase.
+          </p>
+        </div>
       )}
 
       <details className={`${card} mt-6`}>

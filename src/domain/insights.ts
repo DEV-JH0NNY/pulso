@@ -1,4 +1,5 @@
 import { dailyTotals } from './aggregate';
+import { toCsv } from './csv';
 import { addDays } from './dates';
 import { formatNumber } from './format';
 import { correlationPValue, pearson } from './stats';
@@ -174,4 +175,21 @@ export function describeConfidence(c: Pick<Correlation, 'n' | 'p'>): string {
   return c.p < SIGNIFICANCE
     ? `Con ${c.n} días en común, es poco probable que sea pura casualidad (${p}).`
     : `Con ${c.n} días en común, todavía podría ser casualidad (${p}). Sigue registrando para confirmarlo.`;
+}
+
+/** Tabla de correlaciones para analizar fuera de la app (una fila por par y desfase). */
+export function correlationsToCsv(correlations: Correlation[]): string {
+  const rows = correlations.map((c) => [
+    c.a.name,
+    c.b.name,
+    String(c.lag),
+    String(Math.round(c.r * 1e4) / 1e4),
+    String(c.n),
+    c.p.toPrecision(3),
+    c.strength,
+  ]);
+  return toCsv([
+    ['rastreador_a', 'rastreador_b', 'desfase_dias', 'r', 'n', 'p', 'fuerza'],
+    ...rows,
+  ]);
 }

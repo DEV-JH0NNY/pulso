@@ -3,6 +3,7 @@ import { addDays } from './dates';
 import {
   computeInsights,
   computeLaggedCorrelations,
+  correlationsToCsv,
   describeConfidence,
   describeCorrelation,
   strengthOf,
@@ -123,6 +124,19 @@ describe('hallazgos con desfase', () => {
     if (!top) throw new Error('sin resultados');
     expect(describeCorrelation(top)).toBe(
       'Los días en que registras más «Sueño», al día siguiente tiendes a calificar «Ánimo» más alto.',
+    );
+  });
+});
+
+describe('exportar hallazgos', () => {
+  it('genera una fila por correlación', () => {
+    const a = tracker('a', 'Café, con leche');
+    const b = tracker('b', 'Sueño');
+    const csv = correlationsToCsv([
+      { a, b, r: -0.61234, n: 30, p: 0.000312, strength: 'fuerte', points: [], lag: 1 },
+    ]);
+    expect(csv).toBe(
+      'rastreador_a,rastreador_b,desfase_dias,r,n,p,fuerza\r\n"Café, con leche",Sueño,1,-0.6123,30,0.000312,fuerte\r\n',
     );
   });
 });

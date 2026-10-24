@@ -1,5 +1,5 @@
 import { screen } from '@testing-library/react';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { db } from '../../data/db';
 import { resetDb } from '../../data/testUtils';
 import { createTracker } from '../../data/trackers';
@@ -86,5 +86,20 @@ describe('InsightsScreen · desfase', () => {
     await db.entries.bulkAdd(rows);
     renderWithProviders(<InsightsScreen />);
     expect(await screen.findByRole('heading', { name: /al día siguiente/i })).toBeInTheDocument();
+  });
+});
+
+describe('InsightsScreen · exportar', () => {
+  it('descarga los hallazgos como CSV', async () => {
+    await seed(20);
+    const createObjectURL = vi.fn((_blob: Blob) => 'blob:x');
+    vi.stubGlobal('URL', { ...URL, createObjectURL, revokeObjectURL: vi.fn() });
+    vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {});
+    const { user } = renderWithProviders(<InsightsScreen />);
+    await user.click(await screen.findByRole('button', { name: 'Exportar hallazgos (CSV)' }));
+    const text = await (createObjectURL.mock.calls[0]?.[0] as Blob).text();
+    expect(text.split('\r\n')[0]).toBe('rastreador_a,rastreador_b,desfase_dias,r,n,p,fuerza');
+    expect(text).toContain('Café,Sueño,0,');
+    vi.unstubAllGlobals();
   });
 });
