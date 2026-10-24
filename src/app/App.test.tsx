@@ -1,10 +1,13 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { resetDb } from '../data/testUtils';
 import { App } from './App';
 
+beforeEach(resetDb);
+
 describe('App', () => {
-  it('muestra el nombre de la app', () => {
+  it('muestra la navegación principal', async () => {
     render(<App />);
-    expect(screen.getByRole('heading', { name: 'Pulso' })).toBeInTheDocument();
+    expect(await screen.findByRole('navigation', { name: 'Principal' })).toBeInTheDocument();
   });
 });

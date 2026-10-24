@@ -1,0 +1,56 @@
+import { describe, expect, it } from 'vitest';
+import {
+  formatCOP,
+  formatDayLabel,
+  formatNumber,
+  formatTime,
+  formatValue,
+  parseDecimal,
+} from './format';
+
+const norm = (s: string) => s.replace(/\s/g, ' ');
+
+describe('formato es-CO', () => {
+  it('usa punto de miles y coma decimal', () => {
+    expect(formatNumber(1234.5)).toBe('1.234,5');
+    expect(formatNumber(2.345, 1)).toBe('2,3');
+  });
+
+  it('formatea pesos colombianos sin decimales', () => {
+    expect(norm(formatCOP(12500))).toBe('$ 12.500');
+  });
+
+  it('formatea valores según el tipo', () => {
+    expect(formatValue({ type: 'boolean', unit: '' }, 1)).toBe('Sí');
+    expect(formatValue({ type: 'boolean', unit: '' }, 0)).toBe('No');
+    expect(formatValue({ type: 'scale', unit: '' }, 3.5)).toBe('3,5/5');
+    expect(formatValue({ type: 'quantity', unit: 'h' }, 7.5)).toBe('7,5 h');
+    expect(formatValue({ type: 'counter', unit: '' }, 3)).toBe('3');
+    expect(norm(formatValue({ type: 'quantity', unit: 'cop' }, 8000))).toBe('$ 8.000');
+  });
+
+  it('etiqueta hoy, ayer y otros días', () => {
+    expect(formatDayLabel('2026-10-24', '2026-10-24')).toBe('Hoy');
+    expect(formatDayLabel('2026-10-23', '2026-10-24')).toBe('Ayer');
+    expect(formatDayLabel('2026-03-03', '2026-10-24')).toBe('Martes, 3 de marzo');
+    expect(formatDayLabel('2025-03-03', '2026-10-24')).toMatch(/2025/);
+  });
+
+  it('formatea la hora en 12 horas', () => {
+    expect(norm(formatTime('19:05'))).toMatch(/7:05 p\. ?m\./);
+  });
+});
+
+describe('parseDecimal', () => {
+  it('acepta coma o punto decimal', () => {
+    expect(parseDecimal('1,5')).toBe(1.5);
+    expect(parseDecimal(' 2.25 ')).toBe(2.25);
+    expect(parseDecimal('10')).toBe(10);
+    expect(parseDecimal(',5')).toBe(0.5);
+  });
+  it('rechaza texto no numérico', () => {
+    expect(parseDecimal('')).toBeNaN();
+    expect(parseDecimal('abc')).toBeNaN();
+    expect(parseDecimal('1,2,3')).toBeNaN();
+  });
+});
