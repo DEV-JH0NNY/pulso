@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 13:19] Datos de ejemplo (Fase 1 · tarea 10)
+
+- **Qué hice:** Pantalla de bienvenida en la primera apertura con «Explorar con datos de ejemplo» o «Empezar desde cero». Los datos de ejemplo son 120 días de 6 rastreadores (Estudio, Sueño, Café, Ejercicio, Ánimo y Gastos en COP), todos con `isSample`, etiqueta «Ejemplo» en cada rastreador y un aviso fijo en todas las pantallas con botón «Borrar» (con confirmación). También se pueden cargar o borrar desde Ajustes. Borrar elimina los rastreadores de ejemplo y lo que el usuario haya registrado en ellos, sin tocar sus propios rastreadores.
+- **Por qué:** Generador con semilla (mulberry32) para que sean reproducibles y probables. Las relaciones son intencionales y plausibles (semanas de parciales: más estudio y café, menos sueño; dormir bien y hacer ejercicio suben el ánimo) para que «Hallazgos» tenga contenido. De paso aparece una correlación espuria (sueño ↔ gastos, ambas suben el fin de semana) que ilustra por qué correlación no implica causalidad. Hay ~8 % de días sin registro por rastreador para que se parezca a datos reales. No se crean registros de hoy con hora futura. Cargar dos veces no duplica (`bulkPut` con ids fijos).
+- **Archivos principales:** `src/domain/sampleData.ts`, `src/data/{sample,settings}.ts`, `src/ui/components/{WelcomeCard,SampleBanner,ClearSampleButton}.tsx`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (139 pasando) · build ✅
+- **Commit:** 70ee284
+- **Siguiente:** Diseño: tema claro/oscuro manual, es-CO y pulido móvil.
+
 ### [2026-10-24 13:14] Exportar e importar CSV (Fase 1 · tarea 9)
 
 - **Qué hice:** Nueva pantalla «Ajustes» (reemplaza la pestaña «Rastreadores», que ahora vive dentro de Ajustes). Exportación a CSV en formato largo `fecha,hora,rastreador,valor,unidad,nota` (RFC 4180, CRLF, UTF-8, ordenado por fecha y hora). Importación con vista previa: registros válidos, rastreadores que se crearán (con el tipo inferido), duplicados omitidos y errores por número de línea con mensajes concretos («Fecha «2026-02-30» no es válida (usa AAAA-MM-DD)», «La unidad «min» no coincide con la de «Sueño» (h)»…). Se puede importar solo las filas válidas; todo se aplica en una transacción.
