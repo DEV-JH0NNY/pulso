@@ -72,24 +72,37 @@ La integración continua (`.github/workflows/ci.yml`) corre todos estos pasos en
 2. Toca el menú **⋮** y elige **Instalar app** (o **Agregar a la pantalla principal**).
 3. Pulso aparece como una app más; funciona sin conexión después de la primera carga.
 
-Tus datos se guardan solo en ese dispositivo y navegador. Usa la exportación (CSV) para respaldarlos.
+Tus datos se guardan solo en ese dispositivo y navegador. Para pasarlos a otro celular: **Ajustes → Descargar respaldo** en el viejo y **Restaurar respaldo** en el nuevo.
 
 ## 6. Estructura de carpetas
 
 ```
 pulso/
-├── .github/workflows/   # CI (ci.yml) y despliegue a GitHub Pages (deploy.yml)
-├── public/              # Íconos y archivos estáticos de la PWA
+├── .github/workflows/      # CI (ci.yml) y despliegue a GitHub Pages (deploy.yml)
+├── docs/capturas/          # Capturas usadas en el README
+├── public/                 # Íconos y archivos estáticos de la PWA
 ├── src/
-│   ├── app/             # Componente raíz y navegación
-│   ├── domain/          # Lógica pura: tipos, fechas, estadísticas, rachas, correlaciones, CSV
-│   ├── data/            # Persistencia con Dexie (IndexedDB) y repositorios
-│   ├── ui/              # Componentes de presentación y pantallas
-│   └── test/            # Configuración de pruebas
-├── Dockerfile           # Etapas: deps, dev, build y prod (nginx)
-├── docker-compose.yml   # Servicios dev, prod y check
-└── vite.config.ts       # Vite, Tailwind, PWA y Vitest
+│   ├── app/                # Componente raíz: navegación, títulos y carga diferida de pantallas
+│   ├── domain/             # Lógica pura y probada, sin React ni base de datos:
+│   │                       #   tipos, fechas, formato es-CO, agregación diaria, rachas,
+│   │                       #   calendario, series, resúmenes, estadística (Pearson, valor p),
+│   │                       #   hallazgos, CSV, respaldo JSON, datos de ejemplo, plantillas
+│   ├── data/               # Persistencia con Dexie (IndexedDB): repositorios, importación,
+│   │                       #   respaldo, datos de ejemplo, ajustes y almacenamiento persistente
+│   ├── ui/
+│   │   ├── components/     # Componentes reutilizables (tarjetas, gráficos SVG, diálogos…)
+│   │   ├── hooks/          # Consultas reactivas a la base y utilidades de interfaz
+│   │   ├── screens/        # Una pantalla por ruta (Hoy, Historial, Estadísticas…)
+│   │   ├── router.ts       # Rutas por hash (#/historial), compatibles con GitHub Pages
+│   │   └── theme.ts        # Tema claro/oscuro/sistema
+│   ├── test/               # Configuración de pruebas, utilidades y pruebas de accesibilidad
+│   └── main.tsx            # Punto de entrada
+├── Dockerfile              # Etapas: deps, dev, build y prod (nginx)
+├── docker-compose.yml      # Servicios dev, prod y check
+└── vite.config.ts          # Vite, Tailwind, PWA y Vitest
 ```
+
+Las pruebas viven junto al código que prueban (`archivo.test.ts`). La regla es: la lógica de negocio va en `domain/` (fácil de probar), el acceso a datos en `data/` y los componentes de `ui/` solo presentan.
 
 ## 7. Tecnologías usadas y por qué
 
@@ -115,3 +128,6 @@ pulso/
 - **`npm ci` falla por la versión de Node:** verifica `node -v` (debe ser ≥ 22.12). Con nvm: `nvm install && nvm use`.
 - **El puerto 5173 u 8080 está ocupado:** cambia el puerto de la izquierda en `docker-compose.yml` (por ejemplo `'5174:5173'`).
 - **Docker no ve los cambios de `package.json`:** reconstruye la imagen con `docker compose build --no-cache dev`.
+- **Cambié de celular o borré el navegador:** los datos no se sincronizan (no hay servidor). Si descargaste un respaldo JSON, restáuralo en **Ajustes → Restaurar respaldo**.
+- **Excel muestra mal los acentos del CSV:** el archivo es UTF-8 sin BOM. En Excel usa **Datos → Obtener datos → Desde texto/CSV** y elige UTF-8, o ábrelo con Google Sheets o pandas.
+- **No llegan las notificaciones del recordatorio:** sin servidor, los navegadores solo permiten notificar con la app abierta; el aviso igual aparece en «Hoy».
