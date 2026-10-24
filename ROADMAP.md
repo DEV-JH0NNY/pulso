@@ -27,7 +27,7 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 5. ✅ **Resumen semanal y mensual:** esta semana frente a la anterior por rastreador (promedio, metas cumplidas, cambio %).
 6. ✅ **Hallazgos con desfase de un día:** ¿lo de hoy se relaciona con lo de mañana? (por ejemplo, sueño de anoche → ánimo de hoy).
 7. ✅ **Aviso de nueva versión de la PWA:** mostrar «Hay una versión nueva · Actualizar» en lugar de esperar a cerrar todas las pestañas.
-8. ⬜ **Estadísticas por día de la semana:** promedio de cada rastreador de lunes a domingo.
+8. ✅ **Estadísticas por día de la semana:** promedio de cada rastreador de lunes a domingo.
 9. ⬜ **Exportación CSV ancha (un día por fila):** lista para pandas o una hoja de cálculo.
 10. ⬜ **Recordatorio diario dentro de la app:** aviso a una hora elegida si aún no has registrado nada (con permiso de notificaciones cuando el navegador lo permita).
 
@@ -51,3 +51,4 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 - [2026-10-24] Resumen semanal y mensual (Fase 2 · 5).
 - [2026-10-24] Hallazgos con desfase de un día (Fase 2 · 6).
 - [2026-10-24] Aviso de nueva versión de la PWA (Fase 2 · 7).
+- [2026-10-24] Estadísticas por día de la semana (Fase 2 · 8).

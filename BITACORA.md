@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 13:46] Estadísticas por día de la semana (Fase 2 · 8)
+
+- **Qué hice:** En el detalle de cada rastreador, un gráfico de lunes a domingo con el promedio de los días con registros (en sí/no, el porcentaje de días con «Sí») y una frase con el mayor y el menor día («Tu mayor día es el sábado ($ 42.893) y el menor, el miércoles»). La tabla accesible incluye cuántos días respaldan cada promedio.
+- **Por qué:** Es un patrón fácil de entender y accionable (gastos del fin de semana, poco estudio los viernes). Se promedia solo sobre días con datos para no confundir «no registré» con «cero»; lo dice el subtítulo. Reutiliza `BarChart`.
+- **Archivos principales:** `src/domain/weekday.ts`, `src/ui/components/WeekdayChart.tsx`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (166 pasando) · build ✅
+- **Commit:** fc44c87
+- **Siguiente:** Exportación CSV ancha.
+
 ### [2026-10-24 13:44] Aviso de nueva versión de la PWA (Fase 2 · 7)
 
 - **Qué hice:** El service worker pasa de actualización automática silenciosa a modo «prompt»: cuando hay una versión nueva aparece arriba «Hay una versión nueva de Pulso · Después / Actualizar». Verifiqué con Playwright sobre el build de producción que el service worker controla la página y que la app (incluidas las pantallas con carga diferida) abre sin conexión.
