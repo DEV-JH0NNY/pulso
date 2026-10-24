@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 13:35] Plantillas de rastreadores (Fase 2 · 4)
+
+- **Qué hice:** Al crear un rastreador aparecen 12 plantillas (Sueño, Agua, Café, Estudio, Ejercicio, Ánimo, Gastos en COP, Lectura, Meditación, Pasos, Pantalla, Energía) con ícono, color, unidad y meta sensatos. Elegir una llena el formulario para revisarlo antes de crear; se ocultan las que ya existen por nombre.
+- **Por qué:** Llenar el formulario en lugar de crear directo deja ajustar la meta sin pasos extra. También corregí una prueba con condición de carrera (encontraba el chip «Sueño» del diálogo justo antes de que se cerrara).
+- **Archivos principales:** `src/domain/templates.ts`, `src/ui/components/TemplatePicker.tsx`, `src/ui/screens/ManageTrackersScreen.tsx`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (155 pasando) · build ✅
+- **Commit:** 0e2dc5e
+- **Siguiente:** Resumen semanal y mensual.
+
 ### [2026-10-24 13:30] Registrar en días anteriores (Fase 2 · 3)
 
 - **Qué hice:** Flechas «Día anterior / Día siguiente» en la pantalla principal. En un día pasado, los toques registran en esa fecha (con la hora actual), el resumen y el progreso son de ese día, las tarjetas quedan enmarcadas en ámbar para que no haya confusión, y aparece «Volver a hoy». El aviso de deshacer dice el día («(ayer)»).
