@@ -14,6 +14,7 @@ import { TrackerTile } from '../components/TrackerTile';
 import { useActiveTrackers, useEntriesForDate } from '../hooks/useData';
 import { useOnboardingDone } from '../hooks/useSample';
 import { WelcomeCard } from '../components/WelcomeCard';
+import { BackupReminder } from '../components/BackupReminder';
 import { useToday } from '../hooks/useToday';
 import { routeHref } from '../router';
 
@@ -73,6 +74,7 @@ export function TodayScreen() {
   return (
     <div>
       <p className={`${muted} mb-4`}>{formatLongDate(todayDate)}</p>
+      <BackupReminder />
       {trackers.length > 0 && (
         <DaySummaryCard summary={summarizeDay(trackers, values)} total={trackers.length} />
       )}

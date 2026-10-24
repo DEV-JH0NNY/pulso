@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { exportBackup } from '../../data/backupIO';
+import { isStoragePersisted } from '../../data/storage';
 import { exportCsv } from '../../data/csvIO';
 import { LAST_EXPORT_AT, setSetting } from '../../data/settings';
 import { today } from '../../domain/dates';
@@ -21,6 +22,10 @@ export function SettingsScreen() {
   const [restoring, setRestoring] = useState(false);
   const toast = useToast();
   const hasSample = useHasSampleData();
+  const [persisted, setPersisted] = useState<boolean | null>(null);
+  useEffect(() => {
+    void isStoragePersisted().then(setPersisted);
+  }, []);
 
   const doExport = async () => {
     const csv = await exportCsv();
@@ -118,8 +123,14 @@ export function SettingsScreen() {
         </p>
         <p>
           Sin cuentas, sin anuncios y sin telemetría. Todo se guarda en este navegador (IndexedDB) y
-          funciona sin conexión. Si borras los datos del navegador o desinstalas la app, se pierden:
-          exporta un respaldo de vez en cuando.
+          funciona sin conexión.{' '}
+          {persisted === true
+            ? 'El navegador marcó tus datos como persistentes: no los borrará aunque falte espacio. '
+            : persisted === false
+              ? 'El navegador podría borrar los datos si el dispositivo se queda sin espacio (instalar la app ayuda a evitarlo). '
+              : ''}
+          Si borras los datos del navegador o desinstalas la app, se pierden: exporta un respaldo de
+          vez en cuando.
         </p>
       </div>
 
