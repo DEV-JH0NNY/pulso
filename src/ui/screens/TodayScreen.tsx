@@ -1,3 +1,4 @@
+import { vibrate } from '../haptics';
 import { useMemo, useState } from 'react';
 import { addEntry, deleteEntry } from '../../data/entries';
 import { quickLog } from '../../data/quickLog';
@@ -84,11 +85,11 @@ export function TodayScreen() {
     }
     if (reachesGoal(t, dayValues, entry.value)) {
       setCelebrating((c) => ({ id: t.id, n: (c?.n ?? 0) + 1 }));
-      navigator.vibrate?.([15, 60, 15]);
+      vibrate([15, 60, 15]);
       undoable(`🎉 ¡Meta de «${t.name}» cumplida!`, entry.id);
       return;
     }
-    navigator.vibrate?.(10);
+    vibrate(10);
     const amount =
       t.type === 'boolean' || t.type === 'scale'
         ? formatValue(t, entry.value)

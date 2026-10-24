@@ -10,6 +10,7 @@ import { ClearSampleButton } from '../components/ClearSampleButton';
 import { ImportCsvDialog } from '../components/ImportCsvDialog';
 import { RestoreBackupDialog } from '../components/RestoreBackupDialog';
 import { ThemePicker } from '../components/ThemePicker';
+import { VibrationToggle } from '../components/VibrationToggle';
 import { ReminderSettings } from '../components/ReminderSettings';
 import { useHasSampleData } from '../hooks/useSample';
 import { loadSampleData } from '../../data/sample';
@@ -74,6 +75,7 @@ export function SettingsScreen() {
       <h2 className={sectionTitle}>Apariencia</h2>
       <div className={card}>
         <ThemePicker />
+        <VibrationToggle />
       </div>
 
       <h2 className={sectionTitle}>Recordatorio</h2>

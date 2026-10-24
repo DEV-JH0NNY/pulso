@@ -1,3 +1,4 @@
+import { vibrate } from '../haptics';
 import { useRef, type MouseEvent, type PointerEvent } from 'react';
 
 const MOVE_TOLERANCE = 10;
@@ -24,7 +25,7 @@ export function useLongPress(onLongPress: () => void, onClick: () => void, delay
       clear();
       timer.current = window.setTimeout(() => {
         fired.current = true;
-        navigator.vibrate?.(15);
+        vibrate(15);
         onLongPress();
       }, delay);
     },
