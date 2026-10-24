@@ -1,0 +1,33 @@
+services:
+  # Desarrollo: http://localhost:5173
+  dev:
+    build:
+      context: .
+      target: dev
+    ports:
+      - '5173:5173'
+    volumes:
+      - ./src:/app/src
+      - ./public:/app/public
+    environment:
+      - BASE_PATH=/
+
+  # Producción local (build + nginx): http://localhost:8080
+  prod:
+    build:
+      context: .
+      target: prod
+    ports:
+      - '8080:80'
+    profiles: ['prod']
+
+  # Verificación completa: docker compose run --rm check
+  check:
+    build:
+      context: .
+      target: deps
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: sh -c "npm run lint && npm run typecheck && npm test && npm run build"
+    profiles: ['check']
