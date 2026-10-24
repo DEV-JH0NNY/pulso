@@ -24,7 +24,7 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 2. ✅ **Almacenamiento persistente y recordatorio de respaldo:** pedir `navigator.storage.persist()` para que el navegador no borre los datos, y avisar si pasaron más de 30 días sin exportar.
 3. ✅ **Registrar en días anteriores desde Hoy:** flechas para moverse entre días en la pantalla principal (olvidé registrar ayer).
 4. ✅ **Plantillas de rastreadores comunes:** crear con un toque Sueño, Agua, Café, Estudio, Ejercicio, Ánimo, Gastos…
-5. ⬜ **Resumen semanal y mensual:** esta semana frente a la anterior por rastreador (promedio, metas cumplidas, cambio %).
+5. ✅ **Resumen semanal y mensual:** esta semana frente a la anterior por rastreador (promedio, metas cumplidas, cambio %).
 6. ⬜ **Hallazgos con desfase de un día:** ¿lo de hoy se relaciona con lo de mañana? (por ejemplo, sueño de anoche → ánimo de hoy).
 7. ⬜ **Aviso de nueva versión de la PWA:** mostrar «Hay una versión nueva · Actualizar» en lugar de esperar a cerrar todas las pestañas.
 8. ⬜ **Estadísticas por día de la semana:** promedio de cada rastreador de lunes a domingo.
@@ -48,3 +48,4 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 - [2026-10-24] Almacenamiento persistente y recordatorio de respaldo (Fase 2 · 2).
 - [2026-10-24] Registrar en días anteriores (Fase 2 · 3).
 - [2026-10-24] Plantillas de rastreadores (Fase 2 · 4).
+- [2026-10-24] Resumen semanal y mensual (Fase 2 · 5).

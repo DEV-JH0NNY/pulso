@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 13:38] Resumen semanal y mensual (Fase 2 · 5)
+
+- **Qué hice:** Arriba de «Estadísticas», un resumen «Esta semana / Este mes» por rastreador: total (o días con «Sí», o promedio en escalas), promedio por día en contadores y cantidades, días con meta cumplida y el cambio frente al periodo anterior (↑ 11 %, ↓ 0,3 puntos…).
+- **Por qué:** La comparación es justa: un miércoles se comparan lunes–miércoles con lunes–miércoles de la semana pasada (y en meses, los mismos días, recortando si el mes anterior es más corto). El cambio se muestra en color neutro porque «más» no siempre es mejor (café, gastos). En escalas el cambio va en puntos, no en %, porque un porcentaje sobre una escala 1–5 engaña.
+- **Archivos principales:** `src/domain/summary.ts`, `src/ui/components/PeriodSummary.tsx`, `src/ui/screens/StatsScreen.tsx`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (160 pasando) · build ✅
+- **Commit:** d1b5212
+- **Siguiente:** Hallazgos con desfase de un día.
+
 ### [2026-10-24 13:35] Plantillas de rastreadores (Fase 2 · 4)
 
 - **Qué hice:** Al crear un rastreador aparecen 12 plantillas (Sueño, Agua, Café, Estudio, Ejercicio, Ánimo, Gastos en COP, Lectura, Meditación, Pasos, Pantalla, Energía) con ícono, color, unidad y meta sensatos. Elegir una llena el formulario para revisarlo antes de crear; se ocultan las que ya existen por nombre.
