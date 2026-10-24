@@ -8,7 +8,8 @@ export type Route =
   | { name: 'tracker'; id: string }
   | { name: 'insights' }
   | { name: 'settings' }
-  | { name: 'manage' };
+  | { name: 'manage' }
+  | { name: 'year' };
 
 export function parseRoute(hash: string): Route {
   const path = hash.replace(/^#\/?/, '').split('/');
@@ -25,6 +26,8 @@ export function parseRoute(hash: string): Route {
       return { name: 'settings' };
     case 'rastreadores':
       return { name: 'manage' };
+    case 'anual':
+      return { name: 'year' };
     default:
       return { name: 'today' };
   }
@@ -46,6 +49,8 @@ export function routeHref(route: Route): string {
       return '#/ajustes';
     case 'manage':
       return '#/rastreadores';
+    case 'year':
+      return '#/anual';
   }
 }
 

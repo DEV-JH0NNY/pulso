@@ -20,6 +20,7 @@ describe('router', () => {
       { name: 'insights' },
       { name: 'settings' },
       { name: 'manage' },
+      { name: 'year' },
     ];
     for (const r of routes) expect(parseRoute(routeHref(r))).toEqual(r);
   });

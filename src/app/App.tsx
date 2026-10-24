@@ -31,6 +31,9 @@ const InsightsScreen = lazy(() =>
 const SettingsScreen = lazy(() =>
   import('../ui/screens/SettingsScreen').then((m) => ({ default: m.SettingsScreen })),
 );
+const YearReviewScreen = lazy(() =>
+  import('../ui/screens/YearReviewScreen').then((m) => ({ default: m.YearReviewScreen })),
+);
 const ManageTrackersScreen = lazy(() =>
   import('../ui/screens/ManageTrackersScreen').then((m) => ({ default: m.ManageTrackersScreen })),
 );
@@ -42,7 +45,7 @@ const NAV: NavItem[] = [
     route: { name: 'stats' },
     label: 'Estadísticas',
     icon: IconStats,
-    matches: ['stats', 'tracker'],
+    matches: ['stats', 'tracker', 'year'],
   },
   { route: { name: 'insights' }, label: 'Hallazgos', icon: IconInsights, matches: ['insights'] },
   {
@@ -81,6 +84,8 @@ function screenFor(route: Route, trackerName: string | undefined): Screen {
         back: { name: 'settings' },
         content: <ManageTrackersScreen />,
       };
+    case 'year':
+      return { title: 'Tu año en Pulso', back: { name: 'stats' }, content: <YearReviewScreen /> };
     case 'today':
       return { title: 'Hoy', content: <TodayScreen /> };
   }

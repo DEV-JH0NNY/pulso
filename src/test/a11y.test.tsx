@@ -32,6 +32,7 @@ describe('accesibilidad (axe)', () => {
     ['#/hallazgos', 'Hallazgos'],
     ['#/ajustes', 'Ajustes'],
     ['#/rastreadores', 'Rastreadores'],
+    ['#/anual', 'Tu año en Pulso'],
   ];
 
   for (const [hash, heading] of pages) {

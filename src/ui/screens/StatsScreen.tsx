@@ -59,6 +59,18 @@ export function StatsScreen() {
       {active.length > 0 && (
         <PeriodSummary trackers={active} entries={entries} todayDate={todayDate} />
       )}
+      <a
+        href={routeHref({ name: 'year' })}
+        className={`${card} mb-6 flex items-center justify-between font-medium hover:bg-slate-50 dark:hover:bg-slate-800/60`}
+      >
+        <span>
+          🎉 Tu año en Pulso
+          <span className={`block font-normal ${muted}`}>
+            Totales, mejores rachas y meses destacados
+          </span>
+        </span>
+        <IconChevronRight className="h-5 w-5 text-slate-400" />
+      </a>
       <h2 className="mb-1 text-lg font-semibold">Por rastreador</h2>
       <p className={`${muted} mb-4`}>
         Elige un rastreador para ver sus rachas, calendario y gráficos.
