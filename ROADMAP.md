@@ -40,6 +40,15 @@ Ordenado por valor para el dueño (datos seguros primero, luego registrar más r
 15. ✅ **Detalle del rastreador más útil:** botón para editarlo y lista de sus registros recientes con edición.
 16. ✅ **Reordenar arrastrando** (además de los botones subir/bajar).
 
+### Ronda 3
+
+17. ⬜ **Documentación al día con capturas:** README con capturas reales (claro y oscuro) y `COMO_EJECUTAR.md` con la estructura de carpetas actual.
+18. ⬜ **Metas semanales («3 veces por semana»):** para hábitos que no son diarios, como el ejercicio.
+19. ⬜ **Buscar en el historial por nota o rastreador.**
+20. ⬜ **Accesos directos de la app instalada** (mantener presionado el ícono → «Historial», «Hallazgos»).
+21. ⬜ **Celebración sutil al cumplir la meta del día** (respetando «reducir movimiento»).
+22. ⬜ **Rastreadores derivados:** fórmula diaria entre dos rastreadores (por ejemplo, gasto por hora de estudio).
+
 ## Completadas
 
 - [2026-10-24] Base del proyecto (Fase 1 · tarea 1).
