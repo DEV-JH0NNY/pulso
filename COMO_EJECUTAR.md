@@ -46,17 +46,18 @@ npm run preview   # → http://localhost:4173/pulso/
 
 ## 4. Pruebas, lint y build
 
-| Comando                | Qué hace                                         |
-| ---------------------- | ------------------------------------------------ |
-| `npm run lint`         | ESLint (sin advertencias permitidas)             |
-| `npm run format:check` | Verifica el formato con Prettier                 |
-| `npm run format`       | Aplica el formato con Prettier                   |
-| `npm run typecheck`    | TypeScript en modo estricto, sin emitir archivos |
-| `npm test`             | Pruebas con Vitest + Testing Library             |
-| `npm run test:watch`   | Pruebas en modo observación                      |
-| `npm run build`        | Build de producción en `dist/`                   |
+| Comando                | Qué hace                                                 |
+| ---------------------- | -------------------------------------------------------- |
+| `npm run lint`         | ESLint (sin advertencias permitidas)                     |
+| `npm run format:check` | Verifica el formato con Prettier                         |
+| `npm run format`       | Aplica el formato con Prettier                           |
+| `npm run typecheck`    | TypeScript en modo estricto, sin emitir archivos         |
+| `npm test`             | Pruebas con Vitest + Testing Library                     |
+| `npm run test:watch`   | Pruebas en modo observación                              |
+| `npm run build`        | Build de producción en `dist/`                           |
+| `npm run e2e`          | Prueba de punta a punta (Playwright) sobre el build real |
 
-La integración continua (`.github/workflows/ci.yml`) corre todos estos pasos en cada push.
+La integración continua (`.github/workflows/ci.yml`) corre todos estos pasos en cada push, y después la prueba de punta a punta. La primera vez en tu computador, `npx playwright install chromium` descarga el navegador que usa esa prueba.
 
 ## 5. Despliegue en GitHub Pages e instalación en Android
 
@@ -106,20 +107,21 @@ Las pruebas viven junto al código que prueban (`archivo.test.ts`). La regla es:
 
 ## 7. Tecnologías usadas y por qué
 
-| Tecnología                            | Para qué se usa                                       | Por qué se eligió frente a alternativas                                                                        |
-| ------------------------------------- | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| React 19                              | Interfaz de usuario                                   | Requerido por el encargo; ecosistema enorme y Testing Library lo soporta de primera.                           |
-| Vite 8                                | Servidor de desarrollo y build                        | Arranque instantáneo y builds pequeños; más simple que webpack.                                                |
-| TypeScript 6 (estricto)               | Tipado de todo el código                              | Atrapa errores antes de ejecutar. Se fija la 6.0 porque `typescript-eslint` aún no soporta la 7.               |
-| Tailwind CSS 4                        | Estilos                                               | Estilos utilitarios sin CSS muerto; modo oscuro con una variante. Más liviano que una librería de componentes. |
-| Dexie 4 + dexie-react-hooks           | Base de datos local (IndexedDB) y consultas reactivas | API simple y tipada sobre IndexedDB; `useLiveQuery` actualiza la UI al cambiar los datos sin un estado global. |
-| vite-plugin-pwa (Workbox)             | Manifest y service worker (instalable y offline)      | Genera el service worker automáticamente; escribirlo a mano es propenso a errores.                             |
-| Vitest + Testing Library + jsdom      | Pruebas unitarias y de componentes                    | Comparte la configuración de Vite; API compatible con Jest pero más rápido.                                    |
-| axe-core                              | Pruebas automáticas de accesibilidad                  | Motor de reglas de referencia (Deque), sin dependencias; se usa directo sin envoltorios.                       |
-| fake-indexeddb                        | IndexedDB en memoria para las pruebas                 | Permite probar la capa de datos real (Dexie) sin navegador.                                                    |
-| ESLint + typescript-eslint + Prettier | Calidad y formato automáticos                         | Estándar de facto; reglas estrictas y formato consistente sin discusiones.                                     |
-| GitHub Actions + GitHub Pages         | CI y hosting gratuito                                 | Integrado con el repositorio, sin servicios de pago ni registros en terceros.                                  |
-| Docker + docker compose               | Ejecutar sin instalar Node                            | Entorno reproducible en cualquier computador.                                                                  |
+| Tecnología                            | Para qué se usa                                       | Por qué se eligió frente a alternativas                                                                                       |
+| ------------------------------------- | ----------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| React 19                              | Interfaz de usuario                                   | Requerido por el encargo; ecosistema enorme y Testing Library lo soporta de primera.                                          |
+| Vite 8                                | Servidor de desarrollo y build                        | Arranque instantáneo y builds pequeños; más simple que webpack.                                                               |
+| TypeScript 6 (estricto)               | Tipado de todo el código                              | Atrapa errores antes de ejecutar. Se fija la 6.0 porque `typescript-eslint` aún no soporta la 7.                              |
+| Tailwind CSS 4                        | Estilos                                               | Estilos utilitarios sin CSS muerto; modo oscuro con una variante. Más liviano que una librería de componentes.                |
+| Dexie 4 + dexie-react-hooks           | Base de datos local (IndexedDB) y consultas reactivas | API simple y tipada sobre IndexedDB; `useLiveQuery` actualiza la UI al cambiar los datos sin un estado global.                |
+| vite-plugin-pwa (Workbox)             | Manifest y service worker (instalable y offline)      | Genera el service worker automáticamente; escribirlo a mano es propenso a errores.                                            |
+| Vitest + Testing Library + jsdom      | Pruebas unitarias y de componentes                    | Comparte la configuración de Vite; API compatible con Jest pero más rápido.                                                   |
+| axe-core                              | Pruebas automáticas de accesibilidad                  | Motor de reglas de referencia (Deque), sin dependencias; se usa directo sin envoltorios.                                      |
+| Playwright (@playwright/test)         | Prueba de punta a punta en un navegador real          | Ejecuta la app compilada, comprueba que los datos persisten y que funciona sin conexión; es el estándar actual y corre en CI. |
+| fake-indexeddb                        | IndexedDB en memoria para las pruebas                 | Permite probar la capa de datos real (Dexie) sin navegador.                                                                   |
+| ESLint + typescript-eslint + Prettier | Calidad y formato automáticos                         | Estándar de facto; reglas estrictas y formato consistente sin discusiones.                                                    |
+| GitHub Actions + GitHub Pages         | CI y hosting gratuito                                 | Integrado con el repositorio, sin servicios de pago ni registros en terceros.                                                 |
+| Docker + docker compose               | Ejecutar sin instalar Node                            | Entorno reproducible en cualquier computador.                                                                                 |
 
 ## 8. Solución de problemas comunes
 

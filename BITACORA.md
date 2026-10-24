@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 17:35] Prueba de punta a punta en CI (Fase 2 · 43)
+
+- **Qué hice:** Playwright con dos pruebas sobre el build de producción servido con `vite preview` (emulando un Pixel 7, es-CO, hora de Bogotá). La primera crea un rastreador desde una plantilla, registra dos toques, recarga y comprueba que el dato sigue ahí, y luego verifica que la app abre y navega sin conexión. La segunda carga los datos de ejemplo y comprueba que Hallazgos muestra relaciones y la advertencia. Nuevo script `npm run e2e` y un job `punta-a-punta` en la CI que corre después de la verificación.
+- **Por qué:** Las pruebas de componentes usan jsdom y fake-indexeddb; esta prueba cubre lo que solo se ve en un navegador real: IndexedDB de verdad, el service worker y el modo sin conexión. Fijé `@playwright/test` en 1.63.0 para que coincida con el navegador preinstalado en este entorno; en la CI se descarga Chromium con `npx playwright install`.
+- **Archivos principales:** `playwright.config.ts`, `e2e/app.spec.ts`, `.github/workflows/ci.yml`, `vite.config.ts` (Vitest excluye `e2e/`), `tsconfig.node.json`, `COMO_EJECUTAR.md`.
+- **Dependencias nuevas:** `@playwright/test` (desarrollo): el estándar para pruebas de punta a punta, mantenido por Microsoft. No entra en el bundle.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (261 pasando) · build ✅ · e2e ✅ (2 pasando)
+- **Commit:** 1e43949
+- **Siguiente:** Exportar un gráfico como imagen.
+
 ### [2026-10-24 17:32] Nota rápida tras registrar (Fase 2 · 42)
 
 - **Qué hice:** El aviso que aparece al registrar ahora tiene dos acciones: «Nota» y «Deshacer». «Nota» abre un diálogo pequeño solo con el campo de texto y guarda la nota en el registro recién hecho.
