@@ -1,4 +1,4 @@
-import { screen, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { addEntry } from '../../data/entries';
 import { resetDb } from '../../data/testUtils';
@@ -56,5 +56,26 @@ describe('TrackerDetailScreen · día de la semana', () => {
     expect(
       await screen.findByRole('table', { name: /leer por día de la semana/i }),
     ).toBeInTheDocument();
+  });
+});
+
+describe('TrackerDetailScreen · edición', () => {
+  it('edita el rastreador y sus registros desde el detalle', async () => {
+    const t = await seed();
+    const { user } = renderWithProviders(<TrackerDetailScreen id={t.id} />);
+    await user.click(await screen.findByRole('button', { name: 'Editar Leer' }));
+    const name = screen.getByLabelText('Nombre');
+    await user.clear(name);
+    await user.type(name, 'Lectura');
+    await user.click(screen.getByRole('button', { name: 'Guardar' }));
+    expect(await screen.findByRole('button', { name: 'Editar Lectura' })).toBeInTheDocument();
+
+    const rows = await screen.findAllByRole('button', { name: /lectura: sí/i });
+    expect(rows).toHaveLength(7);
+    await user.click(rows[0] as HTMLElement);
+    await user.click(screen.getByRole('button', { name: 'Borrar' }));
+    await waitFor(() =>
+      expect(screen.getAllByRole('button', { name: /lectura: sí/i })).toHaveLength(6),
+    );
   });
 });

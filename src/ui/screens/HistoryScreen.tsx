@@ -1,16 +1,13 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useId, useMemo, useState } from 'react';
 import { db } from '../../data/db';
-import { deleteEntry, restoreEntry, updateEntry } from '../../data/entries';
 import { addDays } from '../../domain/dates';
 import { formatDayLabel } from '../../domain/format';
 import { groupEntriesByDay } from '../../domain/history';
-import type { Entry, EntryDraft } from '../../domain/types';
-import { EntryForm } from '../components/EntryForm';
+import type { Entry } from '../../domain/types';
+import { EntryEditDialog } from '../components/EntryEditDialog';
 import { EntryRow } from '../components/EntryRow';
-import { Modal } from '../components/Modal';
 import { buttonSecondary, card, cardBase, input, label, muted } from '../components/styles';
-import { useToast } from '../components/toastContext';
 import { useAllTrackers, useEntriesBetween } from '../hooks/useData';
 import { useToday } from '../hooks/useToday';
 
@@ -28,7 +25,6 @@ export function HistoryScreen() {
     async () => (await db.entries.orderBy('date').first())?.date ?? null,
     [],
   );
-  const toast = useToast();
   const filterId = useId();
 
   const byId = useMemo(() => new Map((trackers ?? []).map((t) => [t.id, t])), [trackers]);
@@ -38,27 +34,6 @@ export function HistoryScreen() {
   );
 
   if (!trackers || !entries || oldest === undefined) return <p className={muted}>Cargando…</p>;
-
-  const editingTracker = editing ? byId.get(editing.trackerId) : undefined;
-
-  const save = async (draft: EntryDraft) => {
-    if (!editing) return;
-    await updateEntry(editing.id, draft);
-    setEditing(null);
-    toast({ message: 'Registro actualizado' });
-  };
-
-  const remove = async () => {
-    if (!editing) return;
-    const removed = await deleteEntry(editing.id);
-    setEditing(null);
-    if (removed)
-      toast({
-        message: 'Registro borrado',
-        actionLabel: 'Deshacer',
-        onAction: () => void restoreEntry(removed),
-      });
-  };
 
   const hasOlder = oldest !== null && oldest < from;
 
@@ -132,20 +107,11 @@ export function HistoryScreen() {
         </div>
       )}
 
-      <Modal open={editing !== null} title="Editar registro" onClose={() => setEditing(null)}>
-        {editing && editingTracker && (
-          <EntryForm
-            key={editing.id}
-            tracker={editingTracker}
-            initial={editing}
-            maxDate={todayDate}
-            submitLabel="Guardar"
-            onSubmit={save}
-            onCancel={() => setEditing(null)}
-            onDelete={() => void remove()}
-          />
-        )}
-      </Modal>
+      <EntryEditDialog
+        entry={editing}
+        tracker={editing ? byId.get(editing.trackerId) : undefined}
+        onClose={() => setEditing(null)}
+      />
     </div>
   );
 }

@@ -76,6 +76,20 @@ export function validateTrackerDraft(draft: TrackerDraft): DraftErrors {
   return errors;
 }
 
+/** Borrador editable a partir de un rastreador guardado. */
+export function draftFromTracker(t: Tracker): TrackerDraft {
+  return {
+    name: t.name,
+    icon: t.icon,
+    color: t.color,
+    type: t.type,
+    unit: t.unit,
+    defaultValue: t.defaultValue,
+    dailyGoal: t.dailyGoal,
+    goalDirection: t.goalDirection,
+  };
+}
+
 /** Limpia espacios y campos que no aplican al tipo. */
 export function normalizeDraft(draft: TrackerDraft): TrackerDraft {
   const numeric = draft.type === 'counter' || draft.type === 'quantity';

@@ -6,7 +6,7 @@ import {
   setTrackerArchived,
   updateTracker,
 } from '../../data/trackers';
-import { emptyDraft, moveId } from '../../domain/trackers';
+import { draftFromTracker, emptyDraft, moveId } from '../../domain/trackers';
 import type { Tracker, TrackerDraft } from '../../domain/types';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { IconArchive, IconDown, IconEdit, IconPlus, IconTrash, IconUp } from '../components/icons';
@@ -30,17 +30,6 @@ import { describeTracker } from '../trackerText';
 
 type Editing =
   { mode: 'create'; template: TrackerDraft | null } | { mode: 'edit'; tracker: Tracker } | null;
-
-const toDraft = (t: Tracker): TrackerDraft => ({
-  name: t.name,
-  icon: t.icon,
-  color: t.color,
-  type: t.type,
-  unit: t.unit,
-  defaultValue: t.defaultValue,
-  dailyGoal: t.dailyGoal,
-  goalDirection: t.goalDirection,
-});
 
 export function ManageTrackersScreen() {
   const trackers = useAllTrackers();
@@ -208,7 +197,7 @@ export function ManageTrackersScreen() {
             }
             initial={
               editing.mode === 'edit'
-                ? toDraft(editing.tracker)
+                ? draftFromTracker(editing.tracker)
                 : (editing.template ?? emptyDraft())
             }
             submitLabel={editing.mode === 'edit' ? 'Guardar' : 'Crear'}
