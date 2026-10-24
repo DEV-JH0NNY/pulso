@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { colorHex } from '../../domain/colors';
 import { isLimitGoal, progressFor } from '../../domain/aggregate';
-import { formatValue } from '../../domain/format';
+import { formatTime, formatValue } from '../../domain/format';
 import type { Tracker } from '../../domain/types';
 import { useLongPress } from '../hooks/useLongPress';
 import type { WeekProgress } from '../../domain/weekly';
@@ -17,6 +17,8 @@ interface TrackerTileProps {
   week?: WeekProgress | null;
   /** Contador que cambia cada vez que hay que celebrar una meta cumplida. */
   celebrate?: number;
+  /** Hora (HH:mm) del último registro del día, para contadores y cantidades. */
+  lastTime?: string | null;
   onQuickLog: () => void;
   onDetailedLog: () => void;
 }
@@ -26,6 +28,7 @@ export function TrackerTile({
   value,
   week,
   celebrate = 0,
+  lastTime = null,
   onQuickLog,
   onDetailedLog,
 }: TrackerTileProps) {
@@ -91,6 +94,11 @@ export function TrackerTile({
                 backgroundColor: overLimit ? '#e11d48' : hex,
               }}
             />
+          </span>
+        )}
+        {lastTime && (tracker.type === 'counter' || tracker.type === 'quantity') && (
+          <span className="text-xs text-slate-500 dark:text-slate-400">
+            Último: {formatTime(lastTime)}
           </span>
         )}
         {week && (

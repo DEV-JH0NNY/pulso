@@ -1,6 +1,7 @@
 import { act, fireEvent, screen, waitFor, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { db } from '../../data/db';
+import { addEntry } from '../../data/entries';
 import { ONBOARDING_DONE, setSetting } from '../../data/settings';
 import { resetDb } from '../../data/testUtils';
 import { createTracker } from '../../data/trackers';
@@ -150,5 +151,15 @@ describe('TodayScreen · celebración', () => {
     expect(screen.queryByText(/meta de «agua» cumplida/i)).not.toBeInTheDocument();
     await user.click(await tile('Agua'));
     expect(await screen.findByText('🎉 ¡Meta de «Agua» cumplida!')).toBeInTheDocument();
+  });
+});
+
+describe('TodayScreen · último registro', () => {
+  it('muestra la hora del último registro del día', async () => {
+    const t = await createTracker({ ...emptyDraft(), name: 'Agua' });
+    await addEntry(t.id, { value: 1, date: today(), time: '07:05', note: '' });
+    await addEntry(t.id, { value: 1, date: today(), time: '00:10', note: '' });
+    renderWithProviders(<TodayScreen />);
+    expect(await screen.findByText(/Último: 7:05/)).toBeInTheDocument();
   });
 });

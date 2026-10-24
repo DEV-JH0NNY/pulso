@@ -45,6 +45,13 @@ export function TodayScreen() {
     return map;
   }, [trackers, entries, day]);
 
+  const lastTimes = new Map<string, string>();
+  for (const e of entries ?? []) {
+    if (e.date !== day) continue;
+    const prev = lastTimes.get(e.trackerId);
+    if (!prev || e.time > prev) lastTimes.set(e.trackerId, e.time);
+  }
+
   if (!trackers || !entries || onboardingDone === undefined)
     return <p className={muted}>Cargando…</p>;
   if (trackers.length === 0 && !onboardingDone) return <WelcomeCard />;
@@ -157,6 +164,7 @@ export function TodayScreen() {
                   value={values.get(t.id) ?? null}
                   week={weekProgress(t, dailyTotals(t, entries), day)}
                   celebrate={celebrating?.id === t.id ? celebrating.n : 0}
+                  lastTime={lastTimes.get(t.id) ?? null}
                   onQuickLog={() => void handleQuickLog(t)}
                   onDetailedLog={() => setDetailed(t)}
                 />
