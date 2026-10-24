@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 14:46] Restaurar respaldos con más seguridad (Fase 2 · 29)
+
+- **Qué hice:** La restauración rechaza archivos de más de 50 MB sin leerlos, muestra «No se pudo leer el archivo» si la lectura falla, y si la escritura en la base falla avisa «No se pudo restaurar (tus datos no cambiaron)».
+- **Por qué:** Leer a memoria un archivo gigante elegido por error puede colgar el navegador del celular. Como la restauración corre en una transacción, un fallo deja la base intacta; el mensaje lo dice para tranquilizar.
+- **Archivos principales:** `src/ui/components/RestoreBackupDialog.tsx`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (230 pasando) · build ✅
+- **Commit:** 5f3b02e
+- **Siguiente:** Pantallas anchas.
+
 ### [2026-10-24 14:45] Corrección por comparaciones múltiples (Fase 2 · 28)
 
 - **Qué hice:** Cada correlación tiene ahora un valor p ajustado por Benjamini–Hochberg dentro de su familia (todos los pares del mismo día, o todos los de un día de desfase). La explicación dice si el hallazgo «resiste» la corrección («…incluso considerando que se compararon 15 pares (p ajustado = 0,002)») o si «podría ser un falso positivo». El CSV de hallazgos añade la columna `p_ajustado_bh` y la sección «¿Cómo se calculan?» lo explica.
