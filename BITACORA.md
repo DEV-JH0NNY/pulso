@@ -29,6 +29,16 @@ Usa exactamente este formato:
 - **Siguiente:**
 -->
 
+### [2026-10-24 14:58] Importar CSV ancho (Fase 2 · 33)
+
+- **Qué hice:** La importación detecta sola el formato ancho (primera columna `fecha`, sin columnas `rastreador`/`valor`) y convierte cada celda con valor en un registro a las 12:00, leyendo nombre y unidad del encabezado («Sueño (h)»). Pasa por la misma validación, vista previa, detección de duplicados y creación de rastreadores que el formato largo; los errores conservan el número de línea del archivo.
+- **Por qué:** Muchas hojas de cálculo personales («mi tracker en Excel») están en formato ancho; así migrar a Pulso no exige transformar el archivo. La hora fija se explica en el diálogo. Ojo: un CSV ancho exportado por Pulso trae promedios diarios en las escalas (por ejemplo 2,5), que no son registros válidos de 1 a 5 y se reportan como error; para ida y vuelta sin pérdida están el CSV largo y el respaldo JSON.
+- **Archivos principales:** `src/domain/csvData.ts`, `src/ui/components/ImportCsvDialog.tsx`.
+- **Dependencias nuevas:** ninguna.
+- **Verificación:** lint ✅ · typecheck ✅ · pruebas ✅ (239 pasando) · build ✅
+- **Commit:** 6cbc44e
+- **Siguiente:** Atajos de teclado en escritorio.
+
 ### [2026-10-24 14:57] Calidad de datos (Fase 2 · 32)
 
 - **Qué hice:** Sección «Calidad de datos» en el detalle de cada rastreador: días con registro en los últimos 30 y 90 días (con barra y porcentaje) y el hueco más largo sin registros desde el primer registro («7 días (8 – 14 oct)»), con una nota de que los días sin registro nunca se cuentan como cero.
