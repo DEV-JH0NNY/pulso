@@ -22,3 +22,23 @@ export function groupEntriesByDay(entries: Entry[]): DayGroup[] {
       ),
     }));
 }
+
+/** Minúsculas y sin tildes, para buscar sin importar cómo se escribió. */
+export function normalizeForSearch(text: string): string {
+  return text
+    .toLocaleLowerCase('es-CO')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .trim();
+}
+
+/** ¿El registro coincide con la búsqueda (en su nota o en el nombre del rastreador)? */
+export function entryMatches(
+  entry: Pick<Entry, 'note'>,
+  trackerName: string,
+  query: string,
+): boolean {
+  const q = normalizeForSearch(query);
+  if (!q) return true;
+  return normalizeForSearch(entry.note).includes(q) || normalizeForSearch(trackerName).includes(q);
+}

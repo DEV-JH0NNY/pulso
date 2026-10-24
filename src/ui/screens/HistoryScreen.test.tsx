@@ -67,3 +67,25 @@ describe('HistoryScreen', () => {
     expect(await screen.findByText('con leche')).toBeInTheDocument();
   });
 });
+
+describe('HistoryScreen · búsqueda', () => {
+  it('busca en todo el historial por nota, sin importar tildes', async () => {
+    await seed();
+    const t = (await db.trackers.toArray())[0];
+    if (!t) throw new Error('sin rastreador');
+    await addEntry(t.id, {
+      value: 1,
+      date: addDays(today(), -200),
+      time: '08:00',
+      note: 'Cumpleaños de Ana',
+    });
+    const { user } = renderWithProviders(<HistoryScreen />);
+    await screen.findByText('con leche');
+    await user.type(screen.getByLabelText('Buscar'), 'cumpleanos');
+    expect(await screen.findByText('Cumpleaños de Ana')).toBeInTheDocument();
+    expect(screen.queryByText('con leche')).not.toBeInTheDocument();
+    await user.clear(screen.getByLabelText('Buscar'));
+    await user.type(screen.getByLabelText('Buscar'), 'zzz');
+    expect(await screen.findByText('Ningún registro coincide con «zzz».')).toBeInTheDocument();
+  });
+});

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { groupEntriesByDay } from './history';
+import { entryMatches, groupEntriesByDay } from './history';
 import type { Entry } from './types';
 
 const e = (id: string, date: string, time: string, createdAt = 0): Entry => ({
@@ -27,5 +27,15 @@ describe('groupEntriesByDay', () => {
 
   it('lista vacía', () => {
     expect(groupEntriesByDay([])).toEqual([]);
+  });
+});
+
+describe('búsqueda', () => {
+  it('ignora mayúsculas y tildes y busca en nota o rastreador', () => {
+    expect(entryMatches({ note: 'Salida con AMIGOS' }, 'Gastos', 'amigos')).toBe(true);
+    expect(entryMatches({ note: '' }, 'Ánimo', 'animo')).toBe(true);
+    expect(entryMatches({ note: 'café con leche' }, 'Café', 'cafe con')).toBe(true);
+    expect(entryMatches({ note: 'nada' }, 'Sueño', 'gym')).toBe(false);
+    expect(entryMatches({ note: 'x' }, 'Y', '  ')).toBe(true);
   });
 });
